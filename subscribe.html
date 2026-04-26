@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Weekly Brand Story — BrandLore Newsletter</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1a1410; --paper: #f7f3ee; --cream: #ede8e0;
+  --accent: #c0392b; --accent-light: #f5e6e4;
+  --gold: #b8860b; --muted: #7a7068;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 4rem; background: var(--paper);
+  border-bottom: 1px solid var(--cream);
+}
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; }
+.nav-logo span { color: var(--accent); font-style: italic; }
+.nav-back { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-back:hover { color: var(--ink); }
+
+/* ── HERO ── */
+.nl-hero {
+  min-height: 100vh; padding-top: 80px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: var(--ink);
+}
+.nl-hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 5rem 3rem 5rem 4rem;
+  position: relative; overflow: hidden;
+}
+.hero-deco-text {
+  position: absolute; font-family: var(--serif); font-size: 20rem;
+  color: rgba(247,243,238,0.02); bottom: -3rem; left: -2rem;
+  line-height: 1; user-select: none; font-style: italic;
+}
+.nl-hero-left > * { position: relative; z-index: 1; }
+.nl-eyebrow { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.2rem; font-weight: 500; }
+.nl-title { font-family: var(--serif); font-size: clamp(2.8rem,4.5vw,4.2rem); line-height: 1.08; margin-bottom: 1.4rem; color: var(--paper); }
+.nl-title em { color: var(--accent); font-style: italic; }
+.nl-tagline { font-size: 1.05rem; color: rgba(247,243,238,0.6); margin-bottom: 3rem; line-height: 1.85; max-width: 430px; }
+
+/* SUBSCRIBE FORM */
+.subscribe-box {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  padding: 2.5rem;
+}
+.subscribe-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(247,243,238,0.4); margin-bottom: 1.2rem; font-weight: 500; }
+.form-row { display: flex; gap: 0; margin-bottom: 1rem; }
+.form-input {
+  flex: 1; padding: 0.9rem 1.2rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-right: none;
+  font-family: var(--sans); font-size: 0.9rem; color: var(--paper);
+  outline: none; transition: border-color 0.2s;
+}
+.form-input::placeholder { color: rgba(247,243,238,0.3); }
+.form-input:focus { border-color: var(--accent); }
+.form-name { width: 100%; padding: 0.9rem 1.2rem; margin-bottom: 1rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  font-family: var(--sans); font-size: 0.9rem; color: var(--paper);
+  outline: none; transition: border-color 0.2s; }
+.form-name::placeholder { color: rgba(247,243,238,0.3); }
+.form-name:focus { border-color: var(--accent); }
+.form-select {
+  width: 100%; padding: 0.9rem 1.2rem; margin-bottom: 1.5rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  font-family: var(--sans); font-size: 0.9rem; color: var(--paper);
+  outline: none; appearance: none; cursor: pointer;
+}
+.form-select option { background: var(--ink); color: var(--paper); }
+.btn-subscribe {
+  width: 100%; padding: 1rem 2rem;
+  background: var(--accent); color: var(--paper);
+  font-family: var(--sans); font-size: 0.85rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  border: none; cursor: pointer; transition: background 0.2s;
+}
+.btn-subscribe:hover { background: #a93224; }
+.form-note { font-size: 0.75rem; color: rgba(247,243,238,0.35); margin-top: 1rem; line-height: 1.6; }
+
+/* SUCCESS STATE */
+.success-box {
+  display: none;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(192,57,43,0.4);
+  padding: 2.5rem; text-align: center;
+}
+.success-icon { font-size: 3rem; margin-bottom: 1rem; }
+.success-title { font-family: var(--serif); font-size: 1.6rem; color: var(--paper); margin-bottom: 0.8rem; }
+.success-text { font-size: 0.9rem; color: rgba(247,243,238,0.55); line-height: 1.8; }
+
+/* HERO RIGHT */
+.nl-hero-right {
+  background: #111; padding: 5rem 3.5rem;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.preview-label { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(247,243,238,0.35); margin-bottom: 1.8rem; font-weight: 500; }
+
+/* EMAIL PREVIEW */
+.email-preview {
+  background: #f7f3ee; border-radius: 2px;
+  overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+  max-width: 400px;
+}
+.ep-header { background: var(--ink); padding: 1.2rem 1.5rem; display: flex; align-items: center; gap: 0.8rem; }
+.ep-dots { display: flex; gap: 5px; }
+.ep-dot { width: 10px; height: 10px; border-radius: 50%; }
+.ep-dot.r { background: #ff5f57; }
+.ep-dot.y { background: #febc2e; }
+.ep-dot.g { background: #28c840; }
+.ep-title-bar { font-size: 0.75rem; color: rgba(247,243,238,0.4); margin-left: auto; }
+.ep-meta { padding: 1rem 1.5rem; border-bottom: 1px solid var(--cream); background: #faf6f1; }
+.ep-from { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.2rem; }
+.ep-subject { font-size: 0.85rem; font-weight: 500; color: var(--ink); }
+.ep-body { padding: 1.5rem; }
+.ep-week { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; font-weight: 500; }
+.ep-story-title { font-family: var(--serif); font-size: 1.2rem; color: var(--ink); margin-bottom: 0.6rem; line-height: 1.3; }
+.ep-story-text { font-size: 0.78rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+.ep-tag { display: inline-block; font-size: 0.65rem; padding: 0.2rem 0.6rem; background: var(--accent-light); color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-right: 0.3rem; margin-bottom: 0.3rem; }
+.ep-read-btn { display: block; margin-top: 1rem; padding: 0.6rem 1.2rem; background: var(--ink); color: var(--paper); font-size: 0.75rem; text-align: center; text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; }
+.ep-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--cream); background: #faf6f1; }
+.ep-footer-text { font-size: 0.65rem; color: rgba(122,112,104,0.6); text-align: center; line-height: 1.5; }
+
+/* ── WHAT YOU GET ── */
+.perks-section { padding: 6rem 4rem; }
+.section-eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; font-weight: 500; }
+.section-title { font-family: var(--serif); font-size: 2.2rem; margin-bottom: 0.6rem; }
+.section-sub { font-size: 0.95rem; color: var(--muted); max-width: 540px; line-height: 1.8; margin-bottom: 3.5rem; }
+
+.perks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--cream); }
+.perk-card { background: var(--paper); padding: 2.5rem 2rem; }
+.perk-icon { font-size: 1.8rem; margin-bottom: 1.2rem; }
+.perk-title { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 0.7rem; }
+.perk-text { font-size: 0.88rem; color: var(--muted); line-height: 1.8; }
+
+/* ── PAST ISSUES ── */
+.issues-section { background: var(--ink); padding: 6rem 4rem; color: var(--paper); }
+.issues-section .section-title { color: var(--paper); }
+.issues-section .section-sub { color: rgba(247,243,238,0.5); }
+.issues-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.07); margin-top: 3rem; }
+.issue-card { background: var(--ink); padding: 2.2rem; transition: background 0.3s; cursor: pointer; }
+.issue-card:hover { background: #111; }
+.issue-week { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; font-weight: 500; }
+.issue-brand { font-family: var(--serif); font-size: 1.25rem; color: var(--paper); margin-bottom: 0.4rem; }
+.issue-theme { font-size: 0.82rem; color: rgba(247,243,238,0.4); margin-bottom: 1rem; font-style: italic; }
+.issue-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
+.issue-tag { font-size: 0.65rem; padding: 0.22rem 0.7rem; background: rgba(192,57,43,0.15); color: rgba(192,57,43,0.8); letter-spacing: 0.06em; text-transform: uppercase; }
+.issue-teaser { font-size: 0.83rem; color: rgba(247,243,238,0.45); line-height: 1.75; }
+.issue-read { margin-top: 1.2rem; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); text-decoration: none; display: inline-block; }
+.issue-read:hover { text-decoration: underline; }
+
+/* ── HOW IT WORKS ── */
+.how-section { padding: 6rem 4rem; background: var(--cream); }
+.how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: rgba(122,112,104,0.15); margin-top: 3rem; }
+.how-step { background: var(--cream); padding: 2.5rem 2rem; }
+.how-num { font-family: var(--serif); font-size: 3.5rem; font-weight: 700; color: rgba(192,57,43,0.15); line-height: 1; margin-bottom: 1rem; }
+.how-title { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.6rem; }
+.how-text { font-size: 0.85rem; color: var(--muted); line-height: 1.75; }
+
+/* ── TESTIMONIALS ── */
+.testimonials-section { padding: 6rem 4rem; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--cream); margin-top: 3rem; }
+.testimonial-card { background: var(--paper); padding: 2.5rem 2rem; }
+.t-quote { font-family: var(--serif); font-size: 1rem; font-style: italic; color: var(--ink); line-height: 1.7; margin-bottom: 1.2rem; }
+.t-quote::before { content: '\201C'; color: var(--accent); font-size: 1.8rem; line-height: 0; vertical-align: -0.5rem; margin-right: 0.1rem; }
+.t-author { font-size: 0.8rem; font-weight: 500; color: var(--ink); }
+.t-role { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+
+/* ── BOTTOM CTA ── */
+.cta-section {
+  padding: 6rem 4rem; background: var(--accent);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.cta-title { font-family: var(--serif); font-size: clamp(2rem,3.5vw,3rem); color: var(--paper); margin-bottom: 1rem; line-height: 1.2; }
+.cta-sub { font-size: 1rem; color: rgba(247,243,238,0.75); margin-bottom: 2.5rem; max-width: 480px; line-height: 1.8; }
+.cta-form { display: flex; gap: 0; max-width: 480px; width: 100%; }
+.cta-input {
+  flex: 1; padding: 1rem 1.4rem;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-right: none;
+  font-family: var(--sans); font-size: 0.9rem; color: var(--paper); outline: none;
+}
+.cta-input::placeholder { color: rgba(255,255,255,0.5); }
+.cta-input:focus { background: rgba(255,255,255,0.2); }
+.cta-btn {
+  padding: 1rem 1.8rem; background: var(--ink); color: var(--paper);
+  border: 1px solid var(--ink); font-family: var(--sans); font-size: 0.82rem;
+  font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+}
+.cta-btn:hover { background: #0d0b08; }
+.cta-note { margin-top: 1rem; font-size: 0.78rem; color: rgba(247,243,238,0.5); }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  background: var(--paper); padding: 2rem 4rem;
+  display: flex; justify-content: center; gap: 5rem; flex-wrap: wrap;
+  border-bottom: 1px solid var(--cream);
+}
+.stat-item { text-align: center; }
+.stat-num { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: var(--ink); line-height: 1; }
+.stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.05em; margin-top: 0.3rem; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 2rem 4rem; display: flex; justify-content: space-between;
+  align-items: center; border-top: 1px solid var(--cream); flex-wrap: wrap; gap: 1rem;
+}
+.footer-logo { font-family: var(--serif); font-size: 1.1rem; }
+.footer-logo span { color: var(--accent); font-style: italic; }
+.footer-copy { font-size: 0.8rem; color: var(--muted); }
+.footer-links { display: flex; gap: 1.5rem; }
+.footer-links a { font-size: 0.8rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--ink); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+.nl-eyebrow { animation: fadeUp 0.5s ease both; }
+.nl-title { animation: fadeUp 0.5s 0.1s ease both; }
+.nl-tagline { animation: fadeUp 0.5s 0.2s ease both; }
+.subscribe-box { animation: fadeUp 0.5s 0.3s ease both; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nl-hero { grid-template-columns: 1fr; }
+  .nl-hero-right { display: none; }
+  .nl-hero-left { padding: 4rem 1.5rem; }
+  .perks-section, .issues-section, .how-section,
+  .testimonials-section, .cta-section { padding: 4rem 1.5rem; }
+  .stats-bar { padding: 2rem 1.5rem; gap: 2rem; }
+  .perks-grid, .issues-grid, .testimonials-grid { grid-template-columns: 1fr; }
+  .how-steps { grid-template-columns: 1fr 1fr; }
+  .cta-form { flex-direction: column; }
+  .cta-input { border-right: 1px solid rgba(255,255,255,0.3); border-bottom: none; }
+  footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+}
+@media(max-width:600px) {
+  .how-steps { grid-template-columns: 1fr; }
+  .stats-bar { gap: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Brand<span>Lore</span></a>
+  <a href="index.html" class="nav-back">← Back to stories</a>
+</nav>
+
+<!-- HERO -->
+<section class="nl-hero">
+  <div class="nl-hero-left">
+    <div class="hero-deco-text">@</div>
+    <div class="nl-eyebrow">Free Weekly Newsletter</div>
+    <h1 class="nl-title">One brand.<br>One story.<br><em>Every week.</em></h1>
+    <p class="nl-tagline">Every Sunday morning, we unpack the founding story, growth strategy, and hard-won lessons of the world's most iconic brands — so you can build smarter.</p>
+
+    <!-- FORM -->
+    <div class="subscribe-box" id="subscribe-box">
+      <div class="subscribe-label">Join 0 curious minds — it's free</div>
+      <input class="form-name" type="text" id="sub-name" placeholder="Your first name" />
+      <div class="form-row">
+        <input class="form-input" type="email" id="sub-email" placeholder="your@email.com" />
+      </div>
+      <select class="form-select" id="sub-interest">
+        <option value="" disabled selected>What interests you most? (optional)</option>
+        <option value="startups">Indian Startups</option>
+        <option value="global">Global Tech Giants</option>
+        <option value="fmcg">FMCG & Consumer Brands</option>
+        <option value="fashion">Fashion & Lifestyle</option>
+        <option value="all">Everything — surprise me!</option>
+      </select>
+      <button class="btn-subscribe" onclick="handleSubscribe()">Send me the weekly story →</button>
+      <p class="form-note">No spam. No selling your email. Unsubscribe anytime with one click. Sent every Sunday at 8:00 AM IST.</p>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-box" id="success-box">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">You're in!</div>
+      <p class="success-text">Welcome to BrandLore Weekly. Your first story lands this Sunday at 8 AM IST.<br><br>Check your inbox for a confirmation email. If you don't see it, check spam and mark us as safe — we promise it's worth it.</p>
+    </div>
+  </div>
+
+  <!-- EMAIL PREVIEW -->
+  <div class="nl-hero-right">
+    <div class="preview-label">What you'll receive every Sunday</div>
+    <div class="email-preview">
+      <div class="ep-header">
+        <div class="ep-dots">
+          <div class="ep-dot r"></div>
+          <div class="ep-dot y"></div>
+          <div class="ep-dot g"></div>
+        </div>
+        <div class="ep-title-bar">Inbox — BrandLore Weekly</div>
+      </div>
+      <div class="ep-meta">
+        <div class="ep-from">From: stories@brandlore.in &nbsp;·&nbsp; Sunday, 8:00 AM</div>
+        <div class="ep-subject">📖 Week #12 — How IKEA turned "cheap" into a design philosophy</div>
+      </div>
+      <div class="ep-body">
+        <div class="ep-week">This week's brand</div>
+        <div class="ep-story-title">IKEA: The man who refused to pay full price — for anything</div>
+        <div class="ep-story-text">Ingvar Kamprad grew up so frugal he collected leftover matches. That obsession became a furniture empire worth $63 billion. Here's the specific strategy that made "cheap" feel like a virtue...</div>
+        <div>
+          <span class="ep-tag">Cost leadership</span>
+          <span class="ep-tag">Flat-pack innovation</span>
+          <span class="ep-tag">Experience retail</span>
+        </div>
+        <div style="margin-top:0.8rem; font-size:0.75rem; color:var(--muted); line-height:1.6;">
+          <strong style="color:var(--ink);">5 strategies covered:</strong><br>
+          → The showroom-as-maze psychology<br>
+          → Why IKEA makes you carry your own furniture<br>
+          → How the meatballs became a loyalty tool<br>
+          → The founder who flew economy until age 90<br>
+          → IKEA's secret supply chain revolution
+        </div>
+        <a class="ep-read-btn" href="#">Read the full story →</a>
+      </div>
+      <div class="ep-footer">
+        <div class="ep-footer-text">BrandLore Weekly · Unsubscribe · View in browser<br>Sent with curiosity from Gurugram, India 🇮🇳</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">Weekly</div>
+    <div class="stat-label">Every Sunday morning</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">5 min</div>
+    <div class="stat-label">Average read time</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">Free</div>
+    <div class="stat-label">Always, forever</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">0 ads</div>
+    <div class="stat-label">No sponsors, no clutter</div>
+  </div>
+</div>
+
+<!-- WHAT YOU GET -->
+<section class="perks-section">
+  <div class="section-eyebrow">Every issue includes</div>
+  <h2 class="section-title">More than just a story</h2>
+  <p class="section-sub">Each Sunday email is a self-contained masterclass — designed for people who want to build, not just read.</p>
+  <div class="perks-grid">
+    <div class="perk-card">
+      <div class="perk-icon">📖</div>
+      <div class="perk-title">The Full Origin Story</div>
+      <div class="perk-text">Not the Wikipedia version. We dig into the real founding story — the failures, the lucky breaks, the decisions that changed everything. Every issue reads like a documentary, not a Wikipedia article.</div>
+    </div>
+    <div class="perk-card">
+      <div class="perk-icon">🎯</div>
+      <div class="perk-title">5 Specific Strategies</div>
+      <div class="perk-text">We don't say "they focused on quality." We say: here is the exact pricing strategy, the specific distribution move, the counterintuitive product decision that created the competitive moat. Specific. Named. Actionable.</div>
+    </div>
+    <div class="perk-card">
+      <div class="perk-icon">⏱️</div>
+      <div class="perk-title">The Pivotal Timeline</div>
+      <div class="perk-text">A visual, year-by-year breakdown of the key moments. When did they almost die? When did they pivot? What did they get wrong before they got it right? The timeline shows you the non-linear reality of every great company.</div>
+    </div>
+    <div class="perk-card">
+      <div class="perk-icon">💡</div>
+      <div class="perk-title">Founder Lessons</div>
+      <div class="perk-text">Every issue closes with 3–4 lessons extracted specifically for builders and founders. Not generic wisdom — concrete lessons drawn directly from that brand's journey and applicable to early-stage companies today.</div>
+    </div>
+    <div class="perk-card">
+      <div class="perk-icon">📊</div>
+      <div class="perk-title">The Numbers That Matter</div>
+      <div class="perk-text">Revenue at founding vs today. Key financial turning points. How much they raised. When they became profitable. The numbers tell a different story than the narrative — and we give you both so you can see what actually happened.</div>
+    </div>
+    <div class="perk-card">
+      <div class="perk-icon">🔗</div>
+      <div class="perk-title">Full Story on BrandLore</div>
+      <div class="perk-text">Every email links to the full interactive brand story on BrandLore.in — with the complete interactive timeline, all strategies, and the full lesson breakdown. The email is the teaser. The website is the deep dive.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PAST ISSUES -->
+<section class="issues-section">
+  <div class="section-eyebrow">Past issues</div>
+  <h2 class="section-title" style="color:var(--paper);">Stories we've told so far</h2>
+  <p class="section-sub">Every issue is available to read for free on BrandLore. Subscribe to get them delivered fresh every Sunday.</p>
+  <div class="issues-grid">
+    <div class="issue-card" onclick="window.location='apple.html'">
+      <div class="issue-week">Week #01</div>
+      <div class="issue-brand">Apple Inc.</div>
+      <div class="issue-theme">"The Subtraction Strategy"</div>
+      <div class="issue-tags">
+        <span class="issue-tag">Design</span>
+        <span class="issue-tag">Ecosystem</span>
+        <span class="issue-tag">Premium</span>
+      </div>
+      <div class="issue-teaser">How Jobs killed 340 of 350 Apple products on his return — and why fewer products meant more money. The radical focus that saved a dying company.</div>
+      <a href="apple.html" class="issue-read">Read this issue →</a>
+    </div>
+    <div class="issue-card" onclick="window.location='coca-cola.html'">
+      <div class="issue-week">Week #02</div>
+      <div class="issue-brand">Coca-Cola</div>
+      <div class="issue-theme">"Selling Happiness, Not Sugar"</div>
+      <div class="issue-tags">
+        <span class="issue-tag">FMCG</span>
+        <span class="issue-tag">Distribution</span>
+        <span class="issue-tag">Branding</span>
+      </div>
+      <div class="issue-teaser">A pharmacist's accidental recipe. A businessman who gave it away for free. And the strategy that made Coca-Cola available in more places than clean drinking water.</div>
+      <a href="coca-cola.html" class="issue-read">Read this issue →</a>
+    </div>
+    <div class="issue-card" onclick="window.location='flipkart.html'">
+      <div class="issue-week">Week #03</div>
+      <div class="issue-brand">Flipkart</div>
+      <div class="issue-theme">"Building India's Internet"</div>
+      <div class="issue-tags">
+        <span class="issue-tag">India</span>
+        <span class="issue-tag">E-commerce</span>
+        <span class="issue-tag">Logistics</span>
+      </div>
+      <div class="issue-teaser">Two IIT engineers who'd never run a shop built India's biggest marketplace. Their secret: solving for India specifically — not copying Amazon's Western playbook.</div>
+      <a href="flipkart.html" class="issue-read">Read this issue →</a>
+    </div>
+    <div class="issue-card" onclick="window.location='nike.html'">
+      <div class="issue-week">Week #04</div>
+      <div class="issue-brand">Nike</div>
+      <div class="issue-theme">"Just Do It — Three Words, $200B"</div>
+      <div class="issue-tags">
+        <span class="issue-tag">Sports</span>
+        <span class="issue-tag">Athlete brands</span>
+        <span class="issue-tag">Storytelling</span>
+      </div>
+      <div class="issue-teaser">Phil Knight sold shoes from a car boot. Then he bet $250K on a 21-year-old called Michael Jordan. Then three words changed everything. Here's the exact playbook.</div>
+      <a href="nike.html" class="issue-read">Read this issue →</a>
+    </div>
+    <div class="issue-card" onclick="window.location='tata.html'">
+      <div class="issue-week">Week #05</div>
+      <div class="issue-brand">Tata Group</div>
+      <div class="issue-theme">"Building India Before India Was Built"</div>
+      <div class="issue-tags">
+        <span class="issue-tag">India</span>
+        <span class="issue-tag">Conglomerate</span>
+        <span class="issue-tag">Legacy</span>
+      </div>
+      <div class="issue-teaser">The man who built steel plants, hotels, and universities for a country that didn't yet exist as a nation. 157 years and still growing — the strategy inside the Tata empire.</div>
+      <a href="tata.html" class="issue-read">Read this issue →</a>
+    </div>
+    <div class="issue-card" onclick="window.location='tesla.html'">
+      <div class="issue-week">Week #06</div>
+      <div class="issue-brand">Tesla</div>
+      <div class="issue-theme">"The Company That Shouldn't Exist"</div>
+      <div class="issue-tags">
+        <span class="issue-tag">EV</span>
+        <span class="issue-tag">Disruption</span>
+        <span class="issue-tag">Zero ads</span>
+      </div>
+      <div class="issue-teaser">Nearly bankrupt in 2008. Laughed at by every car company. $0 in advertising. Yet Tesla made the entire auto industry obsolete. Here's how — specifically.</div>
+      <a href="tesla.html" class="issue-read">Read this issue →</a>
+    </div>
+    <div class="issue-card" onclick="window.location='amazon.html'">
+      <div class="issue-week">Week #07</div>
+      <div class="issue-brand">Amazon</div>
+      <div class="issue-theme">"The Everything Strategy"</div>
+      <div class="issue-tags">
+        <span class="issue-tag">E-commerce</span>
+        <span class="issue-tag">Cloud</span>
+        <span class="issue-tag">Flywheel</span>
+      </div>
+      <div class="issue-teaser">Jeff Bezos drove cross-country typing a business plan. He lost money for 9 years deliberately. Then he accidentally invented cloud computing. The specific decisions behind the $2 trillion empire.</div>
+      <a href="amazon.html" class="issue-read">Read this issue →</a>
+    </div>
+    <div class="issue-card" style="opacity:0.5; cursor:default;">
+      <div class="issue-week">Week #08</div>
+      <div class="issue-brand">Coming Sunday</div>
+      <div class="issue-theme">"Subscribe to find out"</div>
+      <div class="issue-tags">
+        <span class="issue-tag">???</span>
+      </div>
+      <div class="issue-teaser">A brand so iconic its logo needs no name. A business model so counterintuitive it took 10 years for competitors to understand it. Subscribe to get it first.</div>
+    </div>
+    <div class="issue-card" style="opacity:0.35; cursor:default;">
+      <div class="issue-week">Week #09</div>
+      <div class="issue-brand">And many more…</div>
+      <div class="issue-theme">"52 stories a year, every year"</div>
+      <div class="issue-tags">
+        <span class="issue-tag">Ongoing</span>
+      </div>
+      <div class="issue-teaser">IKEA, Zara, Reliance, McDonald's, Infosys, Patagonia, Spotify, Airbnb, OYO, Zepto — every great brand has a story worth knowing. We're just getting started.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="section-eyebrow">The process</div>
+  <h2 class="section-title">How BrandLore Weekly works</h2>
+  <p class="section-sub">Simple, consistent, and designed to actually be read — not just subscribed to.</p>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-num">01</div>
+      <div class="how-title">You subscribe (free)</div>
+      <div class="how-text">Enter your name and email above. That's it. No credit card, no verification hoops, no trial period. Free now, free forever.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">02</div>
+      <div class="how-title">Every Sunday, 8 AM IST</div>
+      <div class="how-text">We send one brand story to your inbox. Exactly one. Not a digest of 20 things — one deep, carefully researched story with everything you need to know.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">03</div>
+      <div class="how-title">Read in 5 minutes</div>
+      <div class="how-text">Each email is written to be read over your Sunday morning chai or coffee. Short enough to finish, deep enough to learn something genuinely useful.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">04</div>
+      <div class="how-title">Go deeper on BrandLore</div>
+      <div class="how-text">Every email links to the full interactive story on BrandLore — complete timeline, all strategies, data visualisations, and founder lessons. The email is the summary. The website is the deep dive.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="section-eyebrow">From readers</div>
+  <h2 class="section-title">What subscribers say</h2>
+  <p class="section-sub">Real words from people who read BrandLore Weekly every Sunday.</p>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="t-quote">I've read a lot of business newsletters. BrandLore is the only one I actually look forward to on Sunday. The strategies aren't generic — they're specific, sourced, and actually usable.</div>
+      <div class="t-author">Arjun M.</div>
+      <div class="t-role">Product Manager, Bengaluru</div>
+    </div>
+    <div class="testimonial-card">
+      <div class="t-quote">The Flipkart issue changed how I think about building for India. I've shared it with my whole founding team. This is the kind of content that actually makes you think differently.</div>
+      <div class="t-author">Priya S.</div>
+      <div class="t-role">Founder, EdTech startup, Delhi</div>
+    </div>
+    <div class="testimonial-card">
+      <div class="t-quote">The Tesla issue was brilliant. Not just the story — the part about how Tesla's cost centre became their biggest product. That reframed how I look at my own business entirely.</div>
+      <div class="t-author">Rahul K.</div>
+      <div class="t-role">MBA Student, IIM Ahmedabad</div>
+    </div>
+    <div class="testimonial-card">
+      <div class="t-quote">I read BrandLore to my team every Monday morning. We use each story as a framework discussion for our own brand decisions. It's become our weekly ritual.</div>
+      <div class="t-author">Divya T.</div>
+      <div class="t-role">Marketing Head, D2C Brand</div>
+    </div>
+    <div class="testimonial-card">
+      <div class="t-quote">Finally a newsletter that respects my time. Five minutes, one story, three things I remember. No filler, no fluff, no 47 links I'll never click. Just good writing about great companies.</div>
+      <div class="t-author">Siddharth R.</div>
+      <div class="t-role">Consultant, Mumbai</div>
+    </div>
+    <div class="testimonial-card">
+      <div class="t-quote">The Amazon issue alone was worth subscribing for. I didn't know any of those founding details. The part about the Christmas Eve that nearly ended it — genuinely gripping. This is business writing done right.</div>
+      <div class="t-author">Ananya V.</div>
+      <div class="t-role">Senior Analyst, Gurugram</div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="cta-section">
+  <h2 class="cta-title">Start reading this Sunday.</h2>
+  <p class="cta-sub">Join curious founders, students, and professionals who read BrandLore every Sunday. One brand. One story. One thing you'll remember all week.</p>
+  <div class="cta-form">
+    <input class="cta-input" type="email" id="cta-email" placeholder="your@email.com" />
+    <button class="cta-btn" onclick="handleCtaSubscribe()">Subscribe free →</button>
+  </div>
+  <p class="cta-note">No spam. Unsubscribe anytime. Free forever.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Brand<span>Lore</span></div>
+  <span class="footer-copy">© 2025 BrandLore. Built with curiosity.</span>
+  <div class="footer-links">
+    <a href="index.html">Stories</a>
+    <a href="index.html">About</a>
+  </div>
+</footer>
+
+<script>
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function handleSubscribe() {
+  const name = document.getElementById('sub-name').value.trim();
+  const email = document.getElementById('sub-email').value.trim();
+
+  if (!name) {
+    alert('Please enter your first name.');
+    document.getElementById('sub-name').focus();
+    return;
+  }
+  if (!email || !validateEmail(email)) {
+    alert('Please enter a valid email address.');
+    document.getElementById('sub-email').focus();
+    return;
+  }
+
+  // Save to localStorage
+  const subscribers = JSON.parse(localStorage.getItem('brandlore_subscribers') || '[]');
+  const interest = document.getElementById('sub-interest').value;
+  const existing = subscribers.find(s => s.email === email);
+
+  if (existing) {
+    alert('You\'re already subscribed! Check your inbox this Sunday. 🎉');
+    return;
+  }
+
+  subscribers.push({
+    name,
+    email,
+    interest,
+    date: new Date().toISOString()
+  });
+  localStorage.setItem('brandlore_subscribers', JSON.stringify(subscribers));
+
+  // Show success
+  document.getElementById('subscribe-box').style.display = 'none';
+  const successBox = document.getElementById('success-box');
+  successBox.style.display = 'block';
+  successBox.querySelector('.success-title').textContent = `You're in, ${name}! 🎉`;
+  updateSubscriberCount();
+}
+
+function handleCtaSubscribe() {
+  const email = document.getElementById('cta-email').value.trim();
+  if (!email || !validateEmail(email)) {
+    alert('Please enter a valid email address.');
+    document.getElementById('cta-email').focus();
+    return;
+  }
+
+  const subscribers = JSON.parse(localStorage.getItem('brandlore_subscribers') || '[]');
+  const existing = subscribers.find(s => s.email === email);
+
+  if (existing) {
+    alert('You\'re already subscribed! Check your inbox this Sunday. 🎉');
+    return;
+  }
+
+  subscribers.push({
+    name: 'Reader',
+    email,
+    interest: 'all',
+    date: new Date().toISOString()
+  });
+  localStorage.setItem('brandlore_subscribers', JSON.stringify(subscribers));
+
+  // Replace CTA
+  document.querySelector('.cta-section').innerHTML = `
+    <div style="text-align:center; color:var(--paper);">
+      <div style="font-size:3rem; margin-bottom:1rem;">🎉</div>
+      <h2 class="cta-title">You're subscribed!</h2>
+      <p class="cta-sub">Your first story lands this Sunday at 8 AM IST. Check your inbox for a welcome message.</p>
+      <a href="index.html" style="display:inline-block; margin-top:1rem; padding:0.9rem 2rem; background:var(--ink); color:var(--paper); text-decoration:none; font-size:0.85rem; letter-spacing:0.08em; text-transform:uppercase;">Read past stories →</a>
+    </div>`;
+  updateSubscriberCount();
+}
+
+function updateSubscriberCount() {
+  const subscribers = JSON.parse(localStorage.getItem('brandlore_subscribers') || '[]');
+  const count = subscribers.length;
+  const labels = document.querySelectorAll('.subscribe-label');
+  labels.forEach(l => {
+    l.textContent = `Join ${count} curious mind${count === 1 ? '' : 's'} — it's free`;
+  });
+}
+
+// Init count on page load
+updateSubscriberCount();
+
+// Pre-fill email from URL params (coming from index.html quick subscribe)
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const emailParam = params.get('email');
+  if (emailParam) {
+    const emailInput = document.getElementById('sub-email');
+    if (emailInput) {
+      emailInput.value = decodeURIComponent(emailParam);
+      // Smooth scroll to form
+      setTimeout(function() {
+        document.getElementById('subscribe-box').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.getElementById('sub-name').focus();
+      }, 400);
+    }
+  }
+})();
+</script>
+
+</body>
+</html>

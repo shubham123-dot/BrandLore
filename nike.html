@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nike — BrandLore</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --ink: #1a1410; --paper: #f7f3ee; --cream: #ede8e0; --accent: #c0392b; --muted: #7a7068; --serif: 'Playfair Display', Georgia, serif; --sans: 'DM Sans', sans-serif; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: var(--paper); border-bottom: 1px solid var(--cream); }
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; }
+.nav-logo span { color: var(--accent); font-style: italic; }
+.nav-back { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
+.nav-back:hover { color: var(--ink); }
+.story-hero { min-height: 100vh; padding-top: 80px; display: grid; grid-template-columns: 1fr 1fr; background: #111; }
+.story-hero-left { display: flex; flex-direction: column; justify-content: center; padding: 5rem 3rem 5rem 4rem; color: var(--paper); }
+.story-cat { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: #f97316; margin-bottom: 1.2rem; font-weight: 500; }
+.story-title { font-family: var(--serif); font-size: clamp(2.6rem,4vw,4rem); line-height: 1.1; margin-bottom: 1.2rem; color: var(--paper); }
+.story-title em { color: #f97316; font-style: italic; }
+.story-tagline { font-size: 1.05rem; color: rgba(247,243,238,0.65); margin-bottom: 2.5rem; line-height: 1.8; max-width: 420px; }
+.stat-row { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+.stat { display: flex; flex-direction: column; gap: 0.3rem; }
+.stat-num { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: var(--paper); line-height: 1; }
+.stat-label { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(247,243,238,0.45); }
+.story-hero-right { background: #0a0a0a; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 4rem; position: relative; overflow: hidden; }
+.brand-symbol { font-family: var(--serif); font-size: 10rem; color: rgba(255,255,255,0.03); font-style: italic; position: absolute; right: -1rem; bottom: -2rem; line-height: 1; user-select: none; }
+.founding-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); padding: 2.5rem; width: 100%; max-width: 340px; }
+.founding-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(247,243,238,0.35); margin-bottom: 1.5rem; }
+.founding-fact { margin-bottom: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.founding-fact:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.ff-label { font-size: 0.72rem; color: rgba(247,243,238,0.35); margin-bottom: 0.3rem; }
+.ff-val { font-size: 0.95rem; color: var(--paper); font-weight: 400; }
+.timeline-section { padding: 6rem 4rem; }
+.section-eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; font-weight: 500; }
+.section-title { font-family: var(--serif); font-size: 2.2rem; margin-bottom: 3rem; }
+.tl-container { position: relative; }
+.tl-spine { position: absolute; left: 90px; top: 0; bottom: 0; width: 1px; background: var(--cream); }
+.tl-entry { display: grid; grid-template-columns: 90px 1fr; gap: 0; position: relative; cursor: pointer; }
+.tl-year-col { padding: 2rem 2rem 2rem 0; text-align: right; padding-top: 2.2rem; }
+.tl-year-text { font-family: var(--serif); font-size: 1rem; font-weight: 700; color: var(--muted); transition: color 0.3s; }
+.tl-entry:hover .tl-year-text { color: var(--accent); }
+.tl-dot-col { position: relative; display: flex; align-items: flex-start; padding-top: 2.5rem; }
+.tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--cream); border: 2px solid var(--cream); margin-left: -6px; flex-shrink: 0; transition: all 0.3s; margin-right: 2rem; }
+.tl-entry:hover .tl-dot { background: var(--accent); border-color: var(--accent); transform: scale(1.3); }
+.tl-body { padding: 2rem 0; border-bottom: 1px solid var(--cream); }
+.tl-entry:last-child .tl-body { border-bottom: none; }
+.tl-event-title { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 0.5rem; transition: color 0.3s; }
+.tl-entry:hover .tl-event-title { color: var(--accent); }
+.tl-event-text { font-size: 0.9rem; color: var(--muted); line-height: 1.8; max-width: 600px; }
+.tl-strategy-tag { display: inline-block; margin-top: 0.8rem; margin-right: 0.4rem; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; padding: 0.3rem 0.8rem; background: #f5e6e4; color: var(--accent); }
+.strategies-section { background: var(--ink); padding: 6rem 4rem; color: var(--paper); }
+.strategies-section .section-title { color: var(--paper); }
+.strategies-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.08); margin-top: 3rem; }
+.strategy-card { background: var(--ink); padding: 2.5rem 2rem; transition: background 0.3s; }
+.strategy-card:hover { background: #0a0a0a; }
+.strategy-num { font-family: var(--serif); font-size: 3rem; color: rgba(192,57,43,0.2); line-height: 1; margin-bottom: 1rem; font-weight: 700; }
+.strategy-title { font-family: var(--serif); font-size: 1.2rem; color: var(--paper); margin-bottom: 0.8rem; }
+.strategy-text { font-size: 0.88rem; color: rgba(247,243,238,0.55); line-height: 1.8; }
+.strategy-impact { margin-top: 1.2rem; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: #f97316; font-weight: 500; }
+.quote-section { padding: 5rem 4rem; border-top: 1px solid var(--cream); border-bottom: 1px solid var(--cream); }
+.pull-quote { font-family: var(--serif); font-size: clamp(1.4rem,2.5vw,2rem); font-style: italic; line-height: 1.5; color: var(--ink); max-width: 800px; margin: 0 auto; text-align: center; }
+.pull-quote::before { content: '\201C'; color: var(--accent); font-size: 4rem; line-height: 0; vertical-align: -1rem; margin-right: 0.2rem; }
+.quote-attr { text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--muted); }
+.lesson-section { padding: 6rem 4rem; }
+.lesson-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--cream); margin-top: 3rem; }
+.lesson-card { background: var(--paper); padding: 2.5rem; }
+.lesson-icon { font-size: 1.4rem; margin-bottom: 1rem; }
+.lesson-title { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 0.7rem; }
+.lesson-text { font-size: 0.9rem; color: var(--muted); line-height: 1.8; }
+.story-nav { padding: 3rem 4rem; background: var(--cream); display: flex; justify-content: space-between; align-items: center; }
+.story-nav-link { text-decoration: none; color: var(--ink); }
+.story-nav-link:hover { color: var(--accent); }
+.story-nav-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+.story-nav-name { font-family: var(--serif); font-size: 1.2rem; }
+footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--cream); }
+.footer-logo { font-family: var(--serif); font-size: 1.1rem; }
+.footer-logo span { color: var(--accent); font-style: italic; }
+.footer-copy { font-size: 0.8rem; color: var(--muted); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.story-cat { animation: fadeUp 0.5s ease both; }
+.story-title { animation: fadeUp 0.5s 0.1s ease both; }
+.story-tagline { animation: fadeUp 0.5s 0.2s ease both; }
+.stat-row { animation: fadeUp 0.5s 0.3s ease both; }
+@media(max-width:900px) {
+  nav { padding: 1rem 1.5rem; }
+  .story-hero { grid-template-columns: 1fr; }
+  .story-hero-right { display: none; }
+  .story-hero-left { padding: 4rem 1.5rem; }
+  .timeline-section, .strategies-section, .lesson-section, .quote-section { padding: 4rem 1.5rem; }
+  .strategies-grid { grid-template-columns: 1fr; }
+  .lesson-grid { grid-template-columns: 1fr; }
+  .tl-spine { left: 70px; }
+  .tl-entry { grid-template-columns: 70px 1fr; }
+  .story-nav { padding: 2rem 1.5rem; flex-direction: column; gap: 1.5rem; text-align: center; }
+  footer { padding: 2rem 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Brand<span>Lore</span></a>
+  <a href="index.html" class="nav-back">← All Stories</a>
+</nav>
+
+<section class="story-hero">
+  <div class="story-hero-left">
+    <div class="story-cat">Fashion & Sports · Founded 1964</div>
+    <h1 class="story-title">Nike<br><em>From a Car Boot</em><br>to $200 Billion.</h1>
+    <p class="story-tagline">Phil Knight started selling Japanese shoes from the trunk of his car. He built the world's most powerful sports brand through obsession, storytelling, and one perfect swoosh.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">$50</div><div class="stat-label">First inventory</div></div>
+      <div class="stat"><div class="stat-num">$200B</div><div class="stat-label">Market cap</div></div>
+      <div class="stat"><div class="stat-num">$35</div><div class="stat-label">What the swoosh cost</div></div>
+    </div>
+  </div>
+  <div class="story-hero-right">
+    <div class="brand-symbol">N</div>
+    <div class="founding-card">
+      <div class="founding-label">The founding facts</div>
+      <div class="founding-fact"><div class="ff-label">Founded by</div><div class="ff-val">Phil Knight & Bill Bowerman, Oregon</div></div>
+      <div class="founding-fact"><div class="ff-label">Original name</div><div class="ff-val">Blue Ribbon Sports — shoe importer</div></div>
+      <div class="founding-fact"><div class="ff-label">The swoosh</div><div class="ff-val">Designed by Carolyn Davidson for $35. She later got stock worth millions.</div></div>
+      <div class="founding-fact"><div class="ff-label">The waffle sole</div><div class="ff-val">Bowerman poured rubber into his wife's waffle iron — and invented the modern running shoe.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="timeline-section">
+  <div class="section-eyebrow">The journey</div>
+  <div class="section-title">The <em style="font-style:italic;color:var(--accent);">unlikely empire</em> of sport</div>
+  <div class="tl-container">
+    <div class="tl-spine"></div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1964</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Selling Shoes from a Car Boot</div>
+        <div class="tl-event-text">Phil Knight, fresh from Stanford MBA, imports Onitsuka Tiger shoes from Japan and sells them at track meets from the boot of his car. He spots a gap: American runners have no good, affordable shoes. His first year revenue: $8,000. His first distribution channel: athletic events where his customers already were.</div>
+        <span class="tl-strategy-tag">Go where your customers are</span><span class="tl-strategy-tag">Import arbitrage</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1971</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Nike Is Born — $35 Swoosh Included</div>
+        <div class="tl-event-text">After falling out with Onitsuka, Knight renames the company Nike (Greek goddess of victory) and commissions graphic design student Carolyn Davidson to create a logo for $35. Knight says "I don't love it, but it'll grow on me." It grows on 8 billion people. The lesson: great brands are built over time, not in a meeting.</div>
+        <span class="tl-strategy-tag">Identity creation</span><span class="tl-strategy-tag">Simple, scalable logo</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1984</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">The Michael Jordan Bet — $250K That Changed Everything</div>
+        <div class="tl-event-text">Jordan wanted Adidas. Nike offers a $250K/year deal and a signature shoe — unheard of in 1984. The Air Jordan 1 launches. The NBA bans it for violating uniform rules. Nike pays the $5,000-per-game fine. The controversy is priceless publicity. Air Jordan becomes a $4 billion brand within 35 years. One athlete. One bet.</div>
+        <span class="tl-strategy-tag">Athlete-as-brand</span><span class="tl-strategy-tag">Controversy as marketing</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1988</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">"Just Do It" — Three Words, Infinite Power</div>
+        <div class="tl-event-text">Ad agency Wieden+Kennedy creates "Just Do It" — inspired (ironically) by a murderer's last words. The slogan transcends sport entirely. It's not about shoes — it's about overcoming your own limitations. Nike's sales go from $877M to $9.2B in the next decade. Three words carry more weight than most brand strategies combined.</div>
+        <span class="tl-strategy-tag">Universal messaging</span><span class="tl-strategy-tag">Emotional positioning</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1997</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Tiger Woods & the "Hello World" Ad</div>
+        <div class="tl-event-text">Nike signs the 21-year-old Tiger Woods for $40M. Days into his pro career, Nike airs "Hello World" — a stark ad about racism in golf. "There are still courses in the U.S. I am not allowed to play because of the colour of my skin." Brave, polarising, unforgettable. Nike repeatedly chooses sides rather than playing it safe.</div>
+        <span class="tl-strategy-tag">Value-led marketing</span><span class="tl-strategy-tag">Brave storytelling</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2018</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Colin Kaepernick — "Believe in Something"</div>
+        <div class="tl-event-text">Nike makes Kaepernick the face of their 30th anniversary "Just Do It" campaign — the quarterback who knelt during the anthem. #NikeBoycott trends. Shares drop 3%. Then reverse. Nike's online sales jump 31% in 3 days. Stock hits an all-time high. Nike had modelled the risk. They knew their core customer would celebrate, not leave.</div>
+        <span class="tl-strategy-tag">Know your customer deeply</span><span class="tl-strategy-tag">Calculated controversy</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strategies-section">
+  <div class="section-eyebrow">The playbook</div>
+  <div class="section-title" style="color:var(--paper);">6 Strategies That Built Nike</div>
+  <div class="strategies-grid">
+    <div class="strategy-card">
+      <div class="strategy-num">01</div>
+      <div class="strategy-title">Athlete as Brand Ambassador</div>
+      <div class="strategy-text">Nike didn't just sponsor athletes — they co-created identities. Air Jordan wasn't a shoe endorsement; it was a sub-brand. LeBron, Serena, Ronaldo — each has a Nike line that functions as a brand within a brand. Fans of the athlete become fans of Nike without Nike ever asking. Borrowed credibility compounds over time.</div>
+      <div class="strategy-impact">→ Air Jordan alone = $4B annual revenue</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">02</div>
+      <div class="strategy-title">Sell Aspiration, Not Equipment</div>
+      <div class="strategy-text">Nike's target customer is not elite athletes — it's people who want to feel like one. "Just Do It" speaks to the 5am runner, the gym beginner, the weekend warrior. Every Nike ad shows someone overcoming something. The product is a physical object. The brand is a permission slip to believe in yourself.</div>
+      <div class="strategy-impact">→ 40% of customers never play sport seriously</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">03</div>
+      <div class="strategy-title">The Asset-Light Manufacturing Model</div>
+      <div class="strategy-text">Nike owns no factories. All manufacturing is outsourced to Asia. This was radical in the 1970s and is now the standard for every major fashion brand. Nike focuses capital on design, marketing, and athlete relationships — the high-value parts. Manufacturing is a commodity. Creativity is not. Focus resources accordingly.</div>
+      <div class="strategy-impact">→ Industry-leading 45% gross margins</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">04</div>
+      <div class="strategy-title">Innovation as Marketing</div>
+      <div class="strategy-text">Air cushioning. Flyknit. React foam. Vaporfly carbon plate. Every Nike technology launch is a PR event. When Vaporfly shoes helped marathon runners break records, the story ran in every newspaper. Nike didn't buy the ad — the innovation earned it. Product innovation that generates press is the most efficient marketing spend possible.</div>
+      <div class="strategy-impact">→ Vaporfly controversy = $0 in ads, global coverage</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">05</div>
+      <div class="strategy-title">Scarcity and Hype Drops</div>
+      <div class="strategy-text">Nike mastered the art of releasing limited shoes in small quantities — creating queues, resale markets, and cultural events. A shoe that sells for $180 retail trades for $2,000 on StockX. Nike gets the cultural cachet without giving up margin. Scarcity makes demand permanent. When everyone wants something fewer people can have, desire compounds.</div>
+      <div class="strategy-impact">→ Nike resale market worth $6B globally</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">06</div>
+      <div class="strategy-title">Take Calculated Controversial Stands</div>
+      <div class="strategy-text">Kaepernick. Serena. Colin. Nike repeatedly takes public positions on cultural issues — and it consistently pays off. This is not recklessness. Nike studies its customer base deeply. They know that Gen Z and millennials expect brands to have values. Silence is a position. Nike chose to be explicit. Clarity of values builds fanatical loyalty.</div>
+      <div class="strategy-impact">→ 31% sales jump after Kaepernick campaign</div>
+    </div>
+  </div>
+</section>
+
+<section class="quote-section">
+  <div class="pull-quote">The cowards never started and the weak died along the way. That leaves us, ladies and gentlemen. Us.</div>
+  <div class="quote-attr">— Phil Knight, Shoe Dog (Nike memoir)</div>
+</section>
+
+<section class="lesson-section">
+  <div class="section-eyebrow">For founders</div>
+  <div class="section-title">What Nike teaches every startup</div>
+  <div class="lesson-grid">
+    <div class="lesson-card">
+      <div class="lesson-icon">🎯</div>
+      <div class="lesson-title">Find your Michael Jordan early</div>
+      <div class="lesson-text">Every startup has an equivalent of a celebrity endorser — a power user, an influencer, an expert, a community. Find the one person whose credibility, if attached to your product, changes everything. Pursue them obsessively. Offer them equity, not just money.</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">💬</div>
+      <div class="lesson-title">Three words beat three paragraphs</div>
+      <div class="lesson-text">Nike's entire brand fits in three words. Can you say what your startup does in three words? If not, your positioning isn't sharp enough. Simplicity scales. Complexity confuses. Work on your tagline as hard as you work on your product.</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">🏭</div>
+      <div class="lesson-title">Own the magic, outsource the rest</div>
+      <div class="lesson-text">Nike owns design, marketing, and athlete relationships. Everything else is outsourced. What is the "magic" in your business — the part that creates all the value? Own that fiercely. Outsource everything else to stay lean and focused.</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">🔥</div>
+      <div class="lesson-title">Have the courage to have values</div>
+      <div class="lesson-text">Brands that stand for nothing are forgotten. The Kaepernick campaign was a calculated risk — but it was also genuine. Nike's customers knew it. Authentic values attract loyal communities. Performative values repel everyone. Know what you believe before you communicate it.</div>
+    </div>
+  </div>
+</section>
+
+<div class="story-nav">
+  <a href="flipkart.html" class="story-nav-link">
+    <div class="story-nav-label">← Previous</div>
+    <div class="story-nav-name">Flipkart</div>
+  </a>
+  <a href="tata.html" class="story-nav-link" style="text-align:right;">
+    <div class="story-nav-label">Next Story →</div>
+    <div class="story-nav-name">Tata Group</div>
+  </a>
+</div>
+<footer>
+  <div class="footer-logo">Brand<span>Lore</span></div>
+  <span class="footer-copy">© 2025 BrandLore. Built with curiosity.</span>
+</footer>
+</body>
+</html>

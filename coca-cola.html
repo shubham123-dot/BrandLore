@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coca-Cola — BrandLore</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1a1410; --paper: #f7f3ee; --cream: #ede8e0;
+  --accent: #c0392b; --gold: #b8860b; --muted: #7a7068;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: var(--paper); border-bottom: 1px solid var(--cream); }
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; }
+.nav-logo span { color: var(--accent); font-style: italic; }
+.nav-back { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
+.nav-back:hover { color: var(--ink); }
+.story-hero { min-height: 100vh; padding-top: 80px; display: grid; grid-template-columns: 1fr 1fr; background: #8B0000; }
+.story-hero-left { display: flex; flex-direction: column; justify-content: center; padding: 5rem 3rem 5rem 4rem; color: var(--paper); }
+.story-cat { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: #ffb3b3; margin-bottom: 1.2rem; font-weight: 500; }
+.story-title { font-family: var(--serif); font-size: clamp(2.6rem,4vw,4rem); line-height: 1.1; margin-bottom: 1.2rem; color: var(--paper); }
+.story-title em { color: #ffb3b3; font-style: italic; }
+.story-tagline { font-size: 1.05rem; color: rgba(247,243,238,0.65); margin-bottom: 2.5rem; line-height: 1.8; max-width: 420px; }
+.stat-row { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+.stat { display: flex; flex-direction: column; gap: 0.3rem; }
+.stat-num { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: var(--paper); line-height: 1; }
+.stat-label { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(247,243,238,0.45); }
+.story-hero-right { background: rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 4rem; position: relative; overflow: hidden; }
+.brand-symbol { font-family: var(--serif); font-size: 10rem; color: rgba(255,255,255,0.04); font-style: italic; position: absolute; right: -1rem; bottom: -2rem; line-height: 1; user-select: none; }
+.founding-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); padding: 2.5rem; width: 100%; max-width: 340px; }
+.founding-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(247,243,238,0.4); margin-bottom: 1.5rem; }
+.founding-fact { margin-bottom: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.founding-fact:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.ff-label { font-size: 0.72rem; color: rgba(247,243,238,0.4); letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+.ff-val { font-size: 0.95rem; color: var(--paper); font-weight: 400; }
+.timeline-section { padding: 6rem 4rem; }
+.section-eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; font-weight: 500; }
+.section-title { font-family: var(--serif); font-size: 2.2rem; margin-bottom: 3rem; }
+.tl-container { position: relative; }
+.tl-spine { position: absolute; left: 90px; top: 0; bottom: 0; width: 1px; background: var(--cream); }
+.tl-entry { display: grid; grid-template-columns: 90px 1fr; gap: 0; margin-bottom: 0; position: relative; cursor: pointer; }
+.tl-year-col { padding: 2rem 2rem 2rem 0; text-align: right; padding-top: 2.2rem; }
+.tl-year-text { font-family: var(--serif); font-size: 1rem; font-weight: 700; color: var(--muted); transition: color 0.3s; }
+.tl-entry:hover .tl-year-text { color: var(--accent); }
+.tl-dot-col { position: relative; display: flex; align-items: flex-start; padding-top: 2.5rem; }
+.tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--cream); border: 2px solid var(--cream); margin-left: -6px; flex-shrink: 0; transition: all 0.3s; margin-right: 2rem; }
+.tl-entry:hover .tl-dot { background: var(--accent); border-color: var(--accent); transform: scale(1.3); }
+.tl-body { padding: 2rem 0 2rem 0; border-bottom: 1px solid var(--cream); }
+.tl-entry:last-child .tl-body { border-bottom: none; }
+.tl-event-title { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 0.5rem; transition: color 0.3s; }
+.tl-entry:hover .tl-event-title { color: var(--accent); }
+.tl-event-text { font-size: 0.9rem; color: var(--muted); line-height: 1.8; max-width: 600px; }
+.tl-strategy-tag { display: inline-block; margin-top: 0.8rem; margin-right: 0.4rem; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; padding: 0.3rem 0.8rem; background: #f5e6e4; color: var(--accent); }
+.strategies-section { background: var(--ink); padding: 6rem 4rem; color: var(--paper); }
+.strategies-section .section-title { color: var(--paper); }
+.strategies-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.08); margin-top: 3rem; }
+.strategy-card { background: var(--ink); padding: 2.5rem 2rem; transition: background 0.3s; }
+.strategy-card:hover { background: #111; }
+.strategy-num { font-family: var(--serif); font-size: 3rem; color: rgba(192,57,43,0.2); line-height: 1; margin-bottom: 1rem; font-weight: 700; }
+.strategy-title { font-family: var(--serif); font-size: 1.2rem; color: var(--paper); margin-bottom: 0.8rem; }
+.strategy-text { font-size: 0.88rem; color: rgba(247,243,238,0.55); line-height: 1.8; }
+.strategy-impact { margin-top: 1.2rem; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+.quote-section { padding: 5rem 4rem; border-top: 1px solid var(--cream); border-bottom: 1px solid var(--cream); }
+.pull-quote { font-family: var(--serif); font-size: clamp(1.4rem,2.5vw,2rem); font-style: italic; line-height: 1.5; color: var(--ink); max-width: 800px; margin: 0 auto; text-align: center; }
+.pull-quote::before { content: '\201C'; color: var(--accent); font-size: 4rem; line-height: 0; vertical-align: -1rem; margin-right: 0.2rem; }
+.quote-attr { text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--muted); letter-spacing: 0.05em; }
+.lesson-section { padding: 6rem 4rem; }
+.lesson-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--cream); margin-top: 3rem; }
+.lesson-card { background: var(--paper); padding: 2.5rem; }
+.lesson-icon { font-size: 1.4rem; margin-bottom: 1rem; }
+.lesson-title { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 0.7rem; }
+.lesson-text { font-size: 0.9rem; color: var(--muted); line-height: 1.8; }
+.story-nav { padding: 3rem 4rem; background: var(--cream); display: flex; justify-content: space-between; align-items: center; }
+.story-nav-link { text-decoration: none; color: var(--ink); font-size: 0.85rem; }
+.story-nav-link:hover { color: var(--accent); }
+.story-nav-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+.story-nav-name { font-family: var(--serif); font-size: 1.2rem; }
+footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--cream); }
+.footer-logo { font-family: var(--serif); font-size: 1.1rem; }
+.footer-logo span { color: var(--accent); font-style: italic; }
+.footer-copy { font-size: 0.8rem; color: var(--muted); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.story-cat { animation: fadeUp 0.5s ease both; }
+.story-title { animation: fadeUp 0.5s 0.1s ease both; }
+.story-tagline { animation: fadeUp 0.5s 0.2s ease both; }
+.stat-row { animation: fadeUp 0.5s 0.3s ease both; }
+@media(max-width:900px) {
+  nav { padding: 1rem 1.5rem; }
+  .story-hero { grid-template-columns: 1fr; }
+  .story-hero-right { display: none; }
+  .story-hero-left { padding: 4rem 1.5rem; }
+  .timeline-section, .strategies-section, .lesson-section, .quote-section { padding: 4rem 1.5rem; }
+  .strategies-grid { grid-template-columns: 1fr; }
+  .lesson-grid { grid-template-columns: 1fr; }
+  .tl-spine { left: 70px; }
+  .tl-entry { grid-template-columns: 70px 1fr; }
+  .story-nav { padding: 2rem 1.5rem; flex-direction: column; gap: 1.5rem; text-align: center; }
+  footer { padding: 2rem 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Brand<span>Lore</span></a>
+  <a href="index.html" class="nav-back">← All Stories</a>
+</nav>
+
+<section class="story-hero">
+  <div class="story-hero-left">
+    <div class="story-cat">Food & Beverage · Founded 1886</div>
+    <h1 class="story-title">Coca-Cola<br><em>The Accidental</em><br>Empire.</h1>
+    <p class="story-tagline">A pharmacist's headache cure became the world's most recognised brand — served 2 billion times a day in over 200 countries.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">$50</div><div class="stat-label">First batch cost</div></div>
+      <div class="stat"><div class="stat-num">$260B</div><div class="stat-label">Brand value today</div></div>
+      <div class="stat"><div class="stat-num">138 yrs</div><div class="stat-label">And still growing</div></div>
+    </div>
+  </div>
+  <div class="story-hero-right">
+    <div class="brand-symbol">C</div>
+    <div class="founding-card">
+      <div class="founding-label">The founding facts</div>
+      <div class="founding-fact"><div class="ff-label">Invented by</div><div class="ff-val">Dr. John Stith Pemberton, pharmacist</div></div>
+      <div class="founding-fact"><div class="ff-label">Original purpose</div><div class="ff-val">A medicine for headaches and morphine addiction</div></div>
+      <div class="founding-fact"><div class="ff-label">First day sales</div><div class="ff-val">9 glasses at 5 cents each = $0.45</div></div>
+      <div class="founding-fact"><div class="ff-label">The name</div><div class="ff-val">From two ingredients: coca leaf + kola nuts</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="timeline-section">
+  <div class="section-eyebrow">The journey</div>
+  <div class="section-title">138 years of <em style="font-style:italic;color:var(--accent);">relentless expansion</em></div>
+  <div class="tl-container">
+    <div class="tl-spine"></div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1886</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">The Accidental Recipe</div>
+        <div class="tl-event-text">Dr. John Pemberton mixes a caramel-coloured syrup in a three-legged brass kettle. A pharmacist accidentally mixes it with carbonated water instead of plain water. Customers love it. He sells it at Jacob's Pharmacy in Atlanta for 5 cents a glass. He has no idea what he's created.</div>
+        <span class="tl-strategy-tag">Accidental innovation</span><span class="tl-strategy-tag">Right place, right time</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1888</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Asa Candler Buys the Formula</div>
+        <div class="tl-event-text">Pemberton, sick and broke, sells Coca-Cola to businessman Asa Griggs Candler for just $2,300. Candler is the real architect of the brand — he registers it as a trademark, builds a sales force, and starts distributing free sample coupons across America. The genius was in the give-away.</div>
+        <span class="tl-strategy-tag">Sampling strategy</span><span class="tl-strategy-tag">Coupon marketing (first ever)</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1899</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">The Bottling Revolution</div>
+        <div class="tl-event-text">Two lawyers convince Candler to license bottling rights for $1. He thinks bottled soda will never catch on. He's catastrophically wrong. The bottling network explodes across America. This franchised bottling model — which Coca-Cola didn't even invent intentionally — becomes the blueprint for global FMCG expansion.</div>
+        <span class="tl-strategy-tag">Franchise model</span><span class="tl-strategy-tag">Asset-light distribution</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1915</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">The Contour Bottle — Designed to Be Felt in the Dark</div>
+        <div class="tl-event-text">Coca-Cola commissions a bottle design so unique it can be identified blindfolded or broken into pieces. Designer Earl Dean draws inspiration from a cocoa pod. The brief: "a bottle that, if broken on the ground, could still be identified." It becomes the most recognised packaging in history.</div>
+        <span class="tl-strategy-tag">Iconic packaging</span><span class="tl-strategy-tag">Sensory branding</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1931</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Coca-Cola Invents Modern Santa Claus</div>
+        <div class="tl-event-text">Artist Haddon Sundblom paints a warm, rosy-cheeked, red-suited Santa Claus for Coca-Cola's winter campaign. Before this, Santa's image was inconsistent — sometimes tall, sometimes elfin, sometimes scary. Coca-Cola's version becomes the global standard. A brand literally shaped a cultural figure.</div>
+        <span class="tl-strategy-tag">Cultural embedding</span><span class="tl-strategy-tag">Emotional marketing</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1985</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">New Coke — The $100M Lesson</div>
+        <div class="tl-event-text">Losing the "Pepsi Challenge" taste tests, Coca-Cola reformulates and launches New Coke. America revolts. 400,000 complaint letters. Protests. Within 79 days, Coca-Cola brings back the original as "Coca-Cola Classic." The lesson: people don't just buy a drink. They buy a memory, an identity. You can't reformulate nostalgia.</div>
+        <span class="tl-strategy-tag">The cautionary tale</span><span class="tl-strategy-tag">Brand = emotion</span>
+      </div>
+    </div>
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2011</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Share a Coke — Personalisation at Scale</div>
+        <div class="tl-event-text">Australia replaces the Coca-Cola logo with 150 popular names. Sales jump 7% — the first growth in a decade. The campaign rolls out to 80+ countries. People search stores for their name. They post photos online. A 130-year-old brand just went viral. The lesson: make it personal, even at massive scale.</div>
+        <span class="tl-strategy-tag">Personalisation</span><span class="tl-strategy-tag">User-generated content</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strategies-section">
+  <div class="section-eyebrow">The playbook</div>
+  <div class="section-title" style="color:var(--paper);">6 Strategies That Built Coca-Cola</div>
+  <div class="strategies-grid">
+    <div class="strategy-card">
+      <div class="strategy-num">01</div>
+      <div class="strategy-title">Give Before You Sell</div>
+      <div class="strategy-text">Asa Candler distributed millions of free sample coupons before asking people to pay. This was 1890s America — the first mass sampling campaign in history. The principle: let people experience the product for free, and they'll pay forever. Coca-Cola created the sampling strategy that every FMCG brand now copies.</div>
+      <div class="strategy-impact">→ Grew from 1 city to national in 5 years</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">02</div>
+      <div class="strategy-title">Franchised Distribution</div>
+      <div class="strategy-text">Coca-Cola doesn't own most of its bottling plants — local partners do. This asset-light model meant explosive growth with minimal capital. Local bottlers know local markets better than HQ ever could. Coca-Cola provides the syrup, brand, and formula; partners handle manufacturing and distribution. Scale without the burden.</div>
+      <div class="strategy-impact">→ 200+ countries, millions of touchpoints</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">03</div>
+      <div class="strategy-title">Ubiquity as Strategy</div>
+      <div class="strategy-text">"Within arm's reach of desire" — that was Woodruff's goal. Not just in every country, but in every village, every event, every vending machine. When Coca-Cola supplied WWII soldiers for 5 cents a bottle regardless of cost, they earned a generation of loyal customers. Presence creates preference.</div>
+      <div class="strategy-impact">→ Available in more places than any brand on earth</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">04</div>
+      <div class="strategy-title">Sell Happiness, Not Sugar Water</div>
+      <div class="strategy-text">Coca-Cola has never sold a drink. Every ad sells a feeling: friendship, joy, summer, togetherness. "Open Happiness." "Taste the Feeling." The product is a commodity — any lab can recreate the flavour. The feeling is proprietary. Emotional branding is the only kind of moat that can't be copied with a formula.</div>
+      <div class="strategy-impact">→ Most valuable FMCG brand globally</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">05</div>
+      <div class="strategy-title">Cultural Infiltration</div>
+      <div class="strategy-text">Coca-Cola didn't just advertise — it embedded itself into culture. Santa Claus. Polar bears. Sponsoring the Olympics since 1928. FIFA World Cup. Holiday campaigns in 100 languages. When a brand becomes part of a cultural ritual, it's no longer marketing — it's tradition. And traditions are hard to abandon.</div>
+      <div class="strategy-impact">→ 97% global brand recognition</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">06</div>
+      <div class="strategy-title">Protect the Secret Fiercely</div>
+      <div class="strategy-text">The Coca-Cola formula (Merchandise 7X) is one of the world's best-kept trade secrets. Stored in a vault in Atlanta. Known by only two executives at any time. Never patented — so it never expires. This mystique is marketing itself. The secret creates the legend. The legend sells the drink.</div>
+      <div class="strategy-impact">→ Priceless competitive moat</div>
+    </div>
+  </div>
+</section>
+
+<section class="quote-section">
+  <div class="pull-quote">If Coca-Cola's factories burned down tomorrow, the company would be fine. The brand is worth more than all the physical assets combined.</div>
+  <div class="quote-attr">— Warren Buffett, Berkshire Hathaway (largest Coca-Cola shareholder)</div>
+</section>
+
+<section class="lesson-section">
+  <div class="section-eyebrow">For founders</div>
+  <div class="section-title">What Coca-Cola teaches every startup</div>
+  <div class="lesson-grid">
+    <div class="lesson-card">
+      <div class="lesson-icon">🎁</div>
+      <div class="lesson-title">Give away to grow</div>
+      <div class="lesson-text">Candler's free coupons were the original growth hack. If your product is good, letting people try it for free is your best acquisition strategy. The cost of a sample is less than the lifetime value of a loyal customer.</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">🌍</div>
+      <div class="lesson-title">Distribution is the moat</div>
+      <div class="lesson-text">Coca-Cola's product is simple. Its distribution is impossible to replicate. Before you obsess over product features, ask: how does this reach every possible customer? Distribution beats product in consumer markets, every time.</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">❤️</div>
+      <div class="lesson-title">Brand is the business</div>
+      <div class="lesson-text">New Coke tasted better in blind tests — and still failed. Because people don't just buy products, they buy stories, memories, and identities. Build a brand people feel, not just a product people use.</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">🔐</div>
+      <div class="lesson-title">Protect your secret sauce</div>
+      <div class="lesson-text">What is your version of Merchandise 7X? Every business has something proprietary — a process, a relationship, a community. Identify it early. Guard it fiercely. Never give competitors a shortcut to your core advantage.</div>
+    </div>
+  </div>
+</section>
+
+<div class="story-nav">
+  <a href="apple.html" class="story-nav-link">
+    <div class="story-nav-label">← Previous</div>
+    <div class="story-nav-name">Apple Inc.</div>
+  </a>
+  <a href="flipkart.html" class="story-nav-link" style="text-align:right;">
+    <div class="story-nav-label">Next Story →</div>
+    <div class="story-nav-name">Flipkart</div>
+  </a>
+</div>
+<footer>
+  <div class="footer-logo">Brand<span>Lore</span></div>
+  <span class="footer-copy">© 2025 BrandLore. Built with curiosity.</span>
+</footer>
+</body>
+</html>

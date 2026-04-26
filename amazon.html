@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Amazon — BrandLore</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1a1410; --paper: #f7f3ee; --cream: #ede8e0;
+  --accent: #c0392b; --muted: #7a7068;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+  --amazon: #ff9900; --amazon-dark: #e47911;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 4rem; background: var(--paper);
+  border-bottom: 1px solid var(--cream);
+}
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); text-decoration: none; }
+.nav-logo span { color: var(--accent); font-style: italic; }
+.nav-back { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-back:hover { color: var(--ink); }
+
+/* ── HERO ── */
+.story-hero {
+  min-height: 100vh; padding-top: 80px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: #0f1923;
+}
+.story-hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 5rem 3rem 5rem 4rem; color: var(--paper);
+  position: relative;
+}
+.hero-bg-word {
+  position: absolute; font-family: var(--serif); font-size: 16rem;
+  color: rgba(255,153,0,0.03); bottom: -2rem; left: -1rem;
+  line-height: 1; user-select: none; font-style: italic; z-index: 0;
+}
+.story-hero-left > * { position: relative; z-index: 1; }
+.story-cat { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amazon); margin-bottom: 1.2rem; font-weight: 500; }
+.story-title { font-family: var(--serif); font-size: clamp(2.6rem,4vw,4.2rem); line-height: 1.08; margin-bottom: 1.4rem; color: var(--paper); }
+.story-title em { color: var(--amazon); font-style: italic; }
+.story-tagline { font-size: 1.05rem; color: rgba(247,243,238,0.62); margin-bottom: 2.5rem; line-height: 1.85; max-width: 430px; }
+.stat-row { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+.stat { display: flex; flex-direction: column; gap: 0.3rem; }
+.stat-num { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: var(--paper); line-height: 1; }
+.stat-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(247,243,238,0.4); }
+
+.story-hero-right {
+  background: #0a1118;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 4rem; position: relative; overflow: hidden;
+}
+.brand-symbol {
+  font-family: var(--serif); font-size: 18rem; color: rgba(255,153,0,0.03);
+  font-style: italic; position: absolute; right: -2rem; bottom: -3rem;
+  line-height: 1; user-select: none;
+}
+.founding-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,153,0,0.15);
+  padding: 2.5rem; width: 100%; max-width: 340px; position: relative; z-index: 1;
+}
+.founding-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,153,0,0.6); margin-bottom: 1.5rem; font-weight: 500; }
+.founding-fact { margin-bottom: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.founding-fact:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.ff-label { font-size: 0.72rem; color: rgba(247,243,238,0.35); margin-bottom: 0.3rem; letter-spacing: 0.04em; }
+.ff-val { font-size: 0.95rem; color: var(--paper); font-weight: 400; line-height: 1.5; }
+
+/* ── ORIGIN STRIP ── */
+.origin-strip {
+  background: var(--amazon);
+  padding: 1.2rem 4rem;
+  display: flex; align-items: center; gap: 1.5rem;
+  overflow: hidden;
+}
+.origin-strip-text {
+  font-size: 0.85rem; font-weight: 500; color: #0f1923;
+  letter-spacing: 0.05em; white-space: nowrap;
+}
+.origin-strip-divider { width: 4px; height: 4px; border-radius: 50%; background: rgba(15,25,35,0.35); flex-shrink: 0; }
+
+/* ── TIMELINE ── */
+.timeline-section { padding: 7rem 4rem; }
+.section-eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; font-weight: 500; }
+.section-title { font-family: var(--serif); font-size: 2.3rem; margin-bottom: 0.5rem; line-height: 1.2; }
+.section-sub { font-size: 0.95rem; color: var(--muted); margin-bottom: 3.5rem; max-width: 540px; line-height: 1.8; }
+
+.tl-container { position: relative; }
+.tl-spine { position: absolute; left: 100px; top: 0; bottom: 0; width: 1px; background: var(--cream); }
+
+.tl-entry { display: grid; grid-template-columns: 100px 1fr; position: relative; }
+.tl-year-col { padding: 2.2rem 2rem 2.2rem 0; text-align: right; }
+.tl-year-text { font-family: var(--serif); font-size: 1rem; font-weight: 700; color: var(--muted); transition: color 0.3s; line-height: 1; }
+.tl-year-sub { font-size: 0.7rem; color: rgba(122,112,104,0.6); margin-top: 3px; }
+.tl-entry:hover .tl-year-text { color: var(--amazon-dark); }
+
+.tl-dot-col { position: relative; display: flex; align-items: flex-start; padding-top: 2.6rem; }
+.tl-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--cream);
+  margin-left: -7px; flex-shrink: 0; transition: all 0.3s;
+  margin-right: 2.2rem;
+}
+.tl-entry:hover .tl-dot { background: var(--amazon); border-color: var(--amazon); transform: scale(1.25); box-shadow: 0 0 0 4px rgba(255,153,0,0.15); }
+
+.tl-body { padding: 2.2rem 0 2.2rem 0; border-bottom: 1px solid var(--cream); }
+.tl-entry:last-child .tl-body { border-bottom: none; }
+.tl-event-title { font-family: var(--serif); font-size: 1.35rem; margin-bottom: 0.6rem; transition: color 0.3s; line-height: 1.25; }
+.tl-entry:hover .tl-event-title { color: var(--amazon-dark); }
+.tl-event-text { font-size: 0.9rem; color: var(--muted); line-height: 1.85; max-width: 640px; }
+.tl-tags { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tl-tag {
+  font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;
+  padding: 0.28rem 0.8rem; background: rgba(255,153,0,0.1); color: var(--amazon-dark);
+}
+.tl-tag.red { background: #f5e6e4; color: var(--accent); }
+
+/* milestone marker */
+.tl-milestone {
+  grid-column: 1 / -1;
+  background: #0f1923; color: var(--paper);
+  padding: 1.2rem 2.5rem 1.2rem calc(100px + 2.2rem + 14px);
+  margin: 0;
+  display: flex; align-items: center; gap: 1rem;
+}
+.tl-milestone-icon { font-size: 1rem; }
+.tl-milestone-text { font-size: 0.82rem; color: rgba(247,243,238,0.65); }
+.tl-milestone-text strong { color: var(--amazon); font-weight: 500; }
+
+/* ── STRATEGIES ── */
+.strategies-section { background: var(--ink); padding: 7rem 4rem; color: var(--paper); }
+.strategies-section .section-title { color: var(--paper); }
+.strategies-section .section-sub { color: rgba(247,243,238,0.5); }
+
+.strategies-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: rgba(255,255,255,0.07); margin-top: 3.5rem;
+}
+.strategy-card { background: var(--ink); padding: 2.8rem 2.2rem; transition: background 0.3s; }
+.strategy-card:hover { background: #111; }
+.strategy-num { font-family: var(--serif); font-size: 3.5rem; color: rgba(255,153,0,0.12); line-height: 1; margin-bottom: 1rem; font-weight: 700; }
+.strategy-title { font-family: var(--serif); font-size: 1.2rem; color: var(--paper); margin-bottom: 0.9rem; line-height: 1.3; }
+.strategy-text { font-size: 0.87rem; color: rgba(247,243,238,0.52); line-height: 1.85; }
+.strategy-impact { margin-top: 1.3rem; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amazon); font-weight: 500; }
+
+/* ── DATA BARS ── */
+.data-section { padding: 6rem 4rem; background: var(--cream); }
+.data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 3rem; }
+.data-col-title { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 2rem; }
+.bar-item { margin-bottom: 1.4rem; }
+.bar-label-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem; }
+.bar-label { font-size: 0.85rem; color: var(--ink); font-weight: 400; }
+.bar-val { font-size: 0.85rem; font-weight: 500; color: var(--ink); font-family: var(--serif); }
+.bar-track { height: 6px; background: rgba(122,112,104,0.2); }
+.bar-fill { height: 6px; transition: width 1s ease; }
+.bar-fill.orange { background: var(--amazon); }
+.bar-fill.dark { background: var(--ink); }
+
+.metric-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: rgba(122,112,104,0.15); }
+.metric-box { background: var(--paper); padding: 1.8rem; }
+.metric-num { font-family: var(--serif); font-size: 2.2rem; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 0.4rem; }
+.metric-label { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.05em; line-height: 1.5; }
+
+/* ── PRINCIPLES ── */
+.principles-section { padding: 7rem 4rem; }
+.principles-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 4rem; }
+.principles-left .section-title { margin-bottom: 1rem; }
+.principles-left .section-sub { margin-bottom: 0; }
+.principles-right { display: flex; flex-direction: column; justify-content: center; }
+.big-number { font-family: var(--serif); font-size: 8rem; font-weight: 700; color: rgba(255,153,0,0.15); line-height: 1; }
+.big-number-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: -0.5rem; }
+
+.principles-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--cream); }
+.principle-card { background: var(--paper); padding: 2rem 1.5rem; }
+.principle-num { font-size: 0.7rem; letter-spacing: 0.15em; color: var(--amazon-dark); font-weight: 500; text-transform: uppercase; margin-bottom: 0.8rem; }
+.principle-title { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.7rem; line-height: 1.3; }
+.principle-text { font-size: 0.83rem; color: var(--muted); line-height: 1.75; }
+
+/* ── BEZOS LETTERS ── */
+.letters-section { background: var(--ink); padding: 7rem 4rem; color: var(--paper); }
+.letters-section .section-title { color: var(--paper); margin-bottom: 0.5rem; }
+.letters-section .section-sub { color: rgba(247,243,238,0.5); margin-bottom: 3.5rem; }
+.letters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.07); }
+.letter-card { background: var(--ink); padding: 2.5rem 2rem; transition: background 0.3s; }
+.letter-card:hover { background: #111; }
+.letter-year { font-family: var(--serif); font-size: 1.8rem; color: rgba(255,153,0,0.4); line-height: 1; margin-bottom: 1rem; font-weight: 700; }
+.letter-theme { font-family: var(--serif); font-size: 1.05rem; color: var(--paper); margin-bottom: 0.7rem; }
+.letter-insight { font-size: 0.85rem; color: rgba(247,243,238,0.5); line-height: 1.8; }
+
+/* ── QUOTE ── */
+.quote-section { padding: 6rem 4rem; border-top: 1px solid var(--cream); border-bottom: 1px solid var(--cream); }
+.pull-quote {
+  font-family: var(--serif); font-size: clamp(1.4rem,2.5vw,2.1rem);
+  font-style: italic; line-height: 1.5; color: var(--ink);
+  max-width: 820px; margin: 0 auto; text-align: center;
+}
+.pull-quote::before { content: '\201C'; color: var(--amazon); font-size: 4.5rem; line-height: 0; vertical-align: -1.1rem; margin-right: 0.2rem; }
+.quote-attr { text-align: center; margin-top: 1.8rem; font-size: 0.85rem; color: var(--muted); letter-spacing: 0.05em; }
+
+/* ── LESSONS ── */
+.lesson-section { padding: 7rem 4rem; }
+.lesson-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--cream); margin-top: 3.5rem; }
+.lesson-card { background: var(--paper); padding: 2.8rem; }
+.lesson-icon { font-size: 1.5rem; margin-bottom: 1.1rem; }
+.lesson-title { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 0.7rem; }
+.lesson-text { font-size: 0.9rem; color: var(--muted); line-height: 1.85; }
+
+/* ── STORY NAV ── */
+.story-nav {
+  padding: 3rem 4rem; background: var(--cream);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.story-nav-link { text-decoration: none; color: var(--ink); transition: color 0.2s; }
+.story-nav-link:hover { color: var(--accent); }
+.story-nav-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+.story-nav-name { font-family: var(--serif); font-size: 1.25rem; }
+
+footer {
+  padding: 2rem 4rem; display: flex; justify-content: space-between;
+  align-items: center; border-top: 1px solid var(--cream);
+}
+.footer-logo { font-family: var(--serif); font-size: 1.1rem; }
+.footer-logo span { color: var(--accent); font-style: italic; }
+.footer-copy { font-size: 0.8rem; color: var(--muted); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+.story-cat { animation: fadeUp 0.5s ease both; }
+.story-title { animation: fadeUp 0.5s 0.1s ease both; }
+.story-tagline { animation: fadeUp 0.5s 0.2s ease both; }
+.stat-row { animation: fadeUp 0.5s 0.3s ease both; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:1000px) {
+  .principles-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media(max-width:900px) {
+  nav { padding: 1rem 1.5rem; }
+  .story-hero { grid-template-columns: 1fr; }
+  .story-hero-right { display: none; }
+  .story-hero-left { padding: 4rem 1.5rem; }
+  .origin-strip { padding: 1.2rem 1.5rem; flex-wrap: wrap; }
+  .timeline-section, .strategies-section, .data-section, .principles-section,
+  .letters-section, .quote-section, .lesson-section { padding: 4rem 1.5rem; }
+  .strategies-grid, .letters-grid { grid-template-columns: 1fr; }
+  .data-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .principles-intro { grid-template-columns: 1fr; gap: 1.5rem; }
+  .principles-grid { grid-template-columns: 1fr 1fr; }
+  .lesson-grid { grid-template-columns: 1fr; }
+  .tl-spine { left: 70px; }
+  .tl-entry { grid-template-columns: 70px 1fr; }
+  .tl-milestone { padding-left: calc(70px + 2rem); }
+  .story-nav { padding: 2rem 1.5rem; flex-direction: column; gap: 1.5rem; text-align: center; }
+  footer { padding: 2rem 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+@media(max-width:600px) {
+  .principles-grid { grid-template-columns: 1fr; }
+  .metric-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Brand<span>Lore</span></a>
+  <a href="index.html" class="nav-back">← All Stories</a>
+</nav>
+
+<!-- HERO -->
+<section class="story-hero">
+  <div class="story-hero-left">
+    <div class="hero-bg-word">A</div>
+    <div class="story-cat">E-Commerce & Technology · Founded 1994</div>
+    <h1 class="story-title">Amazon<br><em>The Everything</em><br>Store — and Beyond.</h1>
+    <p class="story-tagline">Jeff Bezos quit his Wall Street job, drove cross-country with a business plan typed on a laptop, and built a company that started by selling books — and ended up redefining how the world shops, computes, reads, watches, and lives.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">$10K</div><div class="stat-label">Started with</div></div>
+      <div class="stat"><div class="stat-num">$2T</div><div class="stat-label">Valuation today</div></div>
+      <div class="stat"><div class="stat-num">1.5M+</div><div class="stat-label">Employees worldwide</div></div>
+      <div class="stat"><div class="stat-num">30 yrs</div><div class="stat-label">Garage to $2 trillion</div></div>
+    </div>
+  </div>
+  <div class="story-hero-right">
+    <div class="brand-symbol">A</div>
+    <div class="founding-card">
+      <div class="founding-label">The founding facts</div>
+      <div class="founding-fact"><div class="ff-label">Founded by</div><div class="ff-val">Jeff Bezos — former VP at hedge fund D.E. Shaw</div></div>
+      <div class="founding-fact"><div class="ff-label">Original name</div><div class="ff-val">Cadabra Inc. (changed — lawyers kept hearing "cadaver")</div></div>
+      <div class="founding-fact"><div class="ff-label">Why books first</div><div class="ff-val">3 million book titles existed — no physical store could stock them all. Perfect for internet.</div></div>
+      <div class="founding-fact"><div class="ff-label">The regret test</div><div class="ff-val">Bezos asked: "Will I regret NOT trying this at 80?" The answer was yes. He quit the next day.</div></div>
+      <div class="founding-fact"><div class="ff-label">First investor</div><div class="ff-val">His parents — $250,000. They nearly lost it all.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ORIGIN STRIP -->
+<div class="origin-strip">
+  <span class="origin-strip-text">1994 — Bellevue, WA garage</span>
+  <div class="origin-strip-divider"></div>
+  <span class="origin-strip-text">First order: a science book</span>
+  <div class="origin-strip-divider"></div>
+  <span class="origin-strip-text">Mission: Earth's most customer-centric company</span>
+  <div class="origin-strip-divider"></div>
+  <span class="origin-strip-text">Now: books, cloud, films, AI, satellites, grocery, pharmacy…</span>
+</div>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="section-eyebrow">The full journey</div>
+  <h2 class="section-title">30 years of <em style="font-style:italic;color:var(--amazon-dark);">relentless invention</em></h2>
+  <p class="section-sub">Amazon's story isn't one of steady growth — it's a series of audacious bets, near-disasters, and pivots that redefined entire industries. Here's every pivotal moment.</p>
+
+  <div class="tl-container">
+    <div class="tl-spine"></div>
+
+    <!-- 1994 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1994</div><div class="tl-year-sub">Year 0</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">The Road Trip That Started Everything</div>
+        <div class="tl-event-text">Jeff Bezos reads that internet usage is growing at 2,300% per year. He lists 20 product categories that could sell well online. Books win — there are 3 million titles in print, no physical store can stock them all, and they're easy to ship. He quits his Wall Street job, drives cross-country from New York to Seattle with his wife MacKenzie, types the business plan on a laptop during the journey. His father-in-law funds $250,000. His parents invest $250,000 — money they nearly lose entirely. He sets up shop in the garage of a rented house in Bellevue, Washington, with three Sun workstations, an extension cord running to the house, and no furniture.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Regret minimisation framework</span>
+          <span class="tl-tag">Niche first — books only</span>
+          <span class="tl-tag">Spot exponential trends early</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1995 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1995</div><div class="tl-year-sub">Launch</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Amazon.com Goes Live — First Order: A Science Book</div>
+        <div class="tl-event-text">Amazon.com launches on July 16, 1995. The first order is a copy of "Fluid Concepts and Creative Analogies" by Douglas Hofstadter — bought by a friend of Bezos. The team literally packs the boxes on the floor because they have no packing tables. Within the first month, Amazon ships books to all 50 states and 45 countries. Bezos sends emails to early customers manually. In its first two months, Amazon does $20,000 per week in sales. The Wall Street Journal runs a story. Server goes down from the traffic. Bezos considers this a success.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Manual, personal early operations</span>
+          <span class="tl-tag">Word-of-mouth as primary growth</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestone -->
+    <div class="tl-milestone">
+      <span class="tl-milestone-icon">📦</span>
+      <span class="tl-milestone-text">By end of 1995: <strong>$511,000 in revenue</strong>. Bezos projected $74,000 for year one. He was off by 7x.</span>
+    </div>
+
+    <!-- 1997 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1997</div><div class="tl-year-sub">Goes Public</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">IPO at $18 — Wall Street Is Sceptical</div>
+        <div class="tl-event-text">Amazon goes public on May 15, 1997 at $18 per share, raising $54 million. Market cap: $438 million. Most Wall Street analysts call it overvalued — Amazon has never made a profit. Bezos publishes his first shareholder letter, which becomes legendary. It introduces his core philosophy: "It's all about the long term." He explicitly says Amazon will sacrifice short-term profits to invest in long-term market leadership. Investors who read carefully and believed him multiplied their money 10,000x over the next 25 years.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Long-term investor communication</span>
+          <span class="tl-tag">Profit sacrifice for market capture</span>
+          <span class="tl-tag">Patient capital strategy</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1998 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1998</div><div class="tl-year-sub">Expansion</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Beyond Books — Music, DVDs, and the Everything Store Begins</div>
+        <div class="tl-event-text">Amazon expands into music CDs and DVDs. Bezos has a clear framework for expansion: any product that can be described digitally, shipped reliably, and fits the customer trust Amazon has built. He also starts allowing third-party sellers on Amazon's platform — a counterintuitive move. Why let competitors sell on your site? Because it makes Amazon more useful to customers. In year one, third-party sales are tiny. Within 20 years, they represent 60% of all Amazon units sold.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Platform model — third parties welcome</span>
+          <span class="tl-tag">Category expansion with discipline</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1999 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">1999</div><div class="tl-year-sub">Dot-com peak</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Time Person of the Year — Then the Bubble Bursts</div>
+        <div class="tl-event-text">Bezos is named Time Magazine's Person of the Year. Amazon's stock hits $106. Revenue is $1.64 billion. Then the dot-com bubble collapses. Amazon's stock falls 90% — from $106 to $6. Analysts write obituaries. Lehman Brothers publishes a report: "Amazon.bomb." Employees leave. Bezos calls a company meeting and says: "I'm not worried about our stock price. I'm only worried about our customers." The team that stays will later call this year Amazon's defining moment.</div>
+        <div class="tl-tags">
+          <span class="tl-tag red">Near-death moment</span>
+          <span class="tl-tag">Customer focus over market panic</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestone -->
+    <div class="tl-milestone">
+      <span class="tl-milestone-icon">📉</span>
+      <span class="tl-milestone-text">2001: Stock at <strong>$6</strong>. Wall Street called it dead. Bezos called it a buying opportunity. He was right.</span>
+    </div>
+
+    <!-- 2001 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2001</div><div class="tl-year-sub">Survival</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">First Profitable Quarter — The Model Proves Itself</div>
+        <div class="tl-event-text">Amazon posts its first quarterly profit: $5 million on $1 billion in sales. Tiny margins, but proof the model works. The key insight from the dot-com crash: Bezos had cut costs ruthlessly while refusing to cut customer experience investments. He laid off 1,300 people but kept investing in free shipping experiments and warehouse technology. The constraint of the crash forced Amazon to build a leaner, more durable operation than any of its well-funded competitors.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Cut costs, not customer experience</span>
+          <span class="tl-tag">Constraint as catalyst</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2002 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2002</div><div class="tl-year-sub">The seed</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Amazon Web Services Is Born — Accidentally</div>
+        <div class="tl-event-text">Amazon's engineers spend enormous time on "undifferentiated heavy lifting" — setting up servers, databases, and infrastructure before they can build actual features. Bezos has an insight: what if Amazon packaged this infrastructure and sold it to other companies? The idea is laughed at internally. "We're a bookstore, not an IT company." But Bezos mandates: every internal team must expose their systems as external APIs. AWS launches in 2002 as storage and computing services. No one realises they're watching the birth of a $100 billion business.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Monetise internal tools</span>
+          <span class="tl-tag">API-first architecture mandate</span>
+          <span class="tl-tag">Accidental billion-dollar pivot</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2005 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2005</div><div class="tl-year-sub">Game changer</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Amazon Prime — The Loyalty Trap That Changed Retail Forever</div>
+        <div class="tl-event-text">Amazon Prime launches: $79/year for unlimited free two-day shipping. Every Amazon finance executive says it's a terrible idea — they'll lose money on shipping. Bezos overrules them. His logic: if customers pay upfront, they'll feel compelled to shop more on Amazon to "get their money's worth." They'll stop even checking competitors. He's spectacularly right. Prime members spend 4x more than non-members. By 2024, Prime has 200 million members globally. The annual fee has become Amazon's most profitable product line. It's not a membership — it's a loyalty flywheel.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Subscription lock-in</span>
+          <span class="tl-tag">Loss leader that creates loyalty</span>
+          <span class="tl-tag">Flywheel economics</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestone -->
+    <div class="tl-milestone">
+      <span class="tl-milestone-icon">🔑</span>
+      <span class="tl-milestone-text">Prime members spend <strong>$1,400/year</strong> vs <strong>$600/year</strong> for non-members. The subscription pays for itself in the first three purchases.</span>
+    </div>
+
+    <!-- 2006 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2006</div><div class="tl-year-sub">AWS launches</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">AWS Goes Public — Amazon Accidentally Invents Cloud Computing</div>
+        <div class="tl-event-text">AWS launches publicly with S3 (storage) and EC2 (computing). The price: $0.10 per gigabyte stored per month. Startups go wild — they no longer need to buy expensive servers. Netflix, Dropbox, Airbnb, Instagram all build on AWS. Amazon's retail business is actually funding a cloud company that will make competitors entirely dependent on Amazon's infrastructure. By 2006, no one has noticed. By 2024, AWS generates $100 billion in revenue — more profitable than the entire retail operation — with 33% market share of global cloud computing.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Infrastructure as a service (invented the category)</span>
+          <span class="tl-tag">Competitors depend on you</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2007 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2007</div><div class="tl-year-sub">Hardware</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Kindle — Amazon Cannibalises Its Own Business</div>
+        <div class="tl-event-text">Amazon launches the Kindle e-reader at $399. The device sells out in 5.5 hours. The Kindle is Amazon deliberately destroying its own physical book business — if people buy digital books, Amazon sells fewer $25 hardcovers. Bezos doesn't care. He'd rather cannibalise his own revenue than let a competitor do it. "If someone is going to cannibalise us, I want it to be us." The Kindle creates an entirely new book format and a $12 billion e-book market. Apple later copies the strategy with the iPhone killing the iPod.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Planned self-cannibalisation</span>
+          <span class="tl-tag">Hardware as ecosystem entry</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2009 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2009</div><div class="tl-year-sub">Acquisition</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Zappos Acquisition — Buying Culture, Not Just Revenue</div>
+        <div class="tl-event-text">Amazon acquires Zappos (online shoes) for $1.2 billion. The reason is not the revenue — it's the culture. Zappos is famous for 365-day returns, free shipping both ways, and customer service reps who'll spend hours on a call. Bezos wants Amazon to absorb this customer obsession DNA. He also publishes "The Amazon Narrative" — a 6-page document explaining that Amazon will allow Zappos to operate independently with its culture intact. Acquisitions that preserve culture succeed. Those that don't — don't.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Acquire for culture, not just revenue</span>
+          <span class="tl-tag">Customer obsession as strategy</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2011 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2011</div><div class="tl-year-sub">Content war</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Amazon Studios — The Tech Company That Makes Oscars</div>
+        <div class="tl-event-text">Amazon launches Amazon Studios to produce original films and TV. The logic: if Prime members watch Amazon video, they're less likely to cancel Prime. Content is a customer retention tool. Within 5 years, Amazon wins its first Academy Award. "Manchester by the Sea" wins Best Original Screenplay. A company that started selling books now owns an Oscar. The Bezos strategy: use entertainment content to make the Prime subscription so valuable that leaving becomes unthinkable.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Content as retention strategy</span>
+          <span class="tl-tag">Subscription value stacking</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestone -->
+    <div class="tl-milestone">
+      <span class="tl-milestone-icon">🏆</span>
+      <span class="tl-milestone-text">Amazon Prime now includes: free shipping, Prime Video, Prime Music, Prime Reading, Prime Gaming, Amazon Photos, and same-day delivery. <strong>12 services for one price.</strong></span>
+    </div>
+
+    <!-- 2014 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2014</div><div class="tl-year-sub">Voice AI</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Amazon Echo & Alexa — The Listening Machine in Every Home</div>
+        <div class="tl-event-text">Amazon launches the Echo speaker with Alexa, the first mass-market AI voice assistant. Everyone mocks it — including people inside Amazon. Why would anyone want a cylinder that talks? Within three years, 30 million devices are in American homes. Alexa answers 1 billion requests per week. More importantly: Alexa reorders products, plays Amazon Music, controls Alexa-compatible smart devices — all of which are Amazon businesses. The device is sold at cost. The lifetime customer value it creates is enormous.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Hardware at cost, profit from ecosystem</span>
+          <span class="tl-tag">AI as commerce layer</span>
+          <span class="tl-tag">First mover in voice AI</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2017 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2017</div><div class="tl-year-sub">Disruption</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">Whole Foods Acquisition — Amazon Enters Physical Retail</div>
+        <div class="tl-event-text">Amazon acquires Whole Foods for $13.7 billion in cash — its largest acquisition ever. The next day, Whole Foods prices drop on dozens of items. Grocery stocks crash across America as investors realise Amazon will bring its pricing aggression to physical retail. But the real story is logistics: Whole Foods' 500 stores become Amazon Fresh distribution hubs, enabling same-day grocery delivery. Amazon also gains 13 million affluent customers — exactly who buys Prime. The acquisition isn't about groceries — it's about last-mile delivery infrastructure.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Acquisition for logistics infrastructure</span>
+          <span class="tl-tag">Omnichannel dominance</span>
+          <span class="tl-tag">Customer segment acquisition</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2018 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2018</div><div class="tl-year-sub">$1 trillion</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">$1 Trillion Market Cap — And Bezos Steps Back</div>
+        <div class="tl-event-text">Amazon becomes the second US company to reach a $1 trillion market cap (after Apple). AWS is now generating $26 billion annually. Amazon Advertising (where brands pay to be visible on Amazon search) quietly becomes a $10 billion business — the third-largest digital ad platform behind Google and Facebook. Bezos announces he will step down as CEO in 2021, handing the reins to Andy Jassy — the AWS founder. The student of the platform becomes its steward.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Advertising as hidden profit centre</span>
+          <span class="tl-tag">Succession planning</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2022 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2022</div><div class="tl-year-sub">Turbulence</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">$1 Trillion Lost — The Biggest Destruction of Value in History</div>
+        <div class="tl-event-text">Post-pandemic correction hits Amazon hard. Revenue growth stalls — Amazon had over-hired during COVID (800,000 new employees in 18 months). Stock falls 50%. $1 trillion in market cap evaporates — the largest value loss in stock market history. Amazon lays off 27,000 people. But the core businesses remain strong: AWS continues growing, advertising continues growing, Prime membership holds. The lesson: even Amazon over-corrects during crises. The discipline of cost management never stops being relevant, no matter your size.</div>
+        <div class="tl-tags">
+          <span class="tl-tag red">Overcorrection during COVID hiring</span>
+          <span class="tl-tag">Core business resilience matters most</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2024 -->
+    <div class="tl-entry">
+      <div class="tl-year-col"><div class="tl-year-text">2024</div><div class="tl-year-sub">Today</div></div>
+      <div class="tl-dot-col"><div class="tl-dot"></div></div>
+      <div class="tl-body">
+        <div class="tl-event-title">$2 Trillion — The Most Diverse Business Empire on Earth</div>
+        <div class="tl-event-text">Amazon's market cap crosses $2 trillion. AWS has 33% of global cloud market — $100B in revenue. Amazon Advertising is $47B. Prime Video wins the NFL Thursday Night Football broadcast rights for $1B/year. Amazon Pharmacy is disrupting drug retail. Project Kuiper (satellite internet) is launching. Amazon is simultaneously the world's largest retailer, cloud provider, logistics company, digital advertiser, and content creator. A company that started selling books from a garage now touches virtually every part of the modern economy.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Every business unit a platform</span>
+          <span class="tl-tag">Relentless reinvention</span>
+          <span class="tl-tag">30-year compound growth</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- STRATEGIES -->
+<section class="strategies-section">
+  <div class="section-eyebrow">The playbook</div>
+  <h2 class="section-title" style="color:var(--paper);">8 Strategies That Built Amazon</h2>
+  <p class="section-sub">Not tips — documented, specific decisions that created compounding competitive advantages impossible to replicate.</p>
+  <div class="strategies-grid">
+    <div class="strategy-card">
+      <div class="strategy-num">01</div>
+      <div class="strategy-title">The Flywheel — Where Growth Feeds Growth</div>
+      <div class="strategy-text">Bezos sketched this on a napkin in 2001. Lower prices → more customers → more volume → lower costs → lower prices. And: more sellers → more selection → better customer experience → more customers. The flywheel compounds. Every part of Amazon feeds every other part. No competitor can break in because they'd need to replicate the entire system simultaneously.</div>
+      <div class="strategy-impact">→ Self-reinforcing growth loop for 30 years</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">02</div>
+      <div class="strategy-title">Long-Term Thinking — Delay Profit Deliberately</div>
+      <div class="strategy-text">Amazon lost money for 9 years. Every analyst said it was dying. But Bezos was deliberately reinvesting every dollar into warehouses, tech, and new categories. His investor letters explicitly said: "We will make decisions that reduce short-term profitability if they increase long-term dominance." This is the opposite of quarterly earnings culture — and it's why no competitor caught up.</div>
+      <div class="strategy-impact">→ 9 years of losses funded 30 years of dominance</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">03</div>
+      <div class="strategy-title">Day 1 Mentality — Never Act Like an Incumbent</div>
+      <div class="strategy-text">Bezos's most famous internal memo: "Day 2 is stasis. Followed by irrelevance. Followed by excruciating, painful decline. Followed by death." Amazon's headquarters building is named Day 1. Every meeting, every product, every decision is evaluated: are we still acting like a startup? The enemy is "process as proxy" — where following process replaces actual outcomes. Amazon has resisted bureaucracy at $2 trillion scale better than any company in history.</div>
+      <div class="strategy-impact">→ Culture that never celebrates past success</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">04</div>
+      <div class="strategy-title">Customer Obsession — Start With the Customer, Work Backwards</div>
+      <div class="strategy-text">Amazon's process for new products: write the press release first. Literally — teams write the announcement for a product before they build it. If you can't explain why this makes customers' lives better, you don't build it. The "empty chair" in every meeting represents the customer. Bezos's most repeated line: "We are not competitor obsessed, we are customer obsessed." Competitor obsession means you react. Customer obsession means you invent.</div>
+      <div class="strategy-impact">→ NPS score of 73 — highest in retail</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">05</div>
+      <div class="strategy-title">AWS — Monetise What You're Already Building</div>
+      <div class="strategy-text">Amazon didn't set out to build a cloud company. They built internal infrastructure, realised it was remarkable, and sold it externally. This is the model: what internal capability does your business depend on that others might also need? Amazon's logistics (now sold as MCF — Multi-Channel Fulfilment), payment system (Amazon Pay), advertising (Amazon DSP), AI (Bedrock) — all started as internal tools. Your biggest business may be hiding inside your cost centres.</div>
+      <div class="strategy-impact">→ AWS: $100B revenue, 35% operating margin</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">06</div>
+      <div class="strategy-title">Prime — The Subscription Flywheel</div>
+      <div class="strategy-text">Prime is the most effective loyalty programme in retail history. Members pay upfront, feel psychologically obligated to shop Amazon, and receive so many benefits (shipping, video, music, gaming) that cancellation feels painful. Amazon then uses Prime data to personalise recommendations. And Prime fees are reinvested into more benefits. The subscription itself compounds: each new benefit makes the membership more valuable, which retains members, which funds more benefits.</div>
+      <div class="strategy-impact">→ 200M members, spend 4x more than non-members</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">07</div>
+      <div class="strategy-title">Platform Over Product — Let Others Build on You</div>
+      <div class="strategy-text">Third-party sellers on Amazon Marketplace now represent 60% of all units sold. They pay Amazon a 15% referral fee, fulfilment fees, and increasingly advertising fees. Amazon provides the customer base, the logistics, and the trust — sellers provide the inventory. Amazon's risk is zero on their products. The same model: AWS (others build on Amazon's servers), Alexa Skills (others build on Amazon's AI), Amazon Advertising (others pay to access Amazon's audience). Platform beats product every time.</div>
+      <div class="strategy-impact">→ Third-party revenue: $140B+ annually</div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-num">08</div>
+      <div class="strategy-title">Willingness to Be Misunderstood — Bet on Unpopular Ideas</div>
+      <div class="strategy-text">AWS was laughed at. Kindle was called suicidal. Prime was financially irresponsible. The Echo was mocked. Every transformational Amazon product was initially considered wrong by smart people. Bezos's rule: "If you're going to do something that matters, you have to be willing to be misunderstood for a long period of time." Most companies choose ideas that are defensible in quarterly reviews. Amazon chooses ideas that are indefensible now but obvious in hindsight.</div>
+      <div class="strategy-impact">→ Every major Amazon business was "wrong" first</div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA SECTION -->
+<section class="data-section">
+  <div class="section-eyebrow">By the numbers</div>
+  <h2 class="section-title">Amazon's scale, visualised</h2>
+  <div class="data-grid">
+    <div>
+      <div class="data-col-title">Revenue by segment (2024)</div>
+      <div class="bar-item">
+        <div class="bar-label-row"><span class="bar-label">Online stores (retail)</span><span class="bar-val">$247B</span></div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:72%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label-row"><span class="bar-label">AWS (cloud)</span><span class="bar-val">$100B</span></div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:29%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label-row"><span class="bar-label">Third-party seller services</span><span class="bar-val">$143B</span></div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:42%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label-row"><span class="bar-label">Advertising services</span><span class="bar-val">$47B</span></div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:14%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label-row"><span class="bar-label">Subscription services (Prime)</span><span class="bar-val">$40B</span></div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:12%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label-row"><span class="bar-label">Physical stores (Whole Foods)</span><span class="bar-val">$21B</span></div>
+        <div class="bar-track"><div class="bar-fill orange" style="width:6%"></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="data-col-title">Key metrics at a glance</div>
+      <div class="metric-row">
+        <div class="metric-box">
+          <div class="metric-num">$600B</div>
+          <div class="metric-label">Total annual revenue (2024 est.)</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-num">200M</div>
+          <div class="metric-label">Prime members globally</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-num">33%</div>
+          <div class="metric-label">Global cloud market share (AWS)</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-num">1.5M+</div>
+          <div class="metric-label">Full-time employees worldwide</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERSHIP PRINCIPLES -->
+<section class="principles-section">
+  <div class="principles-intro">
+    <div class="principles-left">
+      <div class="section-eyebrow">The culture code</div>
+      <h2 class="section-title">Amazon's 16 Leadership Principles</h2>
+      <p class="section-sub">These aren't wall posters — Amazon interviews every hire against these principles. Promotions are evaluated against them. Products are built using them. They are the operating system of the company.</p>
+    </div>
+    <div class="principles-right">
+      <div class="big-number">16</div>
+      <div class="big-number-label">Principles every Amazon employee is judged by</div>
+    </div>
+  </div>
+  <div class="principles-grid">
+    <div class="principle-card">
+      <div class="principle-num">01</div>
+      <div class="principle-title">Customer Obsession</div>
+      <div class="principle-text">Leaders start with the customer and work backwards. They work vigorously to earn and keep customer trust. Every decision starts here.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">02</div>
+      <div class="principle-title">Ownership</div>
+      <div class="principle-text">Leaders act on behalf of the entire company, never saying "that's not my job." They think long-term and don't sacrifice long-term value for short-term results.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">03</div>
+      <div class="principle-title">Invent and Simplify</div>
+      <div class="principle-text">Leaders expect and require innovation from their teams and always find ways to simplify. They are externally aware, look for new ideas everywhere.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">04</div>
+      <div class="principle-title">Are Right, A Lot</div>
+      <div class="principle-text">Leaders have strong judgment and good instincts. They seek diverse perspectives and work to disconfirm their own beliefs.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">05</div>
+      <div class="principle-title">Learn and Be Curious</div>
+      <div class="principle-text">Leaders are never done learning and always seek to improve themselves. They are curious about new possibilities and act to explore them.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">06</div>
+      <div class="principle-title">Hire and Develop the Best</div>
+      <div class="principle-text">Leaders raise the performance bar with every hire and promotion. They recognise exceptional talent, and willingly move them throughout the organisation.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">07</div>
+      <div class="principle-title">Insist on the Highest Standards</div>
+      <div class="principle-text">Leaders have relentlessly high standards — many people may think these standards are unreasonably high. Leaders are continually raising the bar.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">08</div>
+      <div class="principle-title">Think Big</div>
+      <div class="principle-text">Thinking small is a self-fulfilling prophecy. Leaders create and communicate a bold direction that inspires results. They think differently and look around corners.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">09</div>
+      <div class="principle-title">Bias for Action</div>
+      <div class="principle-text">Speed matters in business. Many decisions and actions are reversible and do not need extensive study. We value calculated risk taking over cautious paralysis.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">10</div>
+      <div class="principle-title">Frugality</div>
+      <div class="principle-text">Accomplish more with less. Constraints breed resourcefulness, self-sufficiency, and invention. There are no extra points for growing headcount or budget size.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">11</div>
+      <div class="principle-title">Earn Trust</div>
+      <div class="principle-text">Leaders listen attentively, speak candidly, and treat others respectfully. They are vocally self-critical, even when this is awkward or embarrassing.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">12</div>
+      <div class="principle-title">Dive Deep</div>
+      <div class="principle-text">Leaders operate at all levels and stay connected to the details. No task is beneath them. They audit frequently and are sceptical when metrics differ from anecdote.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">13</div>
+      <div class="principle-title">Have Backbone; Disagree and Commit</div>
+      <div class="principle-text">Leaders respectfully challenge decisions when they disagree. Once a decision is determined, they commit fully. They do not compromise to maintain social cohesion.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">14</div>
+      <div class="principle-title">Deliver Results</div>
+      <div class="principle-text">Leaders focus on the key inputs and deliver them with the right quality and in a timely fashion. Despite setbacks, they rise to the occasion and never settle.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">15</div>
+      <div class="principle-title">Strive to be Earth's Best Employer</div>
+      <div class="principle-text">Leaders work to create a safer, more productive, higher performing, more diverse and just work environment. They lead with empathy, have fun at work, and make it easy for others to have fun.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">16</div>
+      <div class="principle-title">Success and Scale Bring Broad Responsibility</div>
+      <div class="principle-text">Amazon is a large company and must approach impact thoughtfully. We must be humble about the effect our decisions have on the world, and act accordingly.</div>
+    </div>
+  </div>
+</section>
+
+<!-- BEZOS LETTERS -->
+<section class="letters-section">
+  <div class="section-eyebrow">Annual wisdom</div>
+  <h2 class="section-title" style="color:var(--paper);">The Bezos Shareholder Letters</h2>
+  <p class="section-sub">Every year since 1997, Bezos wrote a letter to shareholders. These letters are arguably the most important business documents of the internet era — a masterclass in building and thinking about a company.</p>
+  <div class="letters-grid">
+    <div class="letter-card">
+      <div class="letter-year">1997</div>
+      <div class="letter-theme">"It's all about the long term"</div>
+      <div class="letter-insight">The foundational letter. Bezos tells shareholders: we will consistently make decisions that prioritise long-term market leadership over short-term profitability. If you don't agree with this philosophy, don't invest in us. The most honest investor communication ever written.</div>
+    </div>
+    <div class="letter-card">
+      <div class="letter-year">2002</div>
+      <div class="letter-theme">"Free cash flow"</div>
+      <div class="letter-insight">Bezos explains why free cash flow matters more than earnings per share. A company can show accounting profits while destroying cash. He teaches investors a new metric. This letter changes how tech companies are evaluated on Wall Street permanently.</div>
+    </div>
+    <div class="letter-card">
+      <div class="letter-year">2006</div>
+      <div class="letter-theme">"New businesses"</div>
+      <div class="letter-insight">Bezos explains Amazon's approach to launching new businesses. The key rule: new initiatives must have the potential to become a multi-billion-dollar business. Think big or don't start. Small bets have small returns but still consume management attention and capital.</div>
+    </div>
+    <div class="letter-card">
+      <div class="letter-year">2011</div>
+      <div class="letter-theme">"Invention machine"</div>
+      <div class="letter-insight">Bezos calls Amazon an "invention machine" and lists the principles: accept failure as the price of invention, don't use PowerPoint (use six-page memos instead), and maintain your ability to be misunderstood. Amazon bans PowerPoint in all senior meetings in this year.</div>
+    </div>
+    <div class="letter-card">
+      <div class="letter-year">2015</div>
+      <div class="letter-theme">"Two types of decisions"</div>
+      <div class="letter-insight">Bezos introduces Type 1 and Type 2 decisions. Type 1: irreversible, requires careful deliberation. Type 2: reversible, should be made fast by small teams. Most large companies treat all decisions as Type 1 — that's why they move slowly. Amazon moves fast by empowering Type 2 decisions at every level.</div>
+    </div>
+    <div class="letter-card">
+      <div class="letter-year">2016</div>
+      <div class="letter-theme">"Day 1 vs Day 2"</div>
+      <div class="letter-insight">The most famous letter. Bezos asks: what does Day 2 look like? "Day 2 is stasis. Followed by irrelevance. Followed by excruciating, painful decline. Followed by death." How do you stay Day 1? Four techniques: customer obsession, scepticism of proxies, embrace external trends, high-velocity decision making.</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <p class="pull-quote">We are stubborn on vision. We are flexible on details. We don't give up on things easily. Our tenacity is our greatest strength.</p>
+  <p class="quote-attr">— Jeff Bezos, Founder, Amazon</p>
+</section>
+
+<!-- LESSONS -->
+<section class="lesson-section">
+  <div class="section-eyebrow">For founders</div>
+  <h2 class="section-title">What Amazon teaches every startup</h2>
+  <div class="lesson-grid">
+    <div class="lesson-card">
+      <div class="lesson-icon">🎯</div>
+      <div class="lesson-title">Start embarrassingly narrow</div>
+      <div class="lesson-text">Amazon started with books only. Not all products — just books. The narrow focus let them perfect logistics, customer service, and website experience before expanding. Every great platform started as a narrow tool. Twitter was status updates. Facebook was Harvard students. YouTube was dating videos. Start impossibly specific and expand once you've mastered the core.</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">⏳</div>
+      <div class="lesson-title">Think in decades, not quarters</div>
+      <div class="lesson-text">Amazon lost money for nine years. AWS was three years of investment before revenue. Prime cost hundreds of millions before it was profitable. Every transformational business requires patience that markets don't naturally reward. Communicate your long-term thesis to investors clearly and early — then execute it without apologising for the losses along the way.</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">🔄</div>
+      <div class="lesson-title">Design your flywheel first</div>
+      <div class="lesson-text">Before you build anything, draw Bezos's napkin: how does growth in one part of your business create growth in another? Lower prices → more customers → more volume → lower costs → lower prices. What is your version of this loop? A business with a flywheel compounds. A business without one grinds. Design the loop before you write the code.</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">💡</div>
+      <div class="lesson-title">Your cost centre might be your next product</div>
+      <div class="lesson-text">AWS started as internal infrastructure. Fulfilment by Amazon started as internal logistics. Amazon Advertising started as Amazon's own marketing. Ask yourself: what expensive internal capability do you depend on that others might also need? The most overlooked revenue opportunities are hiding inside your own operations. What do you do brilliantly that no one knows about?</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">📝</div>
+      <div class="lesson-title">Write the press release before you build</div>
+      <div class="lesson-text">Amazon's "working backwards" process: before building any new product, the team writes a press release announcing it. If you can't clearly articulate why this makes a customer's life better — in plain language, as if announcing it to the world — you shouldn't build it. Most startup ideas fail this test. That's valuable information. The discipline to kill weak ideas before you build them saves enormous time and money.</div>
+    </div>
+    <div class="lesson-card">
+      <div class="lesson-icon">🔮</div>
+      <div class="lesson-title">Be willing to be misunderstood</div>
+      <div class="lesson-text">The most important innovations look wrong at first. AWS looked wrong. Kindle looked suicidal. Prime looked financially irresponsible. Alexa looked absurd. If your startup idea sounds completely reasonable to everyone, it might not be innovative enough. The best ideas sit at the intersection of "this seems obviously right once you see it" and "this seemed clearly wrong before you saw it." Seek out that uncomfortable space.</div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY NAV -->
+<div class="story-nav">
+  <a href="tesla.html" class="story-nav-link">
+    <div class="story-nav-label">← Previous story</div>
+    <div class="story-nav-name">Tesla</div>
+  </a>
+  <a href="index.html" class="story-nav-link" style="text-align:right;">
+    <div class="story-nav-label">Back to</div>
+    <div class="story-nav-name">All Stories</div>
+  </a>
+</div>
+
+<footer>
+  <div class="footer-logo">Brand<span>Lore</span></div>
+  <span class="footer-copy">© 2025 BrandLore. Built with curiosity.</span>
+</footer>
+
+</body>
+</html>
