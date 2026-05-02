@@ -9,9 +9,9 @@
 
   /* ─── CONFIG ─── */
  const BRAND_VOICES = {
-  rate: 0.88,
-  pitch: 0.92,
-  volume: 1.0
+  rate: 0.78,     // slower = clearer speech
+  pitch: 0.85,    // deeper = more natural tone
+  volume: 1.0     // louder (some browsers cap at 1.0)
 };
   
   const SECTION_INTROS = {
@@ -352,15 +352,25 @@
   let speedSteps = [0.75, 0.88, 1.0, 1.15, 1.3];
   let speedIdx   = 1; // default 0.88 (documentary)
 
-  function getVoice() {
-  const voices = synth.getVoices();
+function getVoice(callback) {
+  let voices = synth.getVoices();
 
-  // Prefer the most natural sounding voices
+  if (voices.length) {
+    return callback(selectVoice(voices));
+  }
+
+  synth.onvoiceschanged = () => {
+    voices = synth.getVoices();
+    callback(selectVoice(voices));
+  };
+}
+
+function selectVoice(voices) {
   const preferred = [
     'Google UK English Male',
     'Google UK English Female',
-    'Microsoft Aria Online (Natural)',
-    'Microsoft Guy Online (Natural)',
+    'Microsoft Aria',
+    'Microsoft Guy',
     'Alex'
   ];
 
@@ -369,11 +379,11 @@
     if (v) return v;
   }
 
-  // fallback
   return voices.find(v => v.lang.includes('en-IN')) ||
          voices.find(v => v.lang.startsWith('en')) ||
          voices[0];
 }
+
 
   function speak(fromChar = 0) {
     synth.cancel();
@@ -408,7 +418,10 @@
       }
     };
 
-    synth.speak(utterance);
+   getVoice((voice) => {
+  if (voice) utterance.voice = voice;
+  synth.speak(utterance);
+});
   }
 
   function startTicker() {
@@ -510,15 +523,13 @@
   }
 
   /* ─── OPEN / CLOSE ─── */
-  function openPlayer() {
-    const player = document.getElementById('bl-audio-player');
-    player.classList.add('bl-visible');
-    // Auto-play
-    if (!isPlaying && !isPaused) {
-      currentTime = 0; charIndex = 0;
-      speak(0);
-    }
-  }
+  btn.onclick = () => {
+  openPlayer();
+
+  setTimeout(() => {
+    document.getElementById('bl-playpause').click();
+  }, 200);
+};
 
   function closePlayer() {
     synth.cancel(); stopTicker(); clearHighlight();
