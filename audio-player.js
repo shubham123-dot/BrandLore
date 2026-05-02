@@ -393,9 +393,6 @@ function selectVoice(voices) {
     utterance.pitch  = BRAND_VOICES.pitch;
     utterance.volume = BRAND_VOICES.volume;
 
-    const voice = getVoice();
-    if (voice) utterance.voice = voice;
-
     utterance.onstart = () => {
       isPlaying = true; isPaused = false;
       updateUI();
@@ -523,13 +520,10 @@ function selectVoice(voices) {
   }
 
   /* ─── OPEN / CLOSE ─── */
-  btn.onclick = () => {
-  openPlayer();
-
-  setTimeout(() => {
-    document.getElementById('bl-playpause').click();
-  }, 200);
-};
+ function openPlayer() {
+  const player = document.getElementById('bl-audio-player');
+  player.classList.add('bl-visible');
+}
 
   function closePlayer() {
     synth.cancel(); stopTicker(); clearHighlight();
@@ -555,9 +549,11 @@ function selectVoice(voices) {
     document.getElementById('bl-total').textContent = fmtTime(totalTime);
 
     // Voices may load async
-    if (synth.onvoiceschanged !== undefined) {
-      synth.onvoiceschanged = () => {}; // trigger voice load
-    }
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = () => {
+    console.log("Voices loaded:", speechSynthesis.getVoices());
+  };
+}
 
     // ── EVENTS ──
 
@@ -592,19 +588,17 @@ function selectVoice(voices) {
     });
 
     // Speed toggle
-    const speedBtn = document.getElementById('bl-speed');
-    const speedLabels = ['0.75×', '0.9×', '1×', '1.15×', '1.3×'];
-    speedBtn.onclick = () => {
-      speedIdx = (speedIdx + 1) % speedSteps.length;
-      speedBtn.textContent = speedLabels[speedIdx];
-      if (isPlaying || isPaused) {
-        const pos = charIndex;
-        const wasPlaying = isPlaying;
-        synth.cancel(); stopTicker();
-        if (wasPlaying) speak(pos);
-        else { isPaused = false; isPlaying = false; updateUI(); }
-      }
-    };
+  document.getElementById('bl-speed').onclick = () => {
+  speedIdx = (speedIdx + 1) % speedSteps.length;
+  const newSpeed = speedSteps[speedIdx];
+  document.getElementById('bl-speed').textContent = newSpeed + '×';
+
+  if (isPlaying) {
+    synth.cancel();
+    stopTicker();
+    speak(charIndex);
+  }
+};
 
     // Close
     document.getElementById('bl-close').onclick = () => closePlayer();
