@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>BrandLore — Stories Behind the World's Greatest Brands</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -17,268 +18,426 @@ body.dark{--ink:#f0ebe4;--paper:#141210;--cream:#1e1b18;--accent:#e05a47;--accen
 html{scroll-behavior:smooth;}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.7;overflow-x:hidden;transition:background 0.3s,color 0.3s;}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.9rem 3rem;background:var(--paper);border-bottom:1px solid var(--cream);transition:background 0.3s;gap:1rem;flex-wrap:nowrap;}
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.85rem 3rem;background:var(--paper);
+  border-bottom:1px solid var(--cream);gap:1rem;flex-wrap:nowrap;
+  transition:background 0.3s,border-color 0.3s;
+}
 .nav-logo{font-family:var(--serif);font-size:1.35rem;color:var(--ink);text-decoration:none;white-space:nowrap;flex-shrink:0;}
 .nav-logo span{color:var(--accent);font-style:italic;}
-.nav-center{flex:1;max-width:380px;position:relative;}
-.nav-search-input{width:100%;padding:0.5rem 1rem 0.5rem 2.2rem;background:var(--cream);border:1px solid transparent;font-family:var(--sans);font-size:0.85rem;color:var(--ink);outline:none;transition:border-color 0.2s;}
+.nav-center{flex:1;max-width:360px;position:relative;}
+.nav-search-input{width:100%;padding:0.48rem 1rem 0.48rem 2.2rem;background:var(--cream);border:1px solid transparent;font-family:var(--sans);font-size:0.85rem;color:var(--ink);outline:none;transition:border-color 0.2s;}
 .nav-search-input:focus{border-color:var(--accent);background:var(--paper);}
 .nav-search-input::placeholder{color:var(--muted);}
-.nav-search-icon{position:absolute;left:0.7rem;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:0.82rem;}
-.search-dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--paper);border:1px solid var(--cream);box-shadow:var(--shadow);z-index:300;display:none;max-height:300px;overflow-y:auto;}
+.nav-search-icon{position:absolute;left:0.7rem;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:0.8rem;}
+.search-dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--paper);border:1px solid var(--cream);box-shadow:var(--shadow);z-index:600;display:none;max-height:300px;overflow-y:auto;}
 .search-dropdown.open{display:block;}
 .search-result-item{display:flex;flex-direction:column;padding:0.7rem 1rem;cursor:pointer;transition:background 0.15s;text-decoration:none;color:var(--ink);border-bottom:1px solid var(--cream);}
 .search-result-item:last-child{border-bottom:none;}
 .search-result-item:hover{background:var(--cream);}
-.sri-cat{font-size:0.63rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:0.15rem;}
+.sri-cat{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:0.1rem;}
 .sri-name{font-family:var(--serif);font-size:0.95rem;}
-.sri-desc{font-size:0.75rem;color:var(--muted);margin-top:0.1rem;}
+.sri-desc{font-size:0.73rem;color:var(--muted);margin-top:0.1rem;}
 .search-empty{padding:1rem;font-size:0.85rem;color:var(--muted);text-align:center;}
-.nav-right{display:flex;align-items:center;gap:0.4rem;flex-shrink:0;}
-.nav-links{display:flex;gap:1.8rem;list-style:none;}
-.nav-links a{font-size:0.78rem;font-weight:400;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;white-space:nowrap;}
-.nav-links a:hover{color:var(--ink);}
-.nav-icon-btn{background:none;border:1px solid var(--cream);padding:0.4rem 0.65rem;color:var(--muted);cursor:pointer;font-size:0.82rem;transition:all 0.2s;display:flex;align-items:center;gap:0.25rem;white-space:nowrap;font-family:var(--sans);}
-.nav-icon-btn:hover{border-color:var(--accent);color:var(--accent);}
+.nav-right{display:flex;align-items:center;gap:0.35rem;flex-shrink:0;}
+.nav-links{display:flex;gap:1.6rem;list-style:none;}
+.nav-links a{font-size:0.77rem;font-weight:400;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;white-space:nowrap;}
+.nav-links a:hover,.nav-links a.nav-active{color:var(--ink);}
+.nav-icon-btn{background:none;border:1px solid var(--cream);padding:0.38rem 0.6rem;color:var(--muted);cursor:pointer;font-size:0.8rem;transition:all 0.2s;display:flex;align-items:center;gap:0.25rem;white-space:nowrap;font-family:var(--sans);}
+.nav-icon-btn:hover,.nav-icon-btn.nav-active{border-color:var(--accent);color:var(--accent);}
 
-/* HERO */
-.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:72px;}
+/* ─── PAGE SECTION TABS (below nav) ─── */
+.page-nav{
+  position:fixed;top:56px;left:0;right:0;z-index:400;
+  display:flex;background:var(--ink);border-bottom:1px solid rgba(255,255,255,0.06);
+  overflow-x:auto;scrollbar-width:none;
+}
+.page-nav::-webkit-scrollbar{display:none;}
+.pn-btn{
+  padding:0.75rem 1.6rem;background:none;border:none;
+  color:rgba(247,243,238,0.4);font-family:var(--sans);font-size:0.75rem;
+  letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;
+  transition:all 0.2s;border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0;
+}
+.pn-btn:hover{color:rgba(247,243,238,0.75);}
+.pn-btn.active{color:var(--paper);border-bottom-color:var(--accent);}
+
+/* ─── MAIN SECTIONS ─── */
+.page-section{display:none;padding-top:104px;min-height:calc(100vh - 104px);}
+.page-section.active{display:block;}
+
+/* ════════════════════════════════
+   SECTION 1 — STORIES
+════════════════════════════════ */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 104px);}
 .hero-left{display:flex;flex-direction:column;justify-content:center;padding:5rem 3rem 5rem 4rem;}
-.hero-eyebrow{font-size:0.72rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;}
-.hero-title{font-family:var(--serif);font-size:clamp(2.8rem,4.5vw,4.2rem);line-height:1.15;color:var(--ink);margin-bottom:1.5rem;}
+.hero-eyebrow{font-size:0.7rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);margin-bottom:1.4rem;}
+.hero-title{font-family:var(--serif);font-size:clamp(2.6rem,4.2vw,4rem);line-height:1.12;color:var(--ink);margin-bottom:1.4rem;}
 .hero-title em{color:var(--accent);font-style:italic;}
-.hero-sub{font-size:1.05rem;color:var(--muted);max-width:420px;margin-bottom:2.5rem;line-height:1.8;}
+.hero-sub{font-size:1rem;color:var(--muted);max-width:400px;margin-bottom:2.5rem;line-height:1.8;}
 .btn-group{display:flex;gap:1rem;flex-wrap:wrap;}
-.btn-primary{padding:0.85rem 2rem;background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:0.85rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;border:none;cursor:pointer;text-decoration:none;transition:background 0.2s;display:inline-block;}
+.btn-primary{padding:0.82rem 1.8rem;background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:0.82rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;border:none;cursor:pointer;text-decoration:none;transition:background 0.2s;display:inline-block;}
 .btn-primary:hover{background:var(--accent);}
-.btn-outline{padding:0.85rem 2rem;background:transparent;color:var(--ink);font-family:var(--sans);font-size:0.85rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--ink);cursor:pointer;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-outline{padding:0.82rem 1.8rem;background:transparent;color:var(--ink);font-family:var(--sans);font-size:0.82rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--ink);cursor:pointer;text-decoration:none;transition:all 0.2s;display:inline-block;}
 .btn-outline:hover{background:var(--ink);color:var(--paper);}
 .hero-right{background:var(--cream);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:5rem 3rem;position:relative;overflow:hidden;}
 .hero-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:100%;}
-.hero-stat{background:var(--paper);padding:2rem;display:flex;flex-direction:column;gap:0.4rem;}
-.hero-stat-num{font-family:var(--serif);font-size:2.6rem;font-weight:700;color:var(--ink);line-height:1;}
-.hero-stat-label{font-size:0.8rem;color:var(--muted);letter-spacing:0.05em;}
-.hero-deco{position:absolute;bottom:-30px;right:-30px;width:200px;height:200px;border:1px solid var(--accent);border-radius:50%;opacity:0.15;}
+.hero-stat{background:var(--paper);padding:1.8rem;display:flex;flex-direction:column;gap:0.3rem;}
+.hero-stat-num{font-family:var(--serif);font-size:2.4rem;font-weight:700;color:var(--ink);line-height:1;}
+.hero-stat-label{font-size:0.78rem;color:var(--muted);letter-spacing:0.04em;}
+.hero-deco{position:absolute;bottom:-30px;right:-30px;width:180px;height:180px;border:1px solid var(--accent);border-radius:50%;opacity:0.13;}
 
-/* PROGRESS BAR */
-.progress-bar-section{background:var(--ink);padding:1.1rem 4rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;}
-.pb-label{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(247,243,238,0.45);white-space:nowrap;}
-.pb-track{flex:1;height:5px;background:rgba(255,255,255,0.1);min-width:100px;}
-.pb-fill{height:5px;background:var(--accent);transition:width 0.6s ease;width:0%;}
-.pb-count{font-family:var(--serif);font-size:1rem;color:var(--paper);white-space:nowrap;}
+/* Progress bar */
+.progress-bar-section{background:var(--ink);padding:1rem 4rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;}
+.pb-label{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(247,243,238,0.4);white-space:nowrap;}
+.pb-track{flex:1;height:4px;background:rgba(255,255,255,0.1);min-width:80px;}
+.pb-fill{height:4px;background:var(--accent);transition:width 0.6s ease;width:0%;}
+.pb-count{font-family:var(--serif);font-size:0.95rem;color:var(--paper);white-space:nowrap;}
 .pb-count span{color:var(--accent);}
-.pb-reset{font-size:0.7rem;color:rgba(247,243,238,0.3);cursor:pointer;background:none;border:none;font-family:var(--sans);transition:color 0.2s;}
-.pb-reset:hover{color:rgba(247,243,238,0.65);}
+.pb-reset{font-size:0.68rem;color:rgba(247,243,238,0.28);cursor:pointer;background:none;border:none;font-family:var(--sans);transition:color 0.2s;}
+.pb-reset:hover{color:rgba(247,243,238,0.6);}
 
-/* FILTER BAR */
-.filter-bar{padding:1.2rem 4rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;border-bottom:1px solid var(--cream);}
-.filter-label{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-right:0.3rem;}
-.filter-btn{font-size:0.72rem;padding:0.35rem 0.9rem;background:transparent;border:1px solid var(--cream);color:var(--muted);cursor:pointer;font-family:var(--sans);letter-spacing:0.06em;text-transform:uppercase;transition:all 0.2s;}
+/* Filter bar */
+.filter-bar{padding:1rem 4rem;display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap;border-bottom:1px solid var(--cream);}
+.filter-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-right:0.3rem;}
+.filter-btn{font-size:0.7rem;padding:0.3rem 0.85rem;background:transparent;border:1px solid var(--cream);color:var(--muted);cursor:pointer;font-family:var(--sans);letter-spacing:0.06em;text-transform:uppercase;transition:all 0.2s;}
 .filter-btn:hover,.filter-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
 body.dark .filter-btn.active{background:var(--accent);border-color:var(--accent);}
 
-/* DIVIDER */
-.divider{display:flex;align-items:center;gap:1rem;padding:0 4rem;margin:2.5rem 0 1.5rem;}
+/* Divider */
+.divider{display:flex;align-items:center;gap:1rem;padding:0 4rem;margin:2.2rem 0 1.3rem;}
 .divider-line{flex:1;height:1px;background:var(--cream);}
-.divider-text{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
-.section-header{padding:0 4rem;margin-bottom:2rem;display:flex;justify-content:space-between;align-items:flex-end;}
-.section-title{font-family:var(--serif);font-size:2rem;color:var(--ink);}
+.divider-text{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.section-header{padding:0 4rem;margin-bottom:1.8rem;display:flex;justify-content:space-between;align-items:flex-end;}
+.section-title-text{font-family:var(--serif);font-size:1.8rem;color:var(--ink);}
 
-/* BRAND CARDS */
+/* Brand cards */
 .brands-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cream);margin:0 4rem;}
-.brand-card{background:var(--paper);padding:2rem;cursor:pointer;transition:background 0.2s;text-decoration:none;color:inherit;display:block;position:relative;}
+.brand-card{background:var(--paper);padding:1.8rem;cursor:pointer;transition:background 0.2s;text-decoration:none;color:inherit;display:block;position:relative;}
 .brand-card:hover{background:var(--ink);color:var(--paper);}
 .brand-card:hover .brand-cat,.brand-card:hover .brand-year,.brand-card:hover .brand-desc{color:rgba(247,243,238,0.6);}
 .brand-card:hover .brand-arrow{color:var(--accent);}
-.brand-cat{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.8rem;font-weight:500;transition:color 0.2s;}
-.brand-name{font-family:var(--serif);font-size:1.5rem;margin-bottom:0.5rem;line-height:1.2;}
-.brand-year{font-size:0.78rem;color:var(--muted);margin-bottom:0.9rem;transition:color 0.2s;}
-.brand-desc{font-size:0.87rem;color:var(--muted);line-height:1.7;margin-bottom:1.2rem;transition:color 0.2s;}
+.brand-cat{font-size:0.66rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.7rem;font-weight:500;transition:color 0.2s;}
+.brand-name{font-family:var(--serif);font-size:1.4rem;margin-bottom:0.4rem;line-height:1.2;}
+.brand-year{font-size:0.76rem;color:var(--muted);margin-bottom:0.8rem;transition:color 0.2s;}
+.brand-desc{font-size:0.85rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem;transition:color 0.2s;}
 .brand-footer{display:flex;justify-content:space-between;align-items:center;}
-.brand-arrow{font-size:1.1rem;color:var(--ink);transition:color 0.2s;}
-.brand-actions{display:flex;gap:0.35rem;opacity:0;transition:opacity 0.2s;}
+.brand-arrow{font-size:1rem;color:var(--ink);transition:color 0.2s;}
+.brand-actions{display:flex;gap:0.3rem;opacity:0;transition:opacity 0.2s;}
 .brand-card:hover .brand-actions{opacity:1;}
-.ba-btn{background:rgba(247,243,238,0.1);border:1px solid rgba(247,243,238,0.18);color:rgba(247,243,238,0.7);font-size:0.7rem;padding:0.22rem 0.5rem;cursor:pointer;transition:all 0.15s;font-family:var(--sans);}
+.ba-btn{background:rgba(247,243,238,0.1);border:1px solid rgba(247,243,238,0.18);color:rgba(247,243,238,0.7);font-size:0.68rem;padding:0.2rem 0.48rem;cursor:pointer;transition:all 0.15s;font-family:var(--sans);}
 .ba-btn:hover,.ba-btn.bookmarked{background:rgba(192,57,43,0.3);border-color:var(--accent);color:#fff;}
-.read-badge{position:absolute;top:0.9rem;right:0.9rem;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;background:var(--accent);color:#fff;padding:0.18rem 0.5rem;font-weight:500;opacity:0;transition:opacity 0.3s;}
+.read-badge{position:absolute;top:0.85rem;right:0.85rem;font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;background:var(--accent);color:#fff;padding:0.16rem 0.48rem;font-weight:500;opacity:0;transition:opacity 0.3s;}
 .brand-card.is-read .read-badge{opacity:1;}
-.compare-check{position:absolute;top:0.9rem;left:0.9rem;width:19px;height:19px;border:2px solid var(--cream);background:var(--paper);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:transparent;}
+.compare-check{position:absolute;top:0.85rem;left:0.85rem;width:18px;height:18px;border:2px solid var(--cream);background:var(--paper);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;font-size:0.68rem;color:transparent;}
 .compare-check.selected{background:var(--accent);border-color:var(--accent);color:#fff;}
+#noResults{display:none;padding:3rem 4rem;text-align:center;color:var(--muted);}
 
-/* FEATURED */
-.featured{margin:3rem 4rem;display:grid;grid-template-columns:1fr 1fr;background:var(--ink);color:var(--paper);}
-.featured-left{padding:4rem;}
-.featured-tag{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;font-weight:500;}
-.featured-title{font-family:var(--serif);font-size:2.2rem;line-height:1.2;margin-bottom:1.2rem;color:var(--paper);}
+/* Featured */
+.featured{margin:2.5rem 4rem;display:grid;grid-template-columns:1fr 1fr;background:var(--ink);color:var(--paper);}
+.featured-left{padding:3.5rem;}
+.featured-tag{font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem;font-weight:500;}
+.featured-title{font-family:var(--serif);font-size:2rem;line-height:1.2;margin-bottom:1rem;color:var(--paper);}
 .featured-title em{color:var(--accent);font-style:italic;}
-.featured-excerpt{color:rgba(247,243,238,0.65);font-size:0.95rem;line-height:1.8;margin-bottom:2rem;}
-.featured-meta{display:flex;gap:2rem;margin-bottom:2rem;}
+.featured-excerpt{color:rgba(247,243,238,0.62);font-size:0.92rem;line-height:1.8;margin-bottom:1.8rem;}
+.featured-meta{display:flex;gap:2rem;margin-bottom:1.8rem;flex-wrap:wrap;}
 .featured-meta-item{display:flex;flex-direction:column;gap:0.2rem;}
-.featured-meta-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,243,238,0.4);}
-.featured-meta-val{font-size:1.1rem;font-family:var(--serif);color:var(--paper);}
-.featured-right{background:var(--cream);display:flex;flex-direction:column;padding:4rem 3rem;}
-.timeline-label{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:2rem;font-weight:500;}
-.timeline-item{display:flex;gap:1.5rem;margin-bottom:1.8rem;align-items:flex-start;}
-.tl-year{font-family:var(--serif);font-size:0.9rem;font-weight:700;color:var(--accent);min-width:40px;padding-top:2px;}
+.featured-meta-label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,243,238,0.38);}
+.featured-meta-val{font-size:1rem;font-family:var(--serif);color:var(--paper);}
+.featured-right{background:var(--cream);display:flex;flex-direction:column;padding:3.5rem 2.8rem;}
+.timeline-label{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1.8rem;font-weight:500;}
+.timeline-item{display:flex;gap:1.2rem;margin-bottom:1.5rem;align-items:flex-start;}
+.tl-year{font-family:var(--serif);font-size:0.88rem;font-weight:700;color:var(--accent);min-width:36px;padding-top:2px;}
 .tl-line-wrap{display:flex;flex-direction:column;align-items:center;}
-.tl-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:6px;flex-shrink:0;}
-.tl-vline{width:1px;background:var(--cream);flex:1;min-height:30px;}
+.tl-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0;}
+.tl-vline{width:1px;background:var(--cream);flex:1;min-height:26px;}
 .tl-content{flex:1;}
-.tl-event{font-size:0.9rem;font-weight:500;color:var(--ink);margin-bottom:0.2rem;}
-.tl-detail{font-size:0.8rem;color:var(--muted);line-height:1.5;}
+.tl-event{font-size:0.87rem;font-weight:500;color:var(--ink);margin-bottom:0.18rem;}
+.tl-detail{font-size:0.78rem;color:var(--muted);line-height:1.5;}
 
-/* NEWSLETTER */
-.newsletter{margin:2rem 4rem 3rem;padding:3.5rem 4rem;background:var(--accent-light);display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;}
-.newsletter-text h2{font-family:var(--serif);font-size:1.8rem;margin-bottom:0.5rem;}
-.newsletter-text p{color:var(--muted);font-size:0.95rem;}
-.newsletter-form{display:flex;gap:0;min-width:340px;}
-.newsletter-form input{flex:1;padding:0.85rem 1.2rem;border:1px solid var(--ink);border-right:none;background:var(--paper);font-family:var(--sans);font-size:0.9rem;color:var(--ink);outline:none;}
+/* Newsletter */
+.newsletter{margin:2rem 4rem 2.5rem;padding:3rem 3.5rem;background:var(--accent-light);display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;}
+.newsletter-text h2{font-family:var(--serif);font-size:1.6rem;margin-bottom:0.4rem;}
+.newsletter-text p{color:var(--muted);font-size:0.92rem;}
+.newsletter-form{display:flex;gap:0;min-width:320px;}
+.newsletter-form input{flex:1;padding:0.8rem 1.1rem;border:1px solid var(--ink);border-right:none;background:var(--paper);font-family:var(--sans);font-size:0.88rem;color:var(--ink);outline:none;}
 .newsletter-form input::placeholder{color:var(--muted);}
-.newsletter-form button{padding:0.85rem 1.5rem;background:var(--ink);color:var(--paper);border:1px solid var(--ink);font-family:var(--sans);font-size:0.8rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.newsletter-form button{padding:0.8rem 1.4rem;background:var(--ink);color:var(--paper);border:1px solid var(--ink);font-family:var(--sans);font-size:0.78rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
 .newsletter-form button:hover{background:var(--accent);border-color:var(--accent);}
 
-/* FOOTER */
-footer{border-top:1px solid var(--cream);padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
-.footer-logo{font-family:var(--serif);font-size:1.1rem;color:var(--ink);}
+/* Footer */
+footer{border-top:1px solid var(--cream);padding:1.8rem 4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-logo{font-family:var(--serif);font-size:1rem;color:var(--ink);}
 .footer-logo span{color:var(--accent);font-style:italic;}
-.footer-copy{font-size:0.8rem;color:var(--muted);}
-.footer-links{display:flex;gap:1.5rem;}
-.footer-links a{font-size:0.8rem;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-copy{font-size:0.78rem;color:var(--muted);}
+.footer-links{display:flex;gap:1.4rem;}
+.footer-links a{font-size:0.78rem;color:var(--muted);text-decoration:none;transition:color 0.2s;}
 .footer-links a:hover{color:var(--ink);}
 
-/* OVERLAY */
-.overlay-bg{position:fixed;inset:0;background:rgba(26,20,16,0.65);z-index:400;display:none;backdrop-filter:blur(3px);}
+/* ════════════════════════════════
+   SECTION 2 — STRATEGY LIBRARY
+════════════════════════════════ */
+.sl-hero{background:var(--ink);padding:3.5rem 4rem;color:var(--paper);}
+.sl-eyebrow{font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);margin-bottom:0.7rem;font-weight:500;}
+.sl-title{font-family:var(--serif);font-size:clamp(2rem,3.2vw,3rem);line-height:1.1;margin-bottom:0.9rem;}
+.sl-sub{font-size:0.92rem;color:rgba(247,243,238,0.52);max-width:520px;line-height:1.8;}
+.sl-stats{display:flex;gap:3rem;margin-top:2rem;flex-wrap:wrap;}
+.sl-stat-num{font-family:var(--serif);font-size:1.9rem;font-weight:700;color:var(--paper);}
+.sl-stat-label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,243,238,0.32);margin-top:0.15rem;}
+.sl-filter{padding:1rem 4rem;display:flex;gap:0.4rem;flex-wrap:wrap;border-bottom:1px solid var(--cream);align-items:center;}
+.sf-btn{font-size:0.7rem;padding:0.3rem 0.85rem;background:transparent;border:1px solid var(--cream);color:var(--muted);cursor:pointer;font-family:var(--sans);letter-spacing:0.06em;text-transform:uppercase;transition:all 0.2s;}
+.sf-btn:hover,.sf-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.strategies-library{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cream);}
+.slc{background:var(--paper);padding:2rem;cursor:pointer;transition:background 0.2s;position:relative;overflow:hidden;}
+.slc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:0;transition:opacity 0.2s;}
+.slc:hover::before,.slc.open::before{opacity:1;}
+.slc:hover,.slc.open{background:var(--cream);}
+.slc-cat{font-size:0.64rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:500;margin-bottom:0.5rem;}
+.slc-name{font-family:var(--serif);font-size:1.15rem;margin-bottom:0.45rem;line-height:1.25;}
+.slc-tagline{font-size:0.82rem;color:var(--muted);line-height:1.65;margin-bottom:0.85rem;}
+.slc-brands{display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.75rem;}
+.slc-tag{font-size:0.62rem;padding:0.18rem 0.55rem;border:1px solid var(--cream);color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;}
+.slc-impact{font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);font-weight:500;}
+.slc-toggle-btn{margin-top:0.7rem;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);cursor:pointer;display:inline-flex;align-items:center;gap:0.3rem;background:none;border:none;font-family:var(--sans);padding:0;}
+.slc-toggle-btn:hover{text-decoration:underline;}
+.slc-body{display:none;margin-top:1.1rem;padding-top:1.1rem;border-top:1px solid var(--cream);}
+.slc-body.open{display:block;}
+.slc-detail-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.45rem;margin-top:0.9rem;}
+.slc-detail-label:first-child{margin-top:0;}
+.slc-detail-text{font-size:0.85rem;color:var(--ink);line-height:1.78;}
+.slc-steps{list-style:none;margin-top:0.3rem;}
+.slc-steps li{font-size:0.83rem;color:var(--ink);padding:0.3rem 0;border-bottom:1px solid var(--cream);display:flex;gap:0.6rem;align-items:flex-start;line-height:1.55;}
+.slc-steps li:last-child{border-bottom:none;}
+.slc-step-n{font-family:var(--serif);font-size:0.88rem;color:var(--accent);font-weight:700;flex-shrink:0;min-width:16px;}
+.meter-row{display:flex;align-items:center;gap:0.7rem;margin-bottom:0.5rem;}
+.meter-label{font-size:0.7rem;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;min-width:70px;}
+.meter-track{flex:1;height:4px;background:var(--cream);}
+.meter-fill{height:4px;background:var(--accent);}
+.meter-val{font-size:0.72rem;color:var(--muted);min-width:30px;text-align:right;}
+
+/* ════════════════════════════════
+   SECTION 3 — COMPARE (ADVANCED)
+════════════════════════════════ */
+.compare-hero{background:var(--ink);padding:3.5rem 4rem;color:var(--paper);}
+.compare-controls{padding:1.5rem 4rem;border-bottom:1px solid var(--cream);display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;}
+.c-select{padding:0.6rem 0.9rem;border:1px solid var(--cream);background:var(--paper);font-family:var(--sans);font-size:0.88rem;color:var(--ink);outline:none;flex:1;min-width:150px;}
+.c-vs{font-family:var(--serif);font-size:1.1rem;color:var(--muted);font-style:italic;}
+.c-go{padding:0.6rem 1.4rem;background:var(--accent);color:#fff;border:none;font-family:var(--sans);font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.c-go:hover{background:#a93224;}
+.verdict-banner{padding:1.5rem 4rem;background:var(--accent);color:#fff;display:none;}
+.verdict-banner.show{display:block;}
+.vb-label{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.4rem;opacity:0.75;}
+.vb-text{font-family:var(--serif);font-size:1.35rem;line-height:1.3;}
+.score-section{padding:2rem 4rem;border-bottom:1px solid var(--cream);}
+.score-section-title{font-family:var(--serif);font-size:1.25rem;margin-bottom:1.3rem;}
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+.score-col-name{font-family:var(--serif);font-size:1rem;margin-bottom:1rem;color:var(--ink);}
+.score-metric{margin-bottom:0.9rem;}
+.sm-row{display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.3rem;}
+.sm-name{color:var(--ink);}
+.sm-val{color:var(--accent);font-weight:500;}
+.sm-track{height:5px;background:var(--cream);}
+.sm-fill{height:5px;background:var(--accent);transition:width 0.7s ease;}
+.sm-fill.b{background:var(--ink);}
+.adv-compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cream);}
+.acc-col{background:var(--paper);}
+.acc-head{padding:1.8rem 2rem;border-bottom:1px solid var(--cream);}
+.acc-cat{font-size:0.63rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.25rem;font-weight:500;}
+.acc-name{font-family:var(--serif);font-size:1.6rem;margin-bottom:0.18rem;}
+.acc-year{font-size:0.78rem;color:var(--muted);}
+.acc-row{padding:0.82rem 2rem;border-bottom:1px solid var(--cream);}
+.acc-row-label{font-size:0.63rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.22rem;}
+.acc-row-val{font-size:0.88rem;line-height:1.5;color:var(--ink);}
+.acc-list-section{padding:1rem 2rem;border-bottom:1px solid var(--cream);}
+.acc-list-label{font-size:0.63rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;}
+.acc-list-item{font-size:0.82rem;color:var(--ink);padding:0.22rem 0;border-bottom:1px solid var(--cream);}
+.acc-list-item:last-child{border-bottom:none;}
+.acc-strength-item{font-size:0.82rem;color:var(--muted);padding:0.18rem 0;}
+.acc-link-wrap{padding:1.3rem 2rem;}
+.acc-link{display:inline-block;padding:0.6rem 1.3rem;background:var(--ink);color:var(--paper);text-decoration:none;font-size:0.76rem;letter-spacing:0.08em;text-transform:uppercase;transition:background 0.2s;}
+.acc-link:hover{background:var(--accent);}
+.compare-placeholder{padding:4rem;text-align:center;color:var(--muted);}
+
+/* ════════════════════════════════
+   SECTION 4 — SIMULATOR
+════════════════════════════════ */
+.sim-hero{background:var(--ink);padding:3.5rem 4rem;color:var(--paper);}
+.sim-brand-bar{padding:1.2rem 4rem;border-bottom:1px solid var(--cream);display:flex;gap:0.7rem;align-items:center;flex-wrap:wrap;}
+.sim-brand-btn{padding:0.5rem 1.1rem;background:var(--paper);border:1px solid var(--cream);font-family:var(--serif);font-size:0.9rem;cursor:pointer;transition:all 0.2s;color:var(--ink);}
+.sim-brand-btn:hover,.sim-brand-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.sim-content-wrap{max-width:780px;margin:0 auto;padding:3rem 4rem;}
+.sim-empty-msg{padding:3rem 4rem;color:var(--muted);font-size:0.9rem;}
+.sim-progress{display:flex;gap:0.4rem;margin-bottom:1.5rem;}
+.sim-prog-dot{flex:1;height:4px;background:var(--cream);transition:background 0.3s;}
+.sim-prog-dot.done{background:var(--accent);}
+.sim-prog-dot.cur{background:var(--ink);}
+.sim-score-line{font-size:0.78rem;color:var(--muted);margin-bottom:1.3rem;}
+.sim-score-line span{color:var(--accent);font-weight:500;}
+.sim-year-pill{display:inline-block;font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;background:var(--accent);color:#fff;padding:0.22rem 0.7rem;margin-bottom:1rem;font-weight:500;}
+.sim-scenario-title{font-family:var(--serif);font-size:1.5rem;line-height:1.3;margin-bottom:0.7rem;}
+.sim-context{font-size:0.9rem;color:var(--muted);line-height:1.8;margin-bottom:1.5rem;padding:1rem 1.2rem;background:var(--cream);border-left:3px solid var(--accent);}
+.sim-question{font-family:var(--serif);font-size:1rem;margin-bottom:1.2rem;font-weight:400;line-height:1.5;}
+.sim-choices{display:flex;flex-direction:column;gap:0.6rem;}
+.sim-choice{padding:1rem 1.3rem;border:1px solid var(--cream);background:var(--paper);cursor:pointer;font-family:var(--sans);font-size:0.88rem;color:var(--ink);text-align:left;transition:all 0.2s;display:flex;align-items:flex-start;gap:0.8rem;}
+.sim-choice:hover:not(:disabled){border-color:var(--ink);background:var(--cream);}
+.sim-choice.correct{background:#eaf3de;border-color:#639922;color:#27500a;}
+.sim-choice.wrong{background:#faecea;border-color:#c0392b;color:#7a1010;}
+.sim-choice.reveal{background:var(--cream);border-color:var(--cream);color:var(--muted);}
+.sim-letter{font-family:var(--serif);font-size:1rem;font-weight:700;opacity:0.35;transition:opacity 0.2s;flex-shrink:0;}
+.sim-choice:hover .sim-letter{opacity:0.7;}
+.sim-choice.correct .sim-letter,.sim-choice.wrong .sim-letter{opacity:1;}
+.sim-outcome{display:none;margin-top:1.3rem;padding:1.3rem;border-left:3px solid var(--accent);background:var(--cream);}
+.sim-outcome.show{display:block;}
+.sim-outcome-label{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.45rem;font-weight:500;}
+.sim-outcome-heading{font-family:var(--serif);font-size:1.05rem;margin-bottom:0.45rem;}
+.sim-outcome-text{font-size:0.86rem;color:var(--ink);line-height:1.8;}
+.sim-outcome-impact{margin-top:0.7rem;font-size:0.76rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);font-weight:500;}
+.sim-next-btn{margin-top:1.2rem;padding:0.72rem 1.8rem;background:var(--ink);color:var(--paper);border:none;font-family:var(--sans);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;display:none;transition:background 0.2s;}
+.sim-next-btn:hover{background:var(--accent);}
+.sim-next-btn.show{display:inline-block;}
+.sim-end{text-align:center;padding:2rem 0;display:none;}
+.sim-end.show{display:block;}
+.sim-end-score{font-family:var(--serif);font-size:4.5rem;font-weight:700;color:var(--accent);line-height:1;}
+.sim-end-label{font-size:0.85rem;color:var(--muted);margin-top:0.5rem;margin-bottom:1.1rem;}
+.sim-end-msg{font-size:0.95rem;color:var(--ink);margin-bottom:1.8rem;line-height:1.7;max-width:460px;margin-left:auto;margin-right:auto;}
+.sim-restart-btn{padding:0.75rem 1.8rem;background:var(--accent);color:#fff;border:none;font-family:var(--sans);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;margin:0 0.3rem;}
+.sim-restart-btn.dark{background:var(--ink);}
+
+/* ════════════════════════════════
+   SECTION 5 — GROWTH CHARTS
+════════════════════════════════ */
+.charts-hero{background:var(--ink);padding:3.5rem 4rem;color:var(--paper);}
+.chart-view-bar{padding:1rem 4rem;display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--cream);}
+.cv-btn{padding:0.32rem 0.9rem;border:1px solid var(--cream);background:transparent;font-family:var(--sans);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all 0.2s;}
+.cv-btn:hover,.cv-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.insight-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--cream);}
+.ic{background:var(--paper);padding:1.4rem 1.8rem;}
+.ic-num{font-family:var(--serif);font-size:1.9rem;font-weight:700;color:var(--ink);line-height:1;}
+.ic-label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:0.25rem;}
+.ic-trend{font-size:0.72rem;color:var(--accent);margin-top:0.15rem;font-weight:500;}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cream);}
+.chart-panel{background:var(--paper);padding:1.8rem;}
+.chart-panel-title{font-family:var(--serif);font-size:1.05rem;margin-bottom:0.25rem;}
+.chart-panel-sub{font-size:0.76rem;color:var(--muted);margin-bottom:1.2rem;}
+.chart-legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;font-size:11px;color:var(--muted);}
+.cl-item{display:flex;align-items:center;gap:4px;}
+.cl-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+.chart-wrap{position:relative;width:100%;height:200px;}
+.chart-full-wrap{position:relative;width:100%;height:340px;}
+.chart-full-panel{background:var(--paper);padding:2rem 4rem;}
+.chart-full-title{font-family:var(--serif);font-size:1.3rem;margin-bottom:0.25rem;}
+.chart-full-sub{font-size:0.8rem;color:var(--muted);margin-bottom:1.2rem;}
+
+/* ════════════════════════════════
+   MODALS & OVERLAYS
+════════════════════════════════ */
+.overlay-bg{position:fixed;inset:0;background:rgba(26,20,16,0.65);z-index:700;display:none;backdrop-filter:blur(3px);}
 .overlay-bg.open{display:block;}
 
-/* BOOKMARKS PANEL */
-.bookmarks-panel{position:fixed;top:0;right:0;bottom:0;width:340px;background:var(--paper);z-index:500;transform:translateX(100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;border-left:1px solid var(--cream);box-shadow:-8px 0 40px rgba(0,0,0,0.15);}
+/* Bookmarks panel */
+.bookmarks-panel{position:fixed;top:0;right:0;bottom:0;width:330px;background:var(--paper);z-index:800;transform:translateX(100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;border-left:1px solid var(--cream);box-shadow:-8px 0 40px rgba(0,0,0,0.15);}
 .bookmarks-panel.open{transform:translateX(0);}
-.panel-header{padding:1.4rem 1.6rem;border-bottom:1px solid var(--cream);display:flex;justify-content:space-between;align-items:center;}
-.panel-title{font-family:var(--serif);font-size:1.25rem;}
-.panel-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);}
+.panel-header{padding:1.3rem 1.5rem;border-bottom:1px solid var(--cream);display:flex;justify-content:space-between;align-items:center;}
+.panel-title{font-family:var(--serif);font-size:1.2rem;}
+.panel-close{background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--muted);}
 .panel-close:hover{color:var(--ink);}
 .panel-body{flex:1;overflow-y:auto;}
-.bookmark-item{display:flex;align-items:center;gap:0.8rem;padding:0.9rem 1.6rem;border-bottom:1px solid var(--cream);cursor:pointer;text-decoration:none;color:var(--ink);transition:background 0.15s;}
+.bookmark-item{display:flex;align-items:center;gap:0.8rem;padding:0.85rem 1.5rem;border-bottom:1px solid var(--cream);cursor:pointer;text-decoration:none;color:var(--ink);transition:background 0.15s;}
 .bookmark-item:hover{background:var(--cream);}
-.bi-cat{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.15rem;}
-.bi-name{font-family:var(--serif);font-size:0.95rem;}
-.bi-year{font-size:0.72rem;color:var(--muted);}
-.bi-remove{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.85rem;flex-shrink:0;transition:color 0.2s;}
+.bi-cat{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.12rem;}
+.bi-name{font-family:var(--serif);font-size:0.92rem;}
+.bi-year{font-size:0.7rem;color:var(--muted);}
+.bi-remove{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.82rem;flex-shrink:0;transition:color 0.2s;}
 .bi-remove:hover{color:var(--accent);}
-.panel-empty{padding:2.5rem 1.6rem;text-align:center;color:var(--muted);}
-.panel-empty-icon{font-size:2.2rem;margin-bottom:0.8rem;}
-.panel-empty-text{font-size:0.88rem;line-height:1.7;}
+.panel-empty{padding:2.5rem 1.5rem;text-align:center;color:var(--muted);}
+.panel-empty-icon{font-size:2rem;margin-bottom:0.7rem;}
+.panel-empty-text{font-size:0.85rem;line-height:1.7;}
 
-/* COMPARE MODAL */
-.compare-modal{position:fixed;inset:0;z-index:500;overflow-y:auto;display:none;padding:2rem;}
-.compare-modal.open{display:block;}
-.compare-inner{background:var(--paper);max-width:900px;margin:0 auto;border:1px solid var(--cream);}
-.cm-header{padding:1.8rem 2.5rem;border-bottom:1px solid var(--cream);display:flex;justify-content:space-between;align-items:center;}
-.cm-title{font-family:var(--serif);font-size:1.4rem;}
-.cm-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);}
-.cm-close:hover{color:var(--ink);}
-.cm-select-row{padding:1.3rem 2.5rem;border-bottom:1px solid var(--cream);display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;}
-.cm-select{padding:0.55rem 0.9rem;border:1px solid var(--cream);background:var(--paper);font-family:var(--sans);font-size:0.88rem;color:var(--ink);outline:none;flex:1;min-width:150px;}
-.cm-vs{font-family:var(--serif);font-size:1.1rem;color:var(--muted);font-style:italic;}
-.cm-go{padding:0.6rem 1.4rem;background:var(--accent);color:#fff;border:none;font-family:var(--sans);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
-.cm-go:hover{background:#a93224;}
-.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cream);}
-.compare-col{background:var(--paper);padding:0;}
-.compare-col-head{padding:1.8rem 2rem;border-bottom:1px solid var(--cream);}
-.cc-cat{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.3rem;font-weight:500;}
-.cc-name{font-family:var(--serif);font-size:1.6rem;margin-bottom:0.2rem;}
-.cc-year{font-size:0.8rem;color:var(--muted);}
-.compare-data-row{padding:0.85rem 2rem;border-bottom:1px solid var(--cream);}
-.cdr-label{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;}
-.cdr-val{font-size:0.9rem;line-height:1.5;color:var(--ink);}
-.cm-link{display:inline-block;margin:1.5rem 2rem;padding:0.65rem 1.4rem;background:var(--ink);color:var(--paper);text-decoration:none;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;transition:background 0.2s;}
-.cm-link:hover{background:var(--accent);}
-
-/* QUIZ MODAL */
-.quiz-modal{position:fixed;inset:0;z-index:500;overflow-y:auto;display:none;padding:2rem;}
+/* Quiz modal */
+.quiz-modal{position:fixed;inset:0;z-index:800;overflow-y:auto;display:none;padding:2rem;}
 .quiz-modal.open{display:block;}
-.quiz-inner{background:var(--paper);max-width:600px;margin:0 auto;border:1px solid var(--cream);}
-.quiz-header{padding:1.8rem 2.5rem;border-bottom:1px solid var(--cream);display:flex;justify-content:space-between;align-items:center;}
-.quiz-title{font-family:var(--serif);font-size:1.35rem;}
-.quiz-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);}
+.quiz-inner{background:var(--paper);max-width:580px;margin:0 auto;border:1px solid var(--cream);}
+.quiz-header{padding:1.6rem 2.2rem;border-bottom:1px solid var(--cream);display:flex;justify-content:space-between;align-items:center;}
+.quiz-title{font-family:var(--serif);font-size:1.25rem;}
+.quiz-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);}
 .quiz-close:hover{color:var(--ink);}
-.quiz-brand-select{padding:1.3rem 2.5rem;border-bottom:1px solid var(--cream);}
-.quiz-brand-select select{width:100%;padding:0.65rem 1rem;border:1px solid var(--cream);background:var(--paper);font-family:var(--sans);font-size:0.9rem;color:var(--ink);outline:none;}
-.quiz-body{padding:2rem 2.5rem;}
-.quiz-progress{display:flex;gap:0.4rem;margin-bottom:1.6rem;}
+.quiz-brand-select{padding:1.2rem 2.2rem;border-bottom:1px solid var(--cream);}
+.quiz-brand-select select{width:100%;padding:0.6rem 0.9rem;border:1px solid var(--cream);background:var(--paper);font-family:var(--sans);font-size:0.88rem;color:var(--ink);outline:none;}
+.quiz-body{padding:1.8rem 2.2rem;}
+.quiz-progress{display:flex;gap:0.35rem;margin-bottom:1.4rem;}
 .qp-dot{flex:1;height:4px;background:var(--cream);transition:background 0.3s;}
 .qp-dot.done{background:var(--accent);}
-.qp-dot.current{background:var(--ink);}
-.quiz-q-num{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;}
-.quiz-question{font-family:var(--serif);font-size:1.15rem;margin-bottom:1.4rem;line-height:1.4;}
-.quiz-options{display:flex;flex-direction:column;gap:0.55rem;}
-.quiz-option{padding:0.8rem 1.1rem;border:1px solid var(--cream);background:var(--paper);cursor:pointer;font-family:var(--sans);font-size:0.88rem;color:var(--ink);text-align:left;transition:all 0.2s;}
+.qp-dot.cur{background:var(--ink);}
+.quiz-q-num{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.45rem;}
+.quiz-question{font-family:var(--serif);font-size:1.1rem;margin-bottom:1.2rem;line-height:1.4;}
+.quiz-options{display:flex;flex-direction:column;gap:0.5rem;}
+.quiz-option{padding:0.75rem 1rem;border:1px solid var(--cream);background:var(--paper);cursor:pointer;font-family:var(--sans);font-size:0.87rem;color:var(--ink);text-align:left;transition:all 0.2s;}
 .quiz-option:hover:not(:disabled){border-color:var(--ink);background:var(--cream);}
 .quiz-option.correct{background:#eaf3de;border-color:#639922;color:#27500a;}
 .quiz-option.wrong{background:#faecea;border-color:#c0392b;color:#7a1010;}
 .quiz-option.reveal{background:#f5f4ef;border-color:#ccc;color:var(--muted);}
-.quiz-feedback{margin-top:1rem;padding:0.9rem 1rem;font-size:0.87rem;line-height:1.7;display:none;}
+.quiz-feedback{margin-top:0.9rem;padding:0.85rem 1rem;font-size:0.85rem;line-height:1.7;display:none;}
 .quiz-feedback.show{display:block;}
 .quiz-feedback.correct-fb{background:#eaf3de;color:#27500a;}
 .quiz-feedback.wrong-fb{background:#faecea;color:#7a1010;}
-.quiz-next{margin-top:1rem;padding:0.7rem 1.6rem;background:var(--ink);color:var(--paper);border:none;font-family:var(--sans);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;display:none;transition:background 0.2s;}
-.quiz-next:hover{background:var(--accent);}
-.quiz-next.show{display:inline-block;}
-.quiz-result{text-align:center;padding:2rem 0;display:none;}
+.quiz-next-btn{margin-top:0.9rem;padding:0.65rem 1.5rem;background:var(--ink);color:var(--paper);border:none;font-family:var(--sans);font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;display:none;transition:background 0.2s;}
+.quiz-next-btn:hover{background:var(--accent);}
+.quiz-next-btn.show{display:inline-block;}
+.quiz-result{text-align:center;padding:1.8rem 0;display:none;}
 .quiz-result.show{display:block;}
-.qr-score{font-family:var(--serif);font-size:4rem;font-weight:700;color:var(--accent);line-height:1;}
-.qr-label{font-size:0.88rem;color:var(--muted);margin-top:0.5rem;margin-bottom:1.3rem;}
-.qr-msg{font-size:0.95rem;color:var(--ink);margin-bottom:1.5rem;line-height:1.7;}
-.qr-retry{padding:0.7rem 2rem;background:var(--accent);color:#fff;border:none;font-family:var(--sans);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;}
+.qr-score{font-family:var(--serif);font-size:3.8rem;font-weight:700;color:var(--accent);line-height:1;}
+.qr-label{font-size:0.85rem;color:var(--muted);margin-top:0.4rem;margin-bottom:1.1rem;}
+.qr-msg{font-size:0.92rem;color:var(--ink);margin-bottom:1.3rem;line-height:1.7;}
+.qr-retry{padding:0.65rem 1.8rem;background:var(--accent);color:#fff;border:none;font-family:var(--sans);font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;}
 
-/* COMPARE FLOATING BAR */
-.compare-bar{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:var(--paper);padding:0.85rem 1.6rem;display:flex;align-items:center;gap:1rem;z-index:300;box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);white-space:nowrap;}
+/* Floating compare bar */
+.compare-bar{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--ink);color:var(--paper);padding:0.8rem 1.5rem;display:flex;align-items:center;gap:0.9rem;z-index:600;box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);white-space:nowrap;}
 .compare-bar.visible{transform:translateX(-50%) translateY(0);}
-.compare-bar-text{font-size:0.83rem;}
-.compare-bar-text span{color:var(--accent);font-weight:500;}
-.compare-bar-go{padding:0.45rem 1.1rem;background:var(--accent);color:#fff;border:none;font-family:var(--sans);font-size:0.76rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
-.compare-bar-go:hover{background:#a93224;}
-.compare-bar-clear{background:none;border:none;color:rgba(247,243,238,0.35);cursor:pointer;font-size:0.78rem;transition:color 0.2s;font-family:var(--sans);}
-.compare-bar-clear:hover{color:rgba(247,243,238,0.75);}
+.cbar-text{font-size:0.82rem;}
+.cbar-text span{color:var(--accent);font-weight:500;}
+.cbar-go{padding:0.42rem 1rem;background:var(--accent);color:#fff;border:none;font-family:var(--sans);font-size:0.74rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.cbar-go:hover{background:#a93224;}
+.cbar-clear{background:none;border:none;color:rgba(247,243,238,0.32);cursor:pointer;font-size:0.76rem;transition:color 0.2s;font-family:var(--sans);}
+.cbar-clear:hover{color:rgba(247,243,238,0.72);}
 
 /* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 .hero-eyebrow{animation:fadeUp 0.6s ease both;}
 .hero-title{animation:fadeUp 0.6s ease 0.1s both;}
 .hero-sub{animation:fadeUp 0.6s ease 0.2s both;}
 .btn-group{animation:fadeUp 0.6s ease 0.3s both;}
 
-/* NO RESULTS */
-#noResults{display:none;padding:3rem 4rem;text-align:center;color:var(--muted);}
-
 /* RESPONSIVE */
-@media(max-width:1100px){.nav-links{display:none;}.nav-center{max-width:260px;}}
+@media(max-width:1100px){.nav-links{display:none;}.nav-center{max-width:240px;}}
 @media(max-width:900px){
-  nav{padding:0.8rem 1.2rem;flex-wrap:wrap;}
+  nav{padding:0.75rem 1.2rem;flex-wrap:wrap;}
   .nav-center{order:3;max-width:100%;width:100%;}
-  .hero{grid-template-columns:1fr;}
-  .hero-right{display:none;}
-  .hero-left{padding:4rem 1.5rem;}
-  .brands-grid{grid-template-columns:1fr;margin:0 1.5rem;}
-  .section-header{padding:0 1.5rem;}
-  .divider{padding:0 1.5rem;}
+  .page-nav{top:100px;}
+  .page-section{padding-top:148px;}
+  .hero{grid-template-columns:1fr;}.hero-right{display:none;}.hero-left{padding:3.5rem 1.5rem;}
+  .brands-grid,.strategies-library,.charts-grid,.adv-compare-grid{grid-template-columns:1fr;}
+  .brands-grid{margin:0 1.5rem;}
   .featured{grid-template-columns:1fr;margin:1.5rem;}
-  .newsletter{margin:1.5rem;padding:2rem 1.5rem;}
-  .newsletter-form{min-width:unset;width:100%;}
-  footer{padding:2rem 1.5rem;}
-  .progress-bar-section{padding:1rem 1.5rem;}
-  .filter-bar{padding:1rem 1.5rem;}
+  .newsletter{margin:1.5rem;padding:2rem 1.5rem;}.newsletter-form{min-width:unset;width:100%;}
+  footer{padding:1.8rem 1.5rem;}
+  .progress-bar-section,.filter-bar,.divider,.section-header,.sl-hero,.sl-filter,
+  .compare-hero,.compare-controls,.sim-hero,.sim-brand-bar,.sim-content-wrap,
+  .sim-empty-msg,.charts-hero,.chart-view-bar,.chart-full-panel{padding-left:1.5rem;padding-right:1.5rem;}
+  .insight-strip{grid-template-columns:1fr 1fr;}
+  .score-grid{grid-template-columns:1fr;}
+  .score-section{padding:1.5rem;}
   .bookmarks-panel{width:100%;}
-  .compare-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
 
-<div class="overlay-bg" id="overlay" onclick="closeAll()"></div>
+<div class="overlay-bg" id="overlay" onclick="closeOverlay()"></div>
 
-<!-- NAV -->
+<!-- ════ NAV ════ -->
 <nav>
   <a href="index.html" class="nav-logo">Brand<span>Lore</span></a>
   <div class="nav-center">
@@ -288,271 +447,339 @@ footer{border-top:1px solid var(--cream);padding:2rem 4rem;display:flex;justify-
   </div>
   <div class="nav-right">
     <ul class="nav-links">
-      <li><a href="#stories">Stories</a></li>
-      <li><a href="#timelines">Featured</a></li>
-      <li><a href="#newsletter">Newsletter</a></li>
+      <li><a href="#" onclick="showSection('stories');return false;">Stories</a></li>
+      <li><a href="#" onclick="showSection('library');return false;">Strategies</a></li>
+      <li><a href="subscribe.html">Newsletter</a></li>
     </ul>
-    <button class="nav-icon-btn" id="darkToggle" title="Toggle dark mode">🌙</button>
+    <button class="nav-icon-btn" id="darkToggle">🌙</button>
     <button class="nav-icon-btn" onclick="openQuiz()">🧠 Quiz</button>
-    <button class="nav-icon-btn" onclick="openCompare()">⚖️ Compare</button>
     <button class="nav-icon-btn" onclick="openBookmarks()">🔖 <span id="bookmarkCount">0</span></button>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <p class="hero-eyebrow">Brand History Platform</p>
-    <h1 class="hero-title">Every great brand<br>has a <em>story</em><br>worth knowing.</h1>
-    <p class="hero-sub">Explore the untold origins, pivotal moments, and founding journeys of the world's most iconic brands — through timelines, deep dives, and audio stories.</p>
-    <div class="btn-group">
-      <a href="#stories" class="btn-primary">Explore Stories</a>
-      <a href="#newsletter" class="btn-outline">Get Weekly Story</a>
+<!-- ════ PAGE NAV TABS ════ -->
+<div class="page-nav" id="pageNav">
+  <button class="pn-btn active" onclick="showSection('stories')">📖 Stories</button>
+  <button class="pn-btn" onclick="showSection('library')">📚 Strategy Library</button>
+  <button class="pn-btn" onclick="showSection('compare')">⚖️ Advanced Compare</button>
+  <button class="pn-btn" onclick="showSection('simulator')">🎯 Decision Simulator</button>
+  <button class="pn-btn" onclick="showSection('charts')">📊 Growth Charts</button>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 1 — STORIES
+════════════════════════════════════════════ -->
+<div class="page-section active" id="sec-stories">
+
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Brand History Platform</p>
+      <h1 class="hero-title">Every great brand<br>has a <em>story</em><br>worth knowing.</h1>
+      <p class="hero-sub">Explore the untold origins, pivotal moments, and founding journeys of the world's most iconic brands — through timelines, audio, and deep dives.</p>
+      <div class="btn-group">
+        <a href="#stories" onclick="showSection('stories');return false;" class="btn-primary">Explore Stories</a>
+        <a href="subscribe.html" class="btn-primary">Get Weekly Story</a>
+      </div>
     </div>
-  </div>
-  <div class="hero-right">
-    <div class="hero-stat-grid">
-      <div class="hero-stat"><div class="hero-stat-num">8</div><div class="hero-stat-label">Brand stories</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">7</div><div class="hero-stat-label">Industries covered</div></div>
-      <div class="hero-stat"><div class="hero-stat-num" id="statRead">0</div><div class="hero-stat-label">Stories you've read</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">Free</div><div class="hero-stat-label">Always & forever</div></div>
+    <div class="hero-right">
+      <div class="hero-stat-grid">
+        <div class="hero-stat"><div class="hero-stat-num">8</div><div class="hero-stat-label">Brand stories</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">7</div><div class="hero-stat-label">Industries covered</div></div>
+        <div class="hero-stat"><div class="hero-stat-num" id="statRead">0</div><div class="hero-stat-label">Stories you've read</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">Free</div><div class="hero-stat-label">Always & forever</div></div>
+      </div>
+      <div class="hero-deco"></div>
     </div>
-    <div class="hero-deco"></div>
+  </section>
+
+  <!-- Progress tracker -->
+  <div class="progress-bar-section">
+    <span class="pb-label">Your reading progress</span>
+    <div class="pb-track"><div class="pb-fill" id="pbFill"></div></div>
+    <span class="pb-count"><span id="pbRead">0</span> / 7 read</span>
+    <button class="pb-reset" onclick="resetProgress()">Reset</button>
   </div>
-</section>
 
-<!-- PROGRESS TRACKER -->
-<div class="progress-bar-section">
-  <span class="pb-label">Your reading progress</span>
-  <div class="pb-track"><div class="pb-fill" id="pbFill"></div></div>
-  <span class="pb-count"><span id="pbRead">0</span> / 7 stories read</span>
-  <button class="pb-reset" onclick="resetProgress()">Reset</button>
-</div>
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" onclick="filterCards(this,'all')">All</button>
+    <button class="filter-btn" onclick="filterCards(this,'Technology')">Technology</button>
+    <button class="filter-btn" onclick="filterCards(this,'Indian')">Indian Brands</button>
+    <button class="filter-btn" onclick="filterCards(this,'Food')">Food & Bev</button>
+    <button class="filter-btn" onclick="filterCards(this,'Fashion')">Fashion</button>
+    <button class="filter-btn" onclick="filterCards(this,'Automobile')">Automobile</button>
+    <button class="filter-btn" onclick="filterCards(this,'bookmarked')">🔖 Saved</button>
+    <button class="filter-btn" onclick="filterCards(this,'unread')">Unread</button>
+  </div>
 
-<!-- FILTER BAR -->
-<div class="filter-bar">
-  <span class="filter-label">Filter:</span>
-  <button class="filter-btn active" onclick="filterCards(this,'all')">All</button>
-  <button class="filter-btn" onclick="filterCards(this,'Technology')">Technology</button>
-  <button class="filter-btn" onclick="filterCards(this,'Indian')">Indian Brands</button>
-  <button class="filter-btn" onclick="filterCards(this,'Food')">Food & Beverage</button>
-  <button class="filter-btn" onclick="filterCards(this,'Fashion')">Fashion</button>
-  <button class="filter-btn" onclick="filterCards(this,'Automobile')">Automobile</button>
-  <button class="filter-btn" onclick="filterCards(this,'bookmarked')">🔖 Saved</button>
-  <button class="filter-btn" onclick="filterCards(this,'unread')">Unread</button>
-</div>
+  <div class="divider"><div class="divider-line"></div><span class="divider-text">Brand stories</span><div class="divider-line"></div></div>
+  <div class="section-header">
+    <h2 class="section-title-text">All Stories</h2>
+    <span style="font-size:0.78rem;color:var(--muted);" id="cardCount">7 stories</span>
+  </div>
 
-<div class="divider"><div class="divider-line"></div><span class="divider-text">Brand stories</span><div class="divider-line"></div></div>
-<div class="section-header" id="stories">
-  <h2 class="section-title">All Stories</h2>
-  <span style="font-size:0.8rem;color:var(--muted);" id="cardCount">7 stories</span>
-</div>
-
-<!-- BRAND CARDS -->
-<div class="brands-grid" id="brandsGrid">
-
-  <a class="brand-card" href="apple.html" data-name="Apple Inc." data-cat="Technology" data-tags="technology steve jobs iphone mac usa silicon valley">
-    <div class="compare-check" onclick="toggleCompare(event,this,'Apple Inc.','apple.html','Technology','1976')"></div>
-    <div class="read-badge">✓ Read</div>
-    <div class="brand-cat">Technology</div>
-    <div class="brand-name">Apple Inc.</div>
-    <div class="brand-year">Founded 1976 · Cupertino, CA</div>
-    <div class="brand-desc">From a garage in Los Altos to the world's most valuable company — the story of Steve Jobs, Steve Wozniak, and a vision that changed computing forever.</div>
-    <div class="brand-footer">
-      <div class="brand-arrow">→</div>
-      <div class="brand-actions">
+  <!-- Brand cards -->
+  <div class="brands-grid" id="brandsGrid">
+    <a class="brand-card" href="apple.html" data-name="Apple Inc." data-cat="Technology" data-tags="technology steve jobs iphone mac usa silicon valley">
+      <div class="compare-check" onclick="toggleCompare(event,this,'Apple Inc.','apple.html','Technology','1976')"></div>
+      <div class="read-badge">✓ Read</div>
+      <div class="brand-cat">Technology</div><div class="brand-name">Apple Inc.</div>
+      <div class="brand-year">Founded 1976 · Cupertino, CA</div>
+      <div class="brand-desc">From a garage in Los Altos to the world's most valuable company — the story of Steve Jobs, Steve Wozniak, and a vision that changed computing forever.</div>
+      <div class="brand-footer"><div class="brand-arrow">→</div><div class="brand-actions">
         <button class="ba-btn bookmark-btn" onclick="toggleBookmark(event,this,'Apple Inc.','apple.html','Technology','1976')">🔖 Save</button>
         <button class="ba-btn" onclick="openQuizForBrand(event,'Apple Inc.')">🧠 Quiz</button>
-      </div>
-    </div>
-  </a>
-
-  <a class="brand-card" href="coca-cola.html" data-name="Coca-Cola" data-cat="Food" data-tags="coca cola food beverage fmcg pharmacist atlanta usa">
-    <div class="compare-check" onclick="toggleCompare(event,this,'Coca-Cola','coca-cola.html','Food & Beverage','1886')"></div>
-    <div class="read-badge">✓ Read</div>
-    <div class="brand-cat">Food & Beverage</div>
-    <div class="brand-name">Coca-Cola</div>
-    <div class="brand-year">Founded 1886 · Atlanta, GA</div>
-    <div class="brand-desc">A pharmacist's accidental recipe became the world's most recognised brand. Discover how Coca-Cola conquered the globe one bottle at a time.</div>
-    <div class="brand-footer">
-      <div class="brand-arrow">→</div>
-      <div class="brand-actions">
+        <button class="ba-btn" onclick="openSimForBrand(event,'Apple')">🎯 Sim</button>
+      </div></div>
+    </a>
+    <a class="brand-card" href="coca-cola.html" data-name="Coca-Cola" data-cat="Food" data-tags="coca cola food beverage fmcg pharmacist atlanta usa">
+      <div class="compare-check" onclick="toggleCompare(event,this,'Coca-Cola','coca-cola.html','Food & Beverage','1886')"></div>
+      <div class="read-badge">✓ Read</div>
+      <div class="brand-cat">Food & Beverage</div><div class="brand-name">Coca-Cola</div>
+      <div class="brand-year">Founded 1886 · Atlanta, GA</div>
+      <div class="brand-desc">A pharmacist's accidental recipe became the world's most recognised brand. Discover how Coca-Cola conquered the globe one bottle at a time.</div>
+      <div class="brand-footer"><div class="brand-arrow">→</div><div class="brand-actions">
         <button class="ba-btn bookmark-btn" onclick="toggleBookmark(event,this,'Coca-Cola','coca-cola.html','Food & Beverage','1886')">🔖 Save</button>
         <button class="ba-btn" onclick="openQuizForBrand(event,'Coca-Cola')">🧠 Quiz</button>
-      </div>
-    </div>
-  </a>
-
-  <a class="brand-card" href="flipkart.html" data-name="Flipkart" data-cat="Indian" data-tags="flipkart india ecommerce iit bengaluru startup sachin bansal walmart">
-    <div class="compare-check" onclick="toggleCompare(event,this,'Flipkart','flipkart.html','Indian Startup','2007')"></div>
-    <div class="read-badge">✓ Read</div>
-    <div class="brand-cat">Indian Startup</div>
-    <div class="brand-name">Flipkart</div>
-    <div class="brand-year">Founded 2007 · Bengaluru, India</div>
-    <div class="brand-desc">Two IIT graduates with ₹4 lakh built India's biggest e-commerce empire. The journey of Sachin and Binny Bansal that redefined Indian retail.</div>
-    <div class="brand-footer">
-      <div class="brand-arrow">→</div>
-      <div class="brand-actions">
+      </div></div>
+    </a>
+    <a class="brand-card" href="flipkart.html" data-name="Flipkart" data-cat="Indian" data-tags="flipkart india ecommerce iit bengaluru startup sachin bansal walmart">
+      <div class="compare-check" onclick="toggleCompare(event,this,'Flipkart','flipkart.html','Indian Startup','2007')"></div>
+      <div class="read-badge">✓ Read</div>
+      <div class="brand-cat">Indian Startup</div><div class="brand-name">Flipkart</div>
+      <div class="brand-year">Founded 2007 · Bengaluru, India</div>
+      <div class="brand-desc">Two IIT graduates with ₹4 lakh built India's biggest e-commerce empire. The journey of Sachin and Binny Bansal that redefined Indian retail.</div>
+      <div class="brand-footer"><div class="brand-arrow">→</div><div class="brand-actions">
         <button class="ba-btn bookmark-btn" onclick="toggleBookmark(event,this,'Flipkart','flipkart.html','Indian Startup','2007')">🔖 Save</button>
         <button class="ba-btn" onclick="openQuizForBrand(event,'Flipkart')">🧠 Quiz</button>
-      </div>
-    </div>
-  </a>
-
-  <a class="brand-card" href="nike.html" data-name="Nike" data-cat="Fashion" data-tags="nike fashion shoes phil knight jordan just do it oregon usa sports">
-    <div class="compare-check" onclick="toggleCompare(event,this,'Nike','nike.html','Fashion','1964')"></div>
-    <div class="read-badge">✓ Read</div>
-    <div class="brand-cat">Fashion</div>
-    <div class="brand-name">Nike</div>
-    <div class="brand-year">Founded 1964 · Oregon, USA</div>
-    <div class="brand-desc">Phil Knight started selling shoes from the trunk of his car. Today Nike is a $200B brand. This is the story of obsession, risk, and the swoosh.</div>
-    <div class="brand-footer">
-      <div class="brand-arrow">→</div>
-      <div class="brand-actions">
+        <button class="ba-btn" onclick="openSimForBrand(event,'Flipkart')">🎯 Sim</button>
+      </div></div>
+    </a>
+    <a class="brand-card" href="nike.html" data-name="Nike" data-cat="Fashion" data-tags="nike fashion shoes phil knight jordan just do it oregon usa sports">
+      <div class="compare-check" onclick="toggleCompare(event,this,'Nike','nike.html','Fashion','1964')"></div>
+      <div class="read-badge">✓ Read</div>
+      <div class="brand-cat">Fashion</div><div class="brand-name">Nike</div>
+      <div class="brand-year">Founded 1964 · Oregon, USA</div>
+      <div class="brand-desc">Phil Knight started selling shoes from the trunk of his car. Today Nike is a $200B brand. This is the story of obsession, risk, and the swoosh.</div>
+      <div class="brand-footer"><div class="brand-arrow">→</div><div class="brand-actions">
         <button class="ba-btn bookmark-btn" onclick="toggleBookmark(event,this,'Nike','nike.html','Fashion','1964')">🔖 Save</button>
         <button class="ba-btn" onclick="openQuizForBrand(event,'Nike')">🧠 Quiz</button>
-      </div>
-    </div>
-  </a>
-
-  <a class="brand-card" href="tata.html" data-name="Tata Group" data-cat="Indian" data-tags="tata india conglomerate mumbai ratan tata tcs jaguar land rover">
-    <div class="compare-check" onclick="toggleCompare(event,this,'Tata Group','tata.html','Indian Conglomerate','1868')"></div>
-    <div class="read-badge">✓ Read</div>
-    <div class="brand-cat">Indian Conglomerate</div>
-    <div class="brand-name">Tata Group</div>
-    <div class="brand-year">Founded 1868 · Mumbai, India</div>
-    <div class="brand-desc">Starting with a textile mill in 1868, Jamsetji Tata built an empire that now spans 30 countries and touches every Indian's daily life.</div>
-    <div class="brand-footer">
-      <div class="brand-arrow">→</div>
-      <div class="brand-actions">
+        <button class="ba-btn" onclick="openSimForBrand(event,'Nike')">🎯 Sim</button>
+      </div></div>
+    </a>
+    <a class="brand-card" href="tata.html" data-name="Tata Group" data-cat="Indian" data-tags="tata india conglomerate mumbai ratan tata tcs jaguar land rover">
+      <div class="compare-check" onclick="toggleCompare(event,this,'Tata Group','tata.html','Indian Conglomerate','1868')"></div>
+      <div class="read-badge">✓ Read</div>
+      <div class="brand-cat">Indian Conglomerate</div><div class="brand-name">Tata Group</div>
+      <div class="brand-year">Founded 1868 · Mumbai, India</div>
+      <div class="brand-desc">Starting with a textile mill in 1868, Jamsetji Tata built an empire that now spans 30 countries and touches every Indian's daily life.</div>
+      <div class="brand-footer"><div class="brand-arrow">→</div><div class="brand-actions">
         <button class="ba-btn bookmark-btn" onclick="toggleBookmark(event,this,'Tata Group','tata.html','Indian Conglomerate','1868')">🔖 Save</button>
         <button class="ba-btn" onclick="openQuizForBrand(event,'Tata Group')">🧠 Quiz</button>
-      </div>
-    </div>
-  </a>
-
-  <a class="brand-card" href="tesla.html" data-name="Tesla" data-cat="Automobile" data-tags="tesla elon musk electric car ev california usa autopilot">
-    <div class="compare-check" onclick="toggleCompare(event,this,'Tesla','tesla.html','Automobile','2003')"></div>
-    <div class="read-badge">✓ Read</div>
-    <div class="brand-cat">Automobile</div>
-    <div class="brand-name">Tesla</div>
-    <div class="brand-year">Founded 2003 · California, USA</div>
-    <div class="brand-desc">Not founded by Elon Musk — but transformed by him. The real story of Tesla's founding, near bankruptcy, and how it disrupted a century-old industry.</div>
-    <div class="brand-footer">
-      <div class="brand-arrow">→</div>
-      <div class="brand-actions">
+      </div></div>
+    </a>
+    <a class="brand-card" href="tesla.html" data-name="Tesla" data-cat="Automobile" data-tags="tesla elon musk electric car ev california usa autopilot">
+      <div class="compare-check" onclick="toggleCompare(event,this,'Tesla','tesla.html','Automobile','2003')"></div>
+      <div class="read-badge">✓ Read</div>
+      <div class="brand-cat">Automobile</div><div class="brand-name">Tesla</div>
+      <div class="brand-year">Founded 2003 · California, USA</div>
+      <div class="brand-desc">Not founded by Elon Musk — but transformed by him. The real story of Tesla's founding, near bankruptcy, and how it disrupted a century-old industry.</div>
+      <div class="brand-footer"><div class="brand-arrow">→</div><div class="brand-actions">
         <button class="ba-btn bookmark-btn" onclick="toggleBookmark(event,this,'Tesla','tesla.html','Automobile','2003')">🔖 Save</button>
         <button class="ba-btn" onclick="openQuizForBrand(event,'Tesla')">🧠 Quiz</button>
-      </div>
-    </div>
-  </a>
-
-  <a class="brand-card" href="amazon.html" data-name="Amazon" data-cat="Technology" data-tags="amazon jeff bezos aws prime ecommerce cloud seattle usa books">
-    <div class="compare-check" onclick="toggleCompare(event,this,'Amazon','amazon.html','Technology','1994')"></div>
-    <div class="read-badge">✓ Read</div>
-    <div class="brand-cat">Technology</div>
-    <div class="brand-name">Amazon</div>
-    <div class="brand-year">Founded 1994 · Seattle, WA</div>
-    <div class="brand-desc">Jeff Bezos quit his Wall Street job, drove cross-country, and built the everything store. From books to $2 trillion — the most audacious business story ever.</div>
-    <div class="brand-footer">
-      <div class="brand-arrow">→</div>
-      <div class="brand-actions">
+        <button class="ba-btn" onclick="openSimForBrand(event,'Tesla')">🎯 Sim</button>
+      </div></div>
+    </a>
+    <a class="brand-card" href="amazon.html" data-name="Amazon" data-cat="Technology" data-tags="amazon jeff bezos aws prime ecommerce cloud seattle usa books">
+      <div class="compare-check" onclick="toggleCompare(event,this,'Amazon','amazon.html','Technology','1994')"></div>
+      <div class="read-badge">✓ Read</div>
+      <div class="brand-cat">Technology</div><div class="brand-name">Amazon</div>
+      <div class="brand-year">Founded 1994 · Seattle, WA</div>
+      <div class="brand-desc">Jeff Bezos quit his Wall Street job, drove cross-country, and built the everything store. From books to $2 trillion — the most audacious business story ever.</div>
+      <div class="brand-footer"><div class="brand-arrow">→</div><div class="brand-actions">
         <button class="ba-btn bookmark-btn" onclick="toggleBookmark(event,this,'Amazon','amazon.html','Technology','1994')">🔖 Save</button>
         <button class="ba-btn" onclick="openQuizForBrand(event,'Amazon')">🧠 Quiz</button>
+        <button class="ba-btn" onclick="openSimForBrand(event,'Amazon')">🎯 Sim</button>
+      </div></div>
+    </a>
+  </div>
+
+  <div id="noResults" style="display:none;padding:3rem 4rem;text-align:center;color:var(--muted);">
+    <div style="font-size:2.2rem;margin-bottom:0.8rem;">🔍</div>
+    <div style="font-family:var(--serif);font-size:1.3rem;margin-bottom:0.4rem;">No stories found</div>
+    <div style="font-size:0.88rem;">Try a different filter or search term.</div>
+  </div>
+
+  <!-- Featured Amazon story -->
+  <div class="featured">
+    <div class="featured-left">
+      <div class="featured-tag">Story of the week</div>
+      <h2 class="featured-title">How <em>Amazon</em> went from bookstore to everything store</h2>
+      <p class="featured-excerpt">Jeff Bezos quit his Wall Street job, drove cross-country, and started selling books from a garage. What followed is one of the most audacious business stories in history.</p>
+      <div class="featured-meta">
+        <div class="featured-meta-item"><span class="featured-meta-label">Founded</span><span class="featured-meta-val">1994</span></div>
+        <div class="featured-meta-item"><span class="featured-meta-label">Started with</span><span class="featured-meta-val">$10,000</span></div>
+        <div class="featured-meta-item"><span class="featured-meta-label">Worth today</span><span class="featured-meta-val">$2 Trillion</span></div>
       </div>
+      <a href="amazon.html" class="btn-primary" style="display:inline-block;">Read full story →</a>
     </div>
-  </a>
-
-</div>
-<div id="noResults"><div style="font-size:2.5rem;margin-bottom:1rem;">🔍</div><div style="font-family:var(--serif);font-size:1.4rem;margin-bottom:0.5rem;">No stories found</div><div style="font-size:0.9rem;">Try a different filter or search term.</div></div>
-
-<!-- FEATURED -->
-<div class="featured" id="timelines">
-  <div class="featured-left">
-    <div class="featured-tag">Story of the week</div>
-    <h2 class="featured-title">How <em>Amazon</em> went from a bookstore to everything store</h2>
-    <p class="featured-excerpt">Jeff Bezos quit his Wall Street job, drove cross-country, and started selling books from a garage. What followed is one of the most audacious business stories in history.</p>
-    <div class="featured-meta">
-      <div class="featured-meta-item"><span class="featured-meta-label">Founded</span><span class="featured-meta-val">1994</span></div>
-      <div class="featured-meta-item"><span class="featured-meta-label">Started with</span><span class="featured-meta-val">$10,000</span></div>
-      <div class="featured-meta-item"><span class="featured-meta-label">Worth today</span><span class="featured-meta-val">$2 Trillion</span></div>
+    <div class="featured-right">
+      <div class="timeline-label">Key milestones</div>
+      <div class="timeline-item"><div class="tl-year">1994</div><div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-vline"></div></div><div class="tl-content"><div class="tl-event">Amazon.com launched</div><div class="tl-detail">Started in Bezos's garage. Sold only books.</div></div></div>
+      <div class="timeline-item"><div class="tl-year">1997</div><div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-vline"></div></div><div class="tl-content"><div class="tl-event">IPO on NASDAQ</div><div class="tl-detail">Went public at $18/share. Analysts were skeptical.</div></div></div>
+      <div class="timeline-item"><div class="tl-year">2005</div><div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-vline"></div></div><div class="tl-content"><div class="tl-event">Amazon Prime launched</div><div class="tl-detail">Changed e-commerce forever.</div></div></div>
+      <div class="timeline-item"><div class="tl-year">2006</div><div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-vline"></div></div><div class="tl-content"><div class="tl-event">AWS born</div><div class="tl-detail">Now bigger than the store itself.</div></div></div>
+      <div class="timeline-item"><div class="tl-year">2024</div><div class="tl-line-wrap"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-event">$2 Trillion valuation</div><div class="tl-detail">From books to cloud to AI.</div></div></div>
     </div>
-    <a href="amazon.html" class="btn-primary" style="display:inline-block;">Read full story →</a>
   </div>
-  <div class="featured-right">
-    <div class="timeline-label">Key milestones</div>
-    <div class="timeline-item"><div class="tl-year">1994</div><div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-vline"></div></div><div class="tl-content"><div class="tl-event">Amazon.com launched</div><div class="tl-detail">Started in Bezos's garage in Bellevue, WA. Sold only books.</div></div></div>
-    <div class="timeline-item"><div class="tl-year">1997</div><div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-vline"></div></div><div class="tl-content"><div class="tl-event">IPO on NASDAQ</div><div class="tl-detail">Went public at $18/share. Most analysts were skeptical.</div></div></div>
-    <div class="timeline-item"><div class="tl-year">2005</div><div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-vline"></div></div><div class="tl-content"><div class="tl-event">Amazon Prime launched</div><div class="tl-detail">Changed e-commerce forever with unlimited free shipping.</div></div></div>
-    <div class="timeline-item"><div class="tl-year">2006</div><div class="tl-line-wrap"><div class="tl-dot"></div><div class="tl-vline"></div></div><div class="tl-content"><div class="tl-event">AWS born</div><div class="tl-detail">Cloud computing arm launched — now bigger than the store itself.</div></div></div>
-    <div class="timeline-item"><div class="tl-year">2024</div><div class="tl-line-wrap"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-event">$2 Trillion valuation</div><div class="tl-detail">From books to cloud to AI — the everything company.</div></div></div>
+
+  <!-- Newsletter -->
+  <div class="newsletter">
+    <div class="newsletter-text"><h2>One brand story, every week.</h2><p>Free in your inbox. No spam. Just history, strategy, and inspiration.</p></div>
+    <div class="newsletter-form">
+      <input type="email" id="quick-email" placeholder="your@email.com"/>
+      <button type="button" onclick="quickSubscribe()">Subscribe</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">Brand<span>Lore</span></div>
+    <span class="footer-copy">© 2025 BrandLore. Built with curiosity.</span>
+    <div class="footer-links">
+      <a href="#">About</a><a href="subscribe.html">Newsletter</a><a href="#">Instagram</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 2 — STRATEGY LIBRARY
+════════════════════════════════════════════ -->
+<div class="page-section" id="sec-library">
+  <div class="sl-hero">
+    <div class="sl-eyebrow">Reusable knowledge</div>
+    <h2 class="sl-title">The Strategy Library</h2>
+    <p class="sl-sub">18 timeless strategies extracted from the world's most iconic brands — each one reusable, transferable, and actionable for your own venture.</p>
+    <div class="sl-stats">
+      <div><div class="sl-stat-num">18</div><div class="sl-stat-label">Strategies</div></div>
+      <div><div class="sl-stat-num">7</div><div class="sl-stat-label">Brands</div></div>
+      <div><div class="sl-stat-num">5</div><div class="sl-stat-label">Categories</div></div>
+    </div>
+  </div>
+  <div class="sl-filter">
+    <span class="filter-label">Category:</span>
+    <button class="sf-btn active" onclick="filterLib(this,'all')">All</button>
+    <button class="sf-btn" onclick="filterLib(this,'Growth')">Growth</button>
+    <button class="sf-btn" onclick="filterLib(this,'Brand')">Brand</button>
+    <button class="sf-btn" onclick="filterLib(this,'Distribution')">Distribution</button>
+    <button class="sf-btn" onclick="filterLib(this,'Product')">Product</button>
+    <button class="sf-btn" onclick="filterLib(this,'Culture')">Culture</button>
+  </div>
+  <div class="strategies-library" id="strategyLibrary"></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SECTION 3 — ADVANCED COMPARE
+════════════════════════════════════════════ -->
+<div class="page-section" id="sec-compare">
+  <div class="compare-hero">
+    <div class="sl-eyebrow">Head to head</div>
+    <h2 class="sl-title">Advanced Compare</h2>
+    <p class="sl-sub">Strategies, risk profiles, founder personalities, growth speed — and a verdict on who played the smarter game.</p>
+  </div>
+  <div class="compare-controls">
+    <select class="c-select" id="cmpA"><option value="">Select first brand…</option></select>
+    <span class="c-vs">vs</span>
+    <select class="c-select" id="cmpB"><option value="">Select second brand…</option></select>
+    <button class="c-go" onclick="runAdvancedCompare()">Compare →</button>
+  </div>
+  <div class="verdict-banner" id="verdictBanner"><div class="vb-label">The Verdict</div><div class="vb-text" id="verdictText"></div></div>
+  <div id="scoreSection" style="display:none;" class="score-section">
+    <div class="score-section-title">Strategic scorecard</div>
+    <div class="score-grid" id="scoreGrid"></div>
+  </div>
+  <div id="compareOutput">
+    <div class="compare-placeholder">
+      <div style="font-size:3rem;margin-bottom:1rem;">⚖️</div>
+      <div style="font-size:0.9rem;line-height:1.7;">Select two brands above to see a full strategic comparison —<br>strategies, scorecard, risk levels, founder style, and a verdict.</div>
+    </div>
+  </div>
+  <!-- Floating compare bar (for card checkbox selects) -->
+  <div class="compare-bar" id="compareBar">
+    <span class="cbar-text">Comparing: <span id="compareBarNames">—</span></span>
+    <button class="cbar-go" onclick="openCompareFromBar()">Compare Now →</button>
+    <button class="cbar-clear" onclick="clearCompare()">✕ Clear</button>
   </div>
 </div>
 
-<!-- NEWSLETTER -->
-<div class="newsletter" id="newsletter">
-  <div class="newsletter-text"><h2>One brand story, every week.</h2><p>Free in your inbox. No spam. Just history, strategy, and inspiration.</p></div>
-  <div class="newsletter-form">
-     <a href="subscribe.html" class="btn-primary">Subscribe</a>
+<!-- ════════════════════════════════════════════
+     SECTION 4 — DECISION SIMULATOR
+════════════════════════════════════════════ -->
+<div class="page-section" id="sec-simulator">
+  <div class="sim-hero">
+    <div class="sl-eyebrow">You're the founder</div>
+    <h2 class="sl-title">Decision Simulator</h2>
+    <p class="sl-sub">Step into the shoes of history's greatest founders. Face the real decisions they faced — with the same incomplete information they had.</p>
   </div>
+  <div class="sim-brand-bar">
+    <span class="filter-label">Choose a brand:</span>
+    <button class="sim-brand-btn" onclick="loadSim('Amazon')">Amazon</button>
+    <button class="sim-brand-btn" onclick="loadSim('Apple')">Apple</button>
+    <button class="sim-brand-btn" onclick="loadSim('Nike')">Nike</button>
+    <button class="sim-brand-btn" onclick="loadSim('Tesla')">Tesla</button>
+    <button class="sim-brand-btn" onclick="loadSim('Flipkart')">Flipkart</button>
+  </div>
+  <div class="sim-empty-msg" id="simEmpty">← Pick a brand above to step into the founding story.</div>
+  <div id="simContent"></div>
 </div>
 
-<!-- FOOTER -->
-<footer id="about">
-  <div class="footer-logo">Brand<span>Lore</span></div>
-  <span class="footer-copy">© 2025 BrandLore. Built with curiosity.</span>
-  <div class="footer-links">
-    <a href="#">About</a>
-          <a href="#">Contact</a>
+<!-- ════════════════════════════════════════════
+     SECTION 5 — GROWTH CHARTS
+════════════════════════════════════════════ -->
+<div class="page-section" id="sec-charts">
+  <div class="charts-hero">
+    <div class="sl-eyebrow">Visual growth data</div>
+    <h2 class="sl-title">Growth Charts</h2>
+    <p class="sl-sub">Revenue trajectories, valuation milestones, and market share shifts — the numbers behind the stories.</p>
   </div>
-</footer>
+  <div class="chart-view-bar">
+    <span class="filter-label">View:</span>
+    <button class="cv-btn active" onclick="switchChartView(this,'overview')">Overview</button>
+    <button class="cv-btn" onclick="switchChartView(this,'revenue')">Revenue</button>
+    <button class="cv-btn" onclick="switchChartView(this,'valuation')">Valuation</button>
+    <button class="cv-btn" onclick="switchChartView(this,'market')">Market Share</button>
+  </div>
+  <div id="chartsContent"></div>
+</div>
 
-<!-- BOOKMARKS PANEL -->
+<!-- ════ MODALS ════ -->
+<!-- Bookmarks panel -->
 <div class="bookmarks-panel" id="bookmarksPanel">
   <div class="panel-header"><div class="panel-title">Saved Stories</div><button class="panel-close" onclick="closeBookmarks()">✕</button></div>
   <div class="panel-body" id="bookmarksList"></div>
 </div>
 
-<!-- COMPARE MODAL -->
-<div class="compare-modal" id="compareModal">
-  <div class="compare-inner">
-    <div class="cm-header"><div class="cm-title">⚖️ Compare Brands</div><button class="cm-close" onclick="closeCompare()">✕</button></div>
-    <div class="cm-select-row">
-      <select class="cm-select" id="cmpA"><option value="">Select first brand…</option></select>
-      <span class="cm-vs">vs</span>
-      <select class="cm-select" id="cmpB"><option value="">Select second brand…</option></select>
-      <button class="cm-go" onclick="runCompare()">Compare →</button>
-    </div>
-    <div id="compareResult"></div>
-  </div>
-</div>
-
-<!-- QUIZ MODAL -->
+<!-- Quiz modal -->
 <div class="quiz-modal" id="quizModal">
   <div class="quiz-inner">
     <div class="quiz-header"><div class="quiz-title">🧠 Brand Quiz</div><button class="quiz-close" onclick="closeQuiz()">✕</button></div>
     <div class="quiz-brand-select">
       <select id="quizBrandSelect" onchange="loadQuiz(this.value)">
-        <option value="">Choose a brand to test yourself on…</option>
+        <option value="">Choose a brand…</option>
         <option>Apple Inc.</option><option>Coca-Cola</option><option>Flipkart</option>
         <option>Nike</option><option>Tata Group</option><option>Tesla</option><option>Amazon</option>
       </select>
     </div>
     <div class="quiz-body" id="quizBody">
-      <div style="text-align:center;padding:2rem 0;color:var(--muted);"><div style="font-size:2.5rem;margin-bottom:1rem;">🎯</div><div style="font-size:0.9rem;">Pick a brand above to start the quiz.</div></div>
+      <div style="text-align:center;padding:2rem 0;color:var(--muted);"><div style="font-size:2.2rem;margin-bottom:0.8rem;">🎯</div><div style="font-size:0.88rem;">Pick a brand above to start.</div></div>
     </div>
   </div>
 </div>
 
-<!-- COMPARE BAR -->
-<div class="compare-bar" id="compareBar">
-  <span class="compare-bar-text">Comparing: <span id="compareBarNames">—</span></span>
-  <button class="compare-bar-go" onclick="openCompareFromBar()">Compare Now →</button>
-  <button class="compare-bar-clear" onclick="clearCompare()">✕ Clear</button>
-</div>
-
 <script>
-/* ── DATA ── */
+/* ══════════════════════════════════
+   ALL DATA
+══════════════════════════════════ */
 const BRANDS=[
   {name:'Apple Inc.',url:'apple.html',cat:'Technology',year:'1976',desc:'From a garage in Los Altos to the world\'s most valuable company.',tags:'technology steve jobs iphone mac usa'},
   {name:'Coca-Cola',url:'coca-cola.html',cat:'Food & Beverage',year:'1886',desc:'A pharmacist\'s accidental recipe became the world\'s most recognised brand.',tags:'coca cola food beverage fmcg usa'},
@@ -562,15 +789,148 @@ const BRANDS=[
   {name:'Tesla',url:'tesla.html',cat:'Automobile',year:'2003',desc:'Near bankruptcy in 2008. $800B peak. Zero ads. The impossible story.',tags:'tesla elon musk ev electric car'},
   {name:'Amazon',url:'amazon.html',cat:'Technology',year:'1994',desc:'Books to $2 trillion — Jeff Bezos and the everything store.',tags:'amazon jeff bezos aws prime ecommerce'},
 ];
-const COMPARE_DATA={
-  'Apple Inc.':{founded:'1976',country:'USA',revenue:'$383B',employees:'160,000',valuation:'$3.5 Trillion',model:'Hardware + Ecosystem + Services',strategy:'Premium pricing, vertical integration, ecosystem lock-in',strength:'Unmatched brand loyalty & ecosystem moat',weakness:'Premium prices limit total addressable market'},
-  'Coca-Cola':{founded:'1886',country:'USA',revenue:'$45B',employees:'80,000',valuation:'$260B',model:'FMCG + Franchise bottling network',strategy:'Ubiquity, emotional branding, franchise distribution',strength:'Unbeatable global distribution and 97% brand recognition',weakness:'Health-conscious shift away from sugary drinks'},
-  'Flipkart':{founded:'2007',country:'India',revenue:'$21B',employees:'50,000+',valuation:'$35B',model:'E-commerce + Logistics + Marketplace',strategy:'India-first design, COD, logistics build-out',strength:'Deep India market knowledge and eKart logistics',weakness:'Amazon competition and ongoing profitability pressure'},
-  'Nike':{founded:'1964',country:'USA',revenue:'$51B',employees:'79,000',valuation:'$200B',model:'Design + Marketing + Asset-light manufacturing',strategy:'Athlete partnerships, storytelling, scarcity drops',strength:'Unmatched cultural brand power and athlete relationships',weakness:'Dependence on third-party Asian manufacturing'},
-  'Tata Group':{founded:'1868',country:'India',revenue:'$165B',employees:'935,000',valuation:'~$300B',model:'Diversified conglomerate + Charitable trust structure',strategy:'Long-term vision, nation-building, contrarian acquisitions',strength:'157 years of trust and India\'s most loved brand',weakness:'Complex multi-sector management across 100+ companies'},
-  'Tesla':{founded:'2003',country:'USA',revenue:'$97B',employees:'140,000',valuation:'$600B+',model:'EV + Energy + Software + AI',strategy:'Premium ladder, zero ads, OTA updates, Supercharger moat',strength:'Technology leadership and cult-like brand following',weakness:'Rising competition from legacy automakers going electric'},
-  'Amazon':{founded:'1994',country:'USA',revenue:'$600B',employees:'1,500,000',valuation:'$2 Trillion',model:'Retail + Cloud + Ads + Content + Logistics',strategy:'Flywheel, long-term profit sacrifice, Prime subscription',strength:'Unmatched scale, diversification and AWS profitability',weakness:'Regulatory scrutiny and massive labour management challenges'},
+
+const STRATEGY_DATA=[
+  {cat:'Growth',name:'The Flywheel',brand:'Amazon',tagline:'Build a self-reinforcing loop where growth in one part feeds every other part.',impact:'→ 30 years of compounding growth',risk:30,speed:95,difficulty:80,
+   what:'Lower prices attract more customers; more customers mean more volume; more volume means lower costs; lower costs enable lower prices. The loop never stops. Every part feeds every other part.',
+   how:['Map every core element of your business','Identify how each element could feed another','Find the prime movers that start the loop','Remove friction at every step','Measure flywheel speed, not individual metrics'],
+   when:'Best for platforms, marketplaces, and any company where network effects compound.',brands:['Amazon','Flipkart','Uber']},
+  {cat:'Brand',name:'Emotional positioning',brand:'Coca-Cola',tagline:'Sell a feeling, not a product. Own an emotion before a competitor can.',impact:'→ 97% global brand recognition',risk:40,speed:30,difficulty:60,
+   what:'Coca-Cola never sold sugar water. Every campaign sold happiness, friendship, summer, belonging. The product is replicable. The emotion is not. When you own an emotion, price becomes secondary.',
+   how:['Identify one core emotion your product can own','Test if the emotion is genuinely connected to your product','Build all communication around that single emotion','Never let features crowd out the feeling','Measure emotional association, not just awareness'],
+   when:'Essential for commodity products where differentiation is difficult.',brands:['Coca-Cola','Nike','Apple']},
+  {cat:'Distribution',name:'Franchise distribution',brand:'Coca-Cola',tagline:'Grow without capital by letting partners own the infrastructure.',impact:'→ 200+ countries with minimal capex',risk:50,speed:85,difficulty:55,
+   what:'Coca-Cola licensed bottling rights for $1 in 1899. Local partners fund manufacturing; Coca-Cola provides the syrup, brand, and formula. Asset-light model scaled faster than any owned infrastructure could.',
+   how:['Identify the capital-intensive part of your operation','Define what you must own (IP, brand, formula)','Design a model where partners fund the rest','Create strict brand and quality standards','Build partner selection and training processes'],
+   when:'Ideal for businesses with replicable operations and strong IP.',brands:['Coca-Cola','McDonald\'s','Subway']},
+  {cat:'Product',name:'Ecosystem lock-in',brand:'Apple',tagline:'Build products that make each other more valuable — and switching painful.',impact:'→ 94% iPhone retention rate',risk:55,speed:40,difficulty:90,
+   what:'No single Apple product is unbeatable. iPhone + Mac + iPad + AirPods + iCloud together creates a system so integrated that leaving means losing everything. The moat is the ecosystem.',
+   how:['Build your core product first','Identify adjacent needs your core users have','Design each adjacent product to integrate seamlessly','Create data and workflow that flows between products','Make cross-product value obvious, not hidden'],
+   when:'Requires significant capital and time. Best for companies with a loyal user base.',brands:['Apple','Google','Microsoft']},
+  {cat:'Culture',name:'Long-term thinking',brand:'Amazon',tagline:'Sacrifice short-term profit to build long-term dominance — and tell investors clearly.',impact:'→ 9 years of losses funded a $2T company',risk:70,speed:20,difficulty:85,
+   what:'Bezos told investors in 1997: we will prioritise long-term market leadership over short-term profitability. Amazon lost money for 9 years. Every dollar went back into warehouses, tech, and new categories.',
+   how:['Write down your explicit long-term thesis','Communicate it clearly before investors commit','Create internal metrics for long-term health','Resist quarterly pressure','Celebrate long-term investments, not just current revenue'],
+   when:'Requires investors who share your vision. Works best in winner-take-all markets.',brands:['Amazon','Tesla','Tata Group']},
+  {cat:'Brand',name:'Radical subtraction',brand:'Apple',tagline:'Decide what NOT to do. Fewer products done brilliantly beat many done adequately.',impact:'→ Jobs cut 95% of Apple products; stock rose 9,000%',risk:65,speed:50,difficulty:75,
+   what:'When Jobs returned in 1997, he killed 340 of 350+ products. Focus means saying no to 100 good ideas to concentrate on one great one. Fewer SKUs = clearer positioning, simpler supply chains, higher margins.',
+   how:['List every product or feature your company offers','Score each on revenue, strategic fit, customer love','Cut the bottom 50% ruthlessly','Resist adding anything back for 12 months','Repeat annually'],
+   when:'Critical for any company that has grown without a clear strategy.',brands:['Apple','Nike','IKEA']},
+  {cat:'Growth',name:'Premium ladder',brand:'Tesla',tagline:'Launch expensive to build prestige. Use profits to fund mass-market versions.',impact:'→ Avoided the capital trap of going cheap first',risk:50,speed:45,difficulty:70,
+   what:'Tesla launched Roadster ($109K) → Model S ($80K) → Model 3 ($40K) → Model Y ($35K). Each product funded the next, cheaper one. High initial margin proves technology and builds prestige.',
+   how:['Launch your highest-margin product first','Use premium revenue to fund R&D for the next tier','Let premium brand reputation trickle down','Never discount premium products when launching cheaper ones','Communicate the ladder to build anticipation'],
+   when:'Best for hardware, automotive, and any industry where premium positioning is achievable.',brands:['Tesla','Apple','Dyson']},
+  {cat:'Distribution',name:'Go where customers are',brand:'Nike',tagline:'Sell at the events and communities where your customers already exist.',impact:'→ From $0 to $8K revenue in year one at track meets',risk:20,speed:60,difficulty:25,
+   what:'Phil Knight drove to track meets and sold shoes from the boot of his car. His customers were runners; he sold where runners were. No advertising, no stores. This insight — go to the customer — is how most great consumer businesses start.',
+   how:['Identify exactly where your target customer spends time','Get physically or digitally present in those spaces','Start with zero advertising; sell person-to-person','Collect feedback and iterate rapidly in the field','Scale only the channels that prove themselves organically'],
+   when:'The universal first-distribution strategy. Never skip this step.',brands:['Nike','Flipkart','Airbnb']},
+  {cat:'Product',name:'Cannibalise yourself',brand:'Apple',tagline:'Disrupt your own best product before a competitor does it for you.',impact:'→ Kindle/iPhone correctly killed iPod/book revenue',risk:75,speed:70,difficulty:80,
+   what:'When iPhone launched, it killed the iPod. When Kindle launched, it destroyed physical book revenue. Jobs\'s rule: if someone is going to cannibalise us, I want it to be us.',
+   how:['Identify which competitor could most damage your core product','Build that competitor\'s product yourself','Price it to win, even at cost of your existing product','Be transparent with your team about the tradeoff','Move fast — waiting gives the market to someone else'],
+   when:'When your core market is clearly going to shift and you can see the destination.',brands:['Apple','Amazon','Netflix']},
+  {cat:'Brand',name:'Athlete as brand',brand:'Nike',tagline:'Borrow a person\'s credibility to reframe what your brand stands for.',impact:'→ Air Jordan alone = $4B annual revenue',risk:60,speed:65,difficulty:65,
+   what:'Nike didn\'t just sponsor Michael Jordan — they built a sub-brand with him. Every Nike celebrity deal follows the same model: not endorsement, but co-creation of identity.',
+   how:['Find someone whose values genuinely align with your brand','Don\'t pay for exposure — pay for co-creation','Give them real creative input on the product','Build a product or line specifically around them','Design for superfans of that person to become superfans of you'],
+   when:'Works for any consumer brand targeting a lifestyle or aspiration.',brands:['Nike','Adidas','Puma']},
+  {cat:'Culture',name:'Day 1 mentality',brand:'Amazon',tagline:'Run your company like a startup, even when you\'re a trillion-dollar business.',impact:'→ Amazon HQ building literally named "Day 1"',risk:30,speed:80,difficulty:85,
+   what:'Bezos\'s philosophy: Day 2 is stasis. Followed by irrelevance. Followed by painful decline. Followed by death. Amazon deliberately resists bureaucracy by empowering small teams and maintaining urgency at scale.',
+   how:['Write down what Day 2 looks like for your company','Identify every process that has replaced outcome-focus','Eliminate approval chains that add no value','Create a culture where people ask "why" before following process','Celebrate speed of decision-making as a KPI'],
+   when:'Applicable at any size, but most urgently needed as a company scales.',brands:['Amazon','Tesla','Reliance Jio']},
+  {cat:'Growth',name:'Sampling strategy',brand:'Coca-Cola',tagline:'Let people experience the product for free. A sample costs less than a lifetime customer.',impact:'→ First mass sampling campaign in history (1890s)',risk:25,speed:70,difficulty:20,
+   what:'Candler distributed millions of free sample coupons across America before asking anyone to pay. The principle: remove the barrier of the first purchase entirely.',
+   how:['Calculate your customer lifetime value (LTV)','Set a sampling budget as a % of LTV','Design the sample to show your product\'s best moment','Make the path from sample to purchase as short as possible','Track conversion from sample to paid customer obsessively'],
+   when:'Whenever the product is significantly better experienced than described.',brands:['Coca-Cola','Spotify','Slack','Dropbox']},
+  {cat:'Culture',name:'Trust as brand',brand:'Tata Group',tagline:'Build a reputation so consistent over decades that the name alone sells the product.',impact:'→ Most trusted brand in India for 20 consecutive years',risk:10,speed:5,difficulty:95,
+   what:'Tata\'s brand is built on 157 years of consistent ethical behaviour — 8-hour workdays before any law required it, free healthcare in 1915, charitable trusts owning 66% of the company.',
+   how:['Define what trust means for your customers','Make one hard commitment that demonstrates that trust','Keep it even when it is expensive to do so','Publicise the commitment without boasting','Repeat for 10 years'],
+   when:'The ultimate brand strategy. Slow to build, impossible to buy, devastating to lose.',brands:['Tata Group','Patagonia','Costco']},
+  {cat:'Product',name:'Hardware at cost + ecosystem',brand:'Amazon',tagline:'Sell the device cheap. Make money on everything the device enables.',impact:'→ Echo sold near cost; Alexa ecosystem worth $10B+',risk:55,speed:75,difficulty:80,
+   what:'Amazon sells Kindle and Echo at or near cost. Every book, song, and subscription purchased on that device generates margin. The device is a Trojan horse.',
+   how:['Identify the recurring revenue your device enables','Price the device to maximise adoption, not margin','Design the ecosystem so the device is useless without it','Make ecosystem switching painful','Invest in device quality — a poor device kills ecosystem revenue'],
+   when:'The razor/blade model. Works when recurring purchases are significant vs device cost.',brands:['Amazon','Apple','Sony','Gillette']},
+  {cat:'Brand',name:'Controversy as marketing',brand:'Nike',tagline:'Take a genuine stand on something that matters. The right people will love you for it.',impact:'→ +31% sales after Kaepernick campaign',risk:80,speed:90,difficulty:70,
+   what:'Nike signed Kaepernick for their 30th anniversary campaign. Boycotts followed. Stock dropped briefly. Then reversed. Online sales jumped 31% in 3 days. Nike had modelled their customer base correctly.',
+   how:['Know your core customer demographics precisely','Identify an issue that genuinely aligns with your brand values','Take a stand that requires real courage','Prepare for backlash — model who will leave vs stay','Let the product absorb the message — don\'t lecture'],
+   when:'Only for brands with deeply known customer demographics. Never for brands still building their base.',brands:['Nike','Patagonia','Ben & Jerry\'s']},
+  {cat:'Distribution',name:'Direct to consumer',brand:'Tesla',tagline:'Own every customer touchpoint. No middlemen, no discounting, no dilution.',impact:'→ Higher margins than any traditional automaker',risk:60,speed:50,difficulty:75,
+   what:'Tesla sells direct — no dealerships, no haggling. You configure online, they deliver. This is illegal in some US states. Tesla fought the lawsuits and won. Result: full margin, full data, full experience control.',
+   how:['Map the full customer journey from discovery to purchase','Identify every point where a middleman takes margin or data','Build the infrastructure to own those touchpoints','Price to reflect your full-margin position','Use customer relationship data to personalise retention'],
+   when:'Best when the customer experience is critical to the brand and data is strategically important.',brands:['Tesla','Warby Parker','Casper']},
+  {cat:'Culture',name:'Work backwards from the customer',brand:'Amazon',tagline:'Write the press release before you build the product. If you can\'t explain the benefit, don\'t build it.',impact:'→ Foundation of every major Amazon product launch',risk:15,speed:45,difficulty:55,
+   what:'Amazon\'s internal process: the team writes a customer-facing press release before writing a line of code. If you can\'t clearly articulate why this makes someone\'s life better — you don\'t build it.',
+   how:['Before building anything, write a 1-page press release announcing it','It must explain: who it\'s for, what problem it solves, why it\'s different','If you can\'t write it convincingly, stop','Share it with people not working on the product','Revise until outsiders find it compelling'],
+   when:'Universal. Works for any new product, feature, or business line.',brands:['Amazon','Stripe','Notion']},
+  {cat:'Growth',name:'Market creation',brand:'Flipkart',tagline:'In an emerging market, your first job is to make people believe the category exists.',impact:'→ Created India\'s ₹5 lakh crore e-commerce market',risk:70,speed:35,difficulty:85,
+   what:'Flipkart didn\'t just grow India\'s e-commerce market. They created it. Their early marketing promoted online shopping itself, not just Flipkart. When you\'re first, growing the category grows your company automatically.',
+   how:['Assess whether the category is genuinely new to your market','Invest in educating customers about the category, not just your brand','Build content that helps customers understand the problem you solve','Become the first stop for learning about your category','Convert category-educated users into customers gradually'],
+   when:'For true first movers in emerging markets or genuinely new product categories.',brands:['Flipkart','Airbnb','Uber','Zepto']},
+];
+
+const COMPARE_FULL={
+  'Apple Inc.':{cat:'Technology',year:'1976',country:'USA',revenue:'$383B',employees:'160,000',valuation:'$3.5T',
+    model:'Hardware + Ecosystem + Services',strategy:'Premium pricing, vertical integration, ecosystem lock-in',
+    founderStyle:'Obsessive perfectionist. Design-first, secretive, binary thinking.',
+    risk:'Low — premium brand with loyal ecosystem',growth:'Consistent 10–15% annual growth after 2000',
+    riskScore:25,growthScore:72,innovationScore:85,brandScore:97,profitabilityScore:92,
+    strategies:['Ecosystem lock-in','Radical subtraction','Cannibalise yourself','Premium — never discount'],
+    strengths:['46% gross margins on hardware','Ecosystem moat: 94% customer retention','Design as strategy — impossible to copy quickly'],
+    weaknesses:['High prices limit total addressable market','Dependence on iPhone for 50%+ of revenue','App Store antitrust risk'],
+    url:'apple.html'},
+  'Coca-Cola':{cat:'Food & Beverage',year:'1886',country:'USA',revenue:'$45B',employees:'80,000',valuation:'$260B',
+    model:'FMCG + Franchise bottling + Brand licensing',strategy:'Ubiquity, emotional branding, franchise distribution',
+    founderStyle:'Multiple stewards — each era had the right leader for its challenge.',
+    risk:'Low — 138 years of resilience',growth:'Slow and steady 5–8% annually',
+    riskScore:20,growthScore:35,innovationScore:40,brandScore:99,profitabilityScore:80,
+    strategies:['Emotional positioning','Franchise distribution','Sampling strategy','Trust as brand'],
+    strengths:['97% global brand recognition','Franchise model: no manufacturing capex','Secret formula uncopied for 138 years'],
+    weaknesses:['Health-conscious shift away from sugary drinks','Growth limited to emerging markets','Innovation constrained by brand conservatism'],
+    url:'coca-cola.html'},
+  'Flipkart':{cat:'Indian Startup',year:'2007',country:'India',revenue:'$21B',employees:'50,000+',valuation:'$35B',
+    model:'E-commerce + Logistics + Marketplace + Payments',strategy:'India-first design, COD, logistics build-out',
+    founderStyle:'Engineer-operators. Methodical, customer-obsessed, did the unglamorous work.',
+    risk:'High — Amazon competition, profitability pressure',growth:'Hyper-growth years 1–10, then consolidation',
+    riskScore:72,growthScore:82,innovationScore:68,brandScore:75,profitabilityScore:45,
+    strategies:['Market creation','Go where customers are','Sampling strategy (COD as trust-builder)','Premium ladder (started with books, then expanded)'],
+    strengths:['Deep India market knowledge','eKart logistics network as moat','PhonePe payments spinoff worth $12B+'],
+    weaknesses:['Amazon has matched most advantages','Path to profitability still unclear','Walmart ownership limits strategic flexibility'],
+    url:'flipkart.html'},
+  'Nike':{cat:'Fashion & Sports',year:'1964',country:'USA',revenue:'$51B',employees:'79,000',valuation:'$200B',
+    model:'Design + Marketing + Asset-light manufacturing',strategy:'Athlete partnerships, storytelling, scarcity drops',
+    founderStyle:'Obsessive underdog. Knight bet everything repeatedly. High pain tolerance.',
+    risk:'Medium — brand concentration risk',growth:'Consistent 8–12% annual growth',
+    riskScore:40,growthScore:68,innovationScore:62,brandScore:93,profitabilityScore:82,
+    strategies:['Athlete as brand','Emotional positioning','Controversy as marketing','Go where customers are'],
+    strengths:['Cultural brand power beyond sports','Air Jordan is a $4B business within a business','Zero factories: 45% gross margin'],
+    weaknesses:['Manufacturing concentrated in Asia','Cultural controversies damage brand occasionally','DTC transition still ongoing'],
+    url:'nike.html'},
+  'Tata Group':{cat:'Indian Conglomerate',year:'1868',country:'India',revenue:'$165B',employees:'935,000',valuation:'~$300B',
+    model:'Diversified conglomerate + Charitable trust structure',strategy:'Long-term vision, nation-building, contrarian acquisitions',
+    founderStyle:'Steward-visionary. Thinks in generations, not quarters. Puts nation before profit.',
+    risk:'Very low — 157 years and 30 countries',growth:'Patient compounding — 5–10% annually',
+    riskScore:12,growthScore:42,innovationScore:55,brandScore:90,profitabilityScore:70,
+    strategies:['Trust as brand','Long-term thinking','Work backwards from the customer','Market creation'],
+    strengths:['Most trusted brand in India for 20 years','JLR acquisition tripled in value','66% owned by charitable trusts — near-unacquirable'],
+    weaknesses:['Complex management across 100+ companies','Some legacy businesses face disruption','Lower innovation speed than pure-tech companies'],
+    url:'tata.html'},
+  'Tesla':{cat:'Automobile & Tech',year:'2003',country:'USA',revenue:'$97B',employees:'140,000',valuation:'$600B+',
+    model:'EV + Energy + Software + AI + Supercharger',strategy:'Premium ladder, zero ads, OTA updates, Supercharger moat',
+    founderStyle:'Maniacal first-principles thinker. High risk tolerance, works at inhuman pace.',
+    risk:'High — Musk concentration, increasing EV competition',growth:'Hypergrowth 2019–2023, now consolidating',
+    riskScore:78,growthScore:88,innovationScore:98,brandScore:82,profitabilityScore:68,
+    strategies:['Premium ladder','Direct to consumer','Hardware at cost + ecosystem','Cannibalise yourself'],
+    strengths:['Supercharger network = uncopiable moat','Software-defined car with OTA updates','CEO as media channel worth billions'],
+    weaknesses:['Elon Musk = single point of failure','Competition from legacy automakers finally real','Regulatory battles in multiple markets'],
+    url:'tesla.html'},
+  'Amazon':{cat:'Technology',year:'1994',country:'USA',revenue:'$600B',employees:'1,500,000',valuation:'$2T',
+    model:'Retail + Cloud + Ads + Content + Logistics',strategy:'Flywheel, long-term profit sacrifice, Prime subscription',
+    founderStyle:'Engineer-visionary. Patient, data-driven, willing to be misunderstood for years.',
+    risk:'Medium — diversified across multiple sectors',growth:'Slow to start, exponential after year 10',
+    riskScore:45,growthScore:92,innovationScore:95,brandScore:88,profitabilityScore:78,
+    strategies:['The Flywheel','Long-term thinking','Work backwards from the customer','Hardware at cost + ecosystem'],
+    strengths:['Unmatched flywheel and ecosystem depth','AWS generates $100B at 35% margin','Prime loyalty impossible to replicate'],
+    weaknesses:['Regulatory scrutiny in every market','Labour challenges at 1.5M employees','Thin retail margins require AWS to subsidise'],
+    url:'amazon.html'},
 };
+
 const QUIZ_DATA={
   'Apple Inc.':[
     {q:'What year was Apple Inc. founded?',opts:['1972','1974','1976','1980'],ans:2,fact:'Apple was founded on April 1, 1976 by Steve Jobs, Steve Wozniak, and Ronald Wayne in a garage in Los Altos.'},
@@ -605,7 +965,7 @@ const QUIZ_DATA={
     {q:'What % of Tata Sons is owned by charitable trusts?',opts:['26%','40%','51%','66%'],ans:3,fact:'66% of Tata Sons is owned by charitable trusts — profits fund hospitals, universities and social programs.'},
     {q:'When did Tata Steel introduce 8-hour workdays?',opts:['1948','1935','1912','1900'],ans:2,fact:'Tata Steel gave workers 8-hour days in 1912 — before it was legally required anywhere in India.'},
     {q:'How much did Tata pay to acquire Jaguar Land Rover?',opts:['$1.2B','$2.3B','$3.5B','$5B'],ans:1,fact:'Tata acquired JLR from Ford for $2.3 billion in 2008. JLR\'s revenue has since tripled under Tata ownership.'},
-    {q:'Why (legend says) did Jamsetji build the Taj Mahal Hotel?',opts:['Beat the British','Refused entry to a Europeans-only hotel','Government contract','India\'s first 5-star hotel'],ans:1,fact:'Legend says Jamsetji was refused entry to Watson\'s Hotel (Europeans only). He built the Taj directly opposite — grander, open to all.'},
+    {q:'Why (legend says) did Jamsetji build the Taj Mahal Hotel?',opts:['Beat the British','Refused entry to a Europeans-only hotel','Government contract','India\'s first 5-star hotel'],ans:1,fact:'Legend says Jamsetji was refused entry to Watson\'s Hotel. He built the Taj directly opposite — grander, open to all.'},
   ],
   'Tesla':[
     {q:'Who actually founded Tesla Motors?',opts:['Elon Musk','Elon Musk and JB Straubel','Martin Eberhard and Marc Tarpenning','Peter Thiel'],ans:2,fact:'Tesla was founded by Martin Eberhard and Marc Tarpenning in 2003. Musk joined as lead investor in 2004.'},
@@ -618,99 +978,155 @@ const QUIZ_DATA={
     {q:'What was Amazon\'s original company name?',opts:['Relentless.com','Cadabra Inc.','Everything Store','Bezos Books'],ans:1,fact:'Amazon was originally called Cadabra Inc. The name was changed after lawyers kept hearing "cadaver".'},
     {q:'Why did Bezos choose books as the first product?',opts:['He loved reading','3 million titles — no store could stock them all','Best margins','Cheapest to ship'],ans:1,fact:'Books were perfect for internet retail: 3 million titles, impossible to stock in any physical store.'},
     {q:'When did Amazon post its first profitable quarter?',opts:['1998','2000','2001','2004'],ans:2,fact:'Amazon\'s first profitable quarter was Q4 2001 — $5 million profit on $1 billion in sales, nine years after founding.'},
-    {q:'What is the Amazon Flywheel?',opts:['A manufacturing tool','Self-reinforcing loop: lower prices → more customers → lower costs','A hiring strategy','An AWS product'],ans:1,fact:'Bezos sketched it on a napkin: lower prices → more customers → more volume → lower costs → lower prices. It compounds.'},
-    {q:'How much more do Prime members spend annually vs non-members?',opts:['Same','Twice','~$1,400 vs $600 — over double','Five times more'],ans:2,fact:'Prime members spend ~$1,400/year vs ~$600 for non-members. The upfront fee creates obligation to get value.'},
+    {q:'What is the Amazon Flywheel?',opts:['A manufacturing tool','Self-reinforcing loop: lower prices → more customers → lower costs','A hiring strategy','An AWS product'],ans:1,fact:'Bezos sketched it on a napkin: lower prices → more customers → more volume → lower costs → lower prices.'},
+    {q:'How much more do Prime members spend vs non-members?',opts:['Same','Twice','~$1,400 vs $600','Five times more'],ans:2,fact:'Prime members spend ~$1,400/year vs ~$600 for non-members. The upfront fee creates obligation to get value.'},
   ],
 };
 
-/* ── STATE ── */
-let bookmarks   = JSON.parse(localStorage.getItem('bl_bookmarks')||'[]');
-let readStories = JSON.parse(localStorage.getItem('bl_read')||'[]');
-let compareList = [];
-let quizState   = {brand:'',questions:[],current:0,score:0,answered:false};
+const SIM_DATA={
+  Amazon:[
+    {year:1994,title:'You\'re Jeff Bezos. You have a lucrative Wall Street job.',scenario:'The internet is growing at 2,300% per year. You\'ve identified books as the perfect first product to sell online. Do you quit your job?',context:'You earn $1M+ per year. You have a young family. The internet is new and unproven. Your boss has asked you not to quit. You have no retail experience.',choices:['Quit immediately. The opportunity won\'t wait.','Negotiate a 6-month leave of absence to test it.','Build it on the side while keeping your job.','Present the idea to your current employer.'],correct:0,outcome:'Bezos quit immediately, drove cross-country typing the business plan. "Regret minimisation framework — will I regret not trying this at 80?" He concluded yes. The speed of the quit gave Amazon a 12-month head start on all competitors.',impact:'→ Speed in 1994 gave Amazon the "original online bookstore" brand position. Hesitation gives competitors time to exist first.'},
+    {year:1997,title:'Amazon is live and growing. Wall Street wants profits.',scenario:'Investors are pressuring you to show profitability. You could cut investment and show a profit this year — or keep losing money to invest in warehouses and technology. What do you do?',context:'Revenue is growing fast but you\'ve never made a profit. Your stock is dropping. A Lehman Brothers analyst has published "Amazon.bomb."',choices:['Cut costs and show a profit to reassure investors.','Write a shareholder letter explaining your long-term thesis and keep investing.','Take the company private to avoid quarterly pressure.','Launch an IPO roadshow to explain your vision directly.'],correct:1,outcome:'Bezos wrote his legendary 1997 shareholder letter: "It\'s all about the long term." He explicitly told investors the company would sacrifice short-term profit for market leadership. Those who believed him multiplied their money 10,000x over 25 years.',impact:'→ Communicating the long-term thesis upfront attracts the right investors and repels the wrong ones. This letter saved Amazon from quarterly pressure for decades.'},
+    {year:2002,title:'Amazon engineers keep wasting time building server infrastructure.',scenario:'Teams spend months setting up servers before they can build features. An engineer proposes packaging this as a service to sell externally. Everyone thinks it\'s a distraction from the retail business. What do you decide?',context:'Amazon is a bookstore. You have no B2B business. Google and Microsoft are far ahead in technology. The idea sounds completely crazy.',choices:['Reject it. Focus on the core retail business.','Let one small team experiment on the side.','Mandate that ALL internal systems must be exposable as external APIs — and build AWS.','Sell the idea to Microsoft or IBM instead.'],correct:2,outcome:'Bezos mandated the API requirement across all teams. AWS launched publicly in 2006. By 2024, AWS generates $100 billion in revenue at 35% operating margins — more profitable than all of Amazon\'s retail combined. The biggest internal tool ever turned into a product.',impact:'→ Your most valuable next business may be hiding inside your current cost centres.'},
+    {year:2005,title:'Should Amazon offer free shipping for a flat annual fee?',scenario:'Your finance team says Amazon Prime will lose money on shipping. Every analyst calls it financially irresponsible. The CFO is against it. You believe: if customers pay upfront, they\'ll shop Amazon for everything. Do you launch Prime?',context:'Shipping is expensive. The maths don\'t work at current scale. Competitors offer nothing like this.',choices:['Don\'t launch. The maths don\'t work.','Launch Prime at $79/year and absorb the loss.','Launch a cheaper, slower free shipping option instead.','Partner with UPS to subsidise the cost.'],correct:1,outcome:'Prime launched at $79/year. Members spend 4x more than non-members. By 2024 there are 200 million Prime members generating $40B+ in annual fee revenue. One of the greatest loyalty programs in business history.',impact:'→ Loss leaders that create behaviour change are worth more than immediately profitable products.'},
+  ],
+  Apple:[
+    {year:1976,title:'You\'re Steve Jobs. Wozniak has built a remarkable computer circuit board.',scenario:'A local computer shop offers to buy 50 units at $500 each — but you need $25,000 of parts to build them. You have almost no money. What do you do?',context:'You\'re 21. No retail experience. No money. Your parents\' garage is your office. Wozniak wants to give the design away for free.',choices:['Take the order. Buy the parts on credit.','Turn it down — too risky without upfront payment.','Ask for 50% upfront from the shop to fund the parts.','Give the design away for free as Wozniak suggested.'],correct:0,outcome:'Jobs took the order, bought parts on 30-day credit, and the team delivered 50 units in time. Revenue: $25,000. It funded the Apple II — the first mass-market personal computer. Commit first. Solve the how second.',impact:'→ Execution under constraint reveals whether an idea has real commercial potential.'},
+    {year:1997,title:'You\'re back at Apple. The company has 350+ products and is nearly bankrupt.',scenario:'You\'ve returned as interim CEO. The product line is a mess — desktops, laptops, printers, cameras, servers, handhelds. The company loses $1B/year. What\'s your first move?',context:'You have weeks, not months, before the company runs out of cash. Microsoft has agreed to invest $150M but it\'s not enough. Every product manager will fight to keep their product alive.',choices:['Cut the bottom 20% of products.','Sell the company to Sun Microsystems.','Cut 340 of 350+ products. Focus on four: desktop Mac, laptop Mac, pro and consumer.','Hire McKinsey to recommend which products to cut.'],correct:2,outcome:'Jobs cut 340 of Apple\'s 350+ products in his first weeks. The focus released cash, simplified the supply chain, and let engineering concentrate on four exceptional products. Within 2 years, Apple was profitable again.',impact:'→ Radical subtraction is almost always more powerful than incremental optimisation. When a company is failing, the answer is usually "do less, better."'},
+    {year:2007,title:'You\'re about to reveal the iPhone to the world.',scenario:'You have a new device that\'s a phone, an iPod, and an internet communicator combined. Every carrier wants exclusive deals and the right to customise the software. AT&T wants to put their own apps on it. What do you tell them?',context:'Without a carrier deal, iPhone can\'t launch. AT&T is your best option. But their demands would compromise the user experience Jobs has designed.',choices:['Accept AT&T\'s demands. You need a carrier.','Negotiate: give AT&T exclusivity but zero software control.','Launch without a carrier — sell direct only.','Delay the launch until you find a carrier with no software demands.'],correct:1,outcome:'Jobs negotiated the first carrier deal in history where Apple kept full control of the software. AT&T got exclusivity; Apple got zero interference with the product. This set the precedent for every iPhone carrier deal globally. The result: a product that never compromised on experience.',impact:'→ In negotiations, the currency you should never trade is product quality. Everything else is negotiable.'},
+  ],
+  Nike:[
+    {year:1964,title:'You\'re Phil Knight. You\'ve returned from Japan with sample shoes.',scenario:'You\'ve spotted a gap: American runners have no good affordable shoes. You can import quality Japanese shoes far cheaper. But you need to start selling. You have $50. What\'s your first move?',context:'No retail relationships. No marketing budget. No brand. You\'re a runner. The only people you know are track athletes.',choices:['Approach major shoe retailers to stock your product.','Advertise in running magazines.','Go directly to track meets and sell from the boot of your car.','Open a small retail shop near a university.'],correct:2,outcome:'Knight drove to track meets and sold shoes to runners who immediately understood the quality difference. No intermediary, no rent, no advertising cost. Direct feedback from real customers. Revenue in year one: $8,000. More importantly: Knight learned exactly what runners wanted.',impact:'→ Go where your customers already are. Sell person-to-person before you sell at scale.'},
+    {year:1984,title:'Michael Jordan wants Adidas. Your team wants to sign him.',scenario:'Jordan is 21 and has just been drafted. He wants Adidas. You can offer $250K/year plus a signature shoe — unprecedented for a rookie. The budget is a serious stretch. Do you do it?',context:'You\'ve never done a signature shoe deal. No NBA player has a signature shoe. Jordan is great but unproven. $250K/year is your entire celebrity budget.',choices:['Pass. The risk is too high for an unproven player.','Offer $100K — a fair market rate.','Offer $250K plus a signature shoe — Air Jordan.','Sign three smaller athletes instead of one big bet.'],correct:2,outcome:'Nike offered $250K/year plus the Air Jordan signature shoe. The Air Jordan 1 launched in 1985. The NBA banned it for violating uniform colour rules. Nike paid the $5,000-per-game fine. The controversy was priceless. Air Jordan is now a $4B annual business.',impact:'→ One right bet, made at the right moment, with the right person, is worth more than a dozen safe bets combined.'},
+    {year:1988,title:'Your ad agency presents the tagline "Just Do It."',scenario:'Nike\'s revenue is $877M. Reebok has overtaken you. Your agency presents a campaign inspired (uncomfortably) by a murderer\'s last words. It feels risky — deliberately broad, not about shoes, not about running. Do you approve it?',context:'Some executives think it\'s too vague. Others think the inspiration source is inappropriate. The tagline works for any goal, not just sport.',choices:['Reject it. Too vague and uncomfortable origin.','Approve it, but change the origin story.','Approve it exactly as presented.','Test it in two cities before national rollout.'],correct:2,outcome:'"Just Do It" launched in 1988. Nike\'s revenue went from $877M to $9.2B over the next decade. The tagline transcended sport entirely. It spoke to every person\'s internal monologue about doing the hard thing. It remains the most recognised advertising slogan in history.',impact:'→ The best brand positioning speaks to a universal human feeling, not just your product category.'},
+  ],
+  Tesla:[
+    {year:2003,title:'You\'re Martin Eberhard. You believe lithium-ion batteries can power a real car.',scenario:'Every car company has tried and failed with EVs. GM killed the EV1. You believe the new batteries change everything. Do you start the company?',context:'The auto industry has 100 years of infrastructure and knowledge you don\'t have. No startup has successfully launched a new car company in America since 1925.',choices:['Don\'t start it. The market has spoken — EVs don\'t work.','Start it, but license the technology to an existing automaker.','Start it, target the luxury sports car market first.','Start it, target the mass market immediately.'],correct:2,outcome:'Eberhard and Tarpenning founded Tesla targeting the luxury sports car market with the Roadster. High price = high margin = fund the technology. Starting at the top gave them credibility, press coverage, and margin to fund the next, cheaper model. The premium ladder strategy was born.',impact:'→ When entering a market with unproven technology, start premium. Luxury buyers are more forgiving of imperfections.'},
+    {year:2008,title:'It\'s Christmas Eve. Tesla is days from bankruptcy.',scenario:'The financial crisis has frozen investment. The Roadster is delayed. SpaceX has failed three launches. You have enough money for one company — Tesla or SpaceX — but not both. What do you do?',context:'This is Elon Musk\'s position. His personal fortune is nearly gone. Multiple investors have walked away. Employees have mortgages.',choices:['Choose SpaceX. It\'s further along.','Choose Tesla. It\'s the core mission.','Split the last $35M between both companies.','Declare bankruptcy and preserve what\'s left.'],correct:2,outcome:'Musk split his last $35M between Tesla and SpaceX. He told employees both companies would survive. On December 31, 2008, Tesla closed a critical funding round. By hours. Both companies survived. Both became worth hundreds of billions.',impact:'→ The decision to split resources between two near-dead companies seems irrational. In hindsight, it created two of the most valuable companies on earth.'},
+    {year:2014,title:'Should Tesla release all its patents for free?',scenario:'Tesla has 200+ patents protecting its EV technology. Your lawyer says releasing them makes no sense. But you have a theory: if all automakers go electric, the world — and Tesla\'s infrastructure — wins. What do you do?',context:'Traditional automakers haven\'t invested seriously in EVs. If they don\'t, the transition is too slow. But giving away your IP seems like commercial suicide.',choices:['Keep all patents. Protect your competitive advantage.','License patents for a fee to fund R&D.','Release all patents for free, framing it as a mission decision.','Release patents only to companies that commit to EV production targets.'],correct:2,outcome:'Tesla released all patents for free in 2014. If the industry goes electric, demand for Superchargers explodes — and Tesla owns the largest charging network. Generosity was strategically optimal. When traditional automakers finally went electric, they adopted Tesla\'s charging standard.',impact:'→ Sometimes the most generous decision is also the most strategically intelligent. Define your moat correctly.'},
+  ],
+  Flipkart:[
+    {year:2007,title:'You\'re Sachin Bansal. You\'ve quit Amazon to start e-commerce in India.',scenario:'Most Indians don\'t have credit cards. Trust in online transactions is nearly zero. You need to solve the payment problem. What do you do?',context:'Amazon required credit cards in the US. India has 30 million credit card holders out of a billion people. The Western model simply doesn\'t work.',choices:['Focus on the 30M who already have credit cards.','Partner with banks to expand credit card adoption.','Introduce Cash on Delivery — pay when the product arrives.','Launch a prepaid wallet system first.'],correct:2,outcome:'Flipkart launched Cash on Delivery. Customers could order online and pay the delivery person in cash. It unlocked 400 million potential customers overnight. COD was expensive but it built the trust that made Indian e-commerce possible. Every competitor copied it within 12 months.',impact:'→ The most powerful growth hacks remove psychological barriers, not technical ones. COD wasn\'t a tech feature — it was a trust feature.'},
+    {year:2010,title:'India\'s courier companies keep losing and damaging your packages.',scenario:'Third-party couriers are unreliable. You can keep complaining to couriers, or build your own delivery network. Building your own will cost crores and years. What do you do?',context:'No Indian e-commerce company owns its logistics. Building infrastructure is slow, expensive, and not your core competency. But bad delivery is killing your reviews.',choices:['Keep using third-party couriers but negotiate harder on SLAs.','Restrict delivery to top-10 cities where couriers are reliable.','Build eKart — your own delivery network from scratch.','Partner exclusively with India Post for nationwide reach.'],correct:2,outcome:'Flipkart built eKart. It took years and hundreds of crores. But it became Flipkart\'s most durable competitive advantage. When Amazon entered India, eKart was years ahead. Logistics infrastructure was the real moat, not the website.',impact:'→ The unglamorous work — the work no one wants to do — usually creates the most durable competitive advantages.'},
+    {year:2014,title:'Should you run India\'s first ever online mega-sale?',scenario:'Your team wants to launch "Big Billion Day" — one day of massive discounts. Finance says you\'ll lose money. Marketing says it\'ll change how India shops. If the servers crash or stock runs out, you\'ll be humiliated publicly. What do you do?',context:'No Indian retailer has done a mass online sale event. The risk of failure is very public.',choices:['Don\'t do it. The risk of failure is too public.','Run a smaller, private sale for existing customers first.','Launch Big Billion Day publicly and see what happens.','Partner with a TV channel to broadcast the sale event live.'],correct:2,outcome:'Big Billion Day launched. ₹600 crore in sales in one day. Servers crashed. Stocks ran out. Customers were furious. Flipkart was publicly humiliated. AND — it proved that India would shop online ferociously. The second Big Billion Day was flawless. The event created a habit that now generates billions annually.',impact:'→ A public failure that teaches you how to handle scale is worth more than a private success that doesn\'t.'},
+  ],
+};
 
-/* ── INIT ── */
-document.addEventListener('DOMContentLoaded',()=>{
-  applyReadBadges(); updateProgress(); updateBookmarkCount();
-  renderBookmarksList(); populateCompareSelects(); initSearch(); initDarkMode();
-  const params=new URLSearchParams(location.search);
-  if(params.get('read')) markRead(params.get('read'));
-});
+const CHART_DATA={
+  revenue:{
+    labels:['2000','2002','2004','2006','2008','2010','2012','2014','2016','2018','2020','2022','2024'],
+    datasets:[
+      {label:'Amazon ($B)',data:[2.8,3.9,6.9,10.7,19.2,34.2,61.1,89,136,233,386,514,600],color:'#e47911'},
+      {label:'Apple ($B)',data:[7.9,5.7,8.3,19.3,37.5,65.2,156,183,216,266,274,394,383],color:'#666'},
+      {label:'Nike ($B)',data:[9.5,9.9,12.3,15,18.6,19,24.1,27.8,32.4,36.4,37.4,46.7,51],color:'#111'},
+      {label:'Coca-Cola ($B)',data:[20.5,19.6,22,24.1,31.9,35.1,48,46,41.9,31.9,33,43,45],color:'#c0392b'},
+    ]
+  },
+  valuation:{
+    labels:['2000','2003','2006','2009','2012','2015','2018','2020','2022','2024'],
+    datasets:[
+      {label:'Amazon ($B)',data:[23,18,17.5,58,114,318,737,1634,836,2000],color:'#e47911'},
+      {label:'Apple ($B)',data:[5,8,73,76,500,702,748,2255,2066,3500],color:'#666'},
+      {label:'Tesla ($B)',data:[0,0,0,0,3.8,32,53,669,389,600],color:'#e63946'},
+      {label:'Coca-Cola ($B)',data:[148,120,100,103,173,195,193,230,250,260],color:'#c0392b'},
+    ]
+  },
+};
 
-/* ── DARK MODE ── */
-function initDarkMode(){
-  if(localStorage.getItem('bl_dark')==='1'){document.body.classList.add('dark');document.getElementById('darkToggle').textContent='☀️';}
+/* ══════════════════════════════════
+   STATE
+══════════════════════════════════ */
+let bookmarks=JSON.parse(localStorage.getItem('bl_bookmarks')||'[]');
+let readStories=JSON.parse(localStorage.getItem('bl_read')||'[]');
+let compareList=[];
+let quizState={brand:'',questions:[],current:0,score:0,answered:false};
+let simState={brand:'',questions:[],current:0,score:0,answered:false};
+let charts={};
+
+/* ══════════════════════════════════
+   SECTION SWITCHING
+══════════════════════════════════ */
+function showSection(name){
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.pn-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  const idx={'stories':0,'library':1,'compare':2,'simulator':3,'charts':4}[name];
+  document.querySelectorAll('.pn-btn')[idx].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='library'&&!document.getElementById('strategyLibrary').innerHTML) renderStrategyLibrary('all');
+  if(name==='charts'&&!document.getElementById('chartsContent').innerHTML) renderChartOverview();
 }
+
+/* ══════════════════════════════════
+   DARK MODE
+══════════════════════════════════ */
 document.getElementById('darkToggle').onclick=()=>{
   document.body.classList.toggle('dark');
   const on=document.body.classList.contains('dark');
   localStorage.setItem('bl_dark',on?'1':'0');
   document.getElementById('darkToggle').textContent=on?'☀️':'🌙';
 };
+if(localStorage.getItem('bl_dark')==='1'){document.body.classList.add('dark');document.getElementById('darkToggle').textContent='☀️';}
 
-/* ── SEARCH ── */
-function initSearch(){
+/* ══════════════════════════════════
+   SEARCH
+══════════════════════════════════ */
+(function(){
   const input=document.getElementById('searchInput');
   const dd=document.getElementById('searchDropdown');
   input.addEventListener('input',()=>{
     const q=input.value.trim().toLowerCase();
     if(!q){dd.classList.remove('open');return;}
     const res=BRANDS.filter(b=>b.name.toLowerCase().includes(q)||b.tags.includes(q)||b.cat.toLowerCase().includes(q)||b.desc.toLowerCase().includes(q));
-    dd.innerHTML=res.length?res.map(b=>`<a class="search-result-item" href="${b.url}"><div class="sri-cat">${b.cat}</div><div class="sri-name">${b.name}</div><div class="sri-desc">${b.desc.slice(0,75)}…</div></a>`).join(''):'<div class="search-empty">No brands found for "'+input.value+'"</div>';
+    dd.innerHTML=res.length?res.map(b=>`<a class="search-result-item" href="${b.url}"><div class="sri-cat">${b.cat}</div><div class="sri-name">${b.name}</div><div class="sri-desc">${b.desc.slice(0,72)}…</div></a>`).join(''):'<div class="search-empty">No results for "'+input.value+'"</div>';
     dd.classList.add('open');
   });
   document.addEventListener('click',e=>{if(!e.target.closest('.nav-center'))dd.classList.remove('open');});
   input.addEventListener('keydown',e=>{if(e.key==='Escape'){dd.classList.remove('open');input.blur();}});
-}
+})();
 
-/* ── FILTER ── */
+/* ══════════════════════════════════
+   FILTER CARDS
+══════════════════════════════════ */
 function filterCards(btn,filter){
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   const cards=document.querySelectorAll('#brandsGrid .brand-card[data-name]');
-  let visible=0;
+  let v=0;
   cards.forEach(card=>{
-    const cat=card.dataset.cat||'';const name=card.dataset.name||'';
-    let show=false;
-    if(filter==='all') show=true;
-    else if(filter==='bookmarked') show=bookmarks.some(b=>b.name===name);
-    else if(filter==='unread') show=!readStories.includes(name);
-    else show=cat.toLowerCase().includes(filter.toLowerCase());
+    const cat=card.dataset.cat||'',name=card.dataset.name||'';
+    let show=filter==='all'?true:filter==='bookmarked'?bookmarks.some(b=>b.name===name):filter==='unread'?!readStories.includes(name):cat.toLowerCase().includes(filter.toLowerCase());
     card.style.display=show?'block':'none';
-    if(show)visible++;
+    if(show)v++;
   });
-  document.getElementById('cardCount').textContent=visible+' stor'+(visible===1?'y':'ies');
-  document.getElementById('noResults').style.display=visible===0?'block':'none';
+  document.getElementById('cardCount').textContent=v+' stor'+(v===1?'y':'ies');
+  document.getElementById('noResults').style.display=v===0?'block':'none';
 }
 
-/* ── PROGRESS ── */
+/* ══════════════════════════════════
+   PROGRESS
+══════════════════════════════════ */
 function markRead(name){
   if(!readStories.includes(name)){readStories.push(name);localStorage.setItem('bl_read',JSON.stringify(readStories));applyReadBadges();updateProgress();}
 }
 function applyReadBadges(){
-  document.querySelectorAll('#brandsGrid .brand-card[data-name]').forEach(card=>{
-    card.classList.toggle('is-read',readStories.includes(card.dataset.name));
-  });
+  document.querySelectorAll('#brandsGrid .brand-card[data-name]').forEach(c=>c.classList.toggle('is-read',readStories.includes(c.dataset.name)));
   document.getElementById('statRead').textContent=readStories.length;
 }
 function updateProgress(){
-  const done=readStories.length;const total=7;
-  document.getElementById('pbFill').style.width=Math.round(done/total*100)+'%';
-  document.getElementById('pbRead').textContent=done;
-  document.getElementById('statRead').textContent=done;
+  const d=readStories.length,t=7;
+  document.getElementById('pbFill').style.width=Math.round(d/t*100)+'%';
+  document.getElementById('pbRead').textContent=d;
+  document.getElementById('statRead').textContent=d;
 }
-function resetProgress(){
-  if(!confirm('Reset your reading progress?'))return;
-  readStories=[];localStorage.setItem('bl_read','[]');applyReadBadges();updateProgress();
-}
+function resetProgress(){if(!confirm('Reset reading progress?'))return;readStories=[];localStorage.setItem('bl_read','[]');applyReadBadges();updateProgress();}
 document.querySelectorAll('.brand-card[data-name]').forEach(card=>{
-  card.addEventListener('click',e=>{
-    if(e.target.closest('.ba-btn')||e.target.closest('.compare-check'))return;
-    markRead(card.dataset.name);
-  });
+  card.addEventListener('click',e=>{if(e.target.closest('.ba-btn')||e.target.closest('.compare-check'))return;markRead(card.dataset.name);});
 });
 
-/* ── BOOKMARKS ── */
+/* ══════════════════════════════════
+   BOOKMARKS
+══════════════════════════════════ */
 function toggleBookmark(e,btn,name,url,cat,year){
   e.preventDefault();e.stopPropagation();
   const idx=bookmarks.findIndex(b=>b.name===name);
@@ -722,11 +1138,9 @@ function toggleBookmark(e,btn,name,url,cat,year){
 function updateBookmarkCount(){
   document.getElementById('bookmarkCount').textContent=bookmarks.length;
   document.querySelectorAll('.bookmark-btn').forEach(btn=>{
-    const name=btn.closest('.brand-card')?.dataset.name;
-    if(!name)return;
+    const name=btn.closest('.brand-card')?.dataset.name;if(!name)return;
     const saved=bookmarks.some(b=>b.name===name);
-    btn.textContent=saved?'🔖 Saved':'🔖 Save';
-    btn.classList.toggle('bookmarked',saved);
+    btn.textContent=saved?'🔖 Saved':'🔖 Save';btn.classList.toggle('bookmarked',saved);
   });
 }
 function renderBookmarksList(){
@@ -738,7 +1152,13 @@ function removeBookmark(e,name){e.preventDefault();e.stopPropagation();bookmarks
 function openBookmarks(){document.getElementById('bookmarksPanel').classList.add('open');document.getElementById('overlay').classList.add('open');}
 function closeBookmarks(){document.getElementById('bookmarksPanel').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
 
-/* ── COMPARE ── */
+/* ══════════════════════════════════
+   COMPARE (ADVANCED)
+══════════════════════════════════ */
+function initCompareSelects(){
+  const opts=Object.keys(COMPARE_FULL).map(k=>`<option value="${k}">${k}</option>`).join('');
+  ['cmpA','cmpB'].forEach(id=>{document.getElementById(id).innerHTML='<option value="">Select brand…</option>'+opts;});
+}
 function toggleCompare(e,el,name,url,cat,year){
   e.preventDefault();e.stopPropagation();
   const idx=compareList.findIndex(b=>b.name===name);
@@ -753,66 +1173,250 @@ function updateCompareBar(){
   document.getElementById('compareBarNames').textContent=compareList.map(b=>b.name).join(' vs ');
 }
 function clearCompare(){compareList=[];document.querySelectorAll('.compare-check').forEach(el=>{el.classList.remove('selected');el.textContent='';});updateCompareBar();}
-function openCompareFromBar(){if(compareList.length===2){document.getElementById('cmpA').value=compareList[0].name;document.getElementById('cmpB').value=compareList[1].name;openCompare();runCompare();}else openCompare();}
-function populateCompareSelects(){const opts=BRANDS.map(b=>`<option value="${b.name}">${b.name}</option>`).join('');['cmpA','cmpB'].forEach(id=>{document.getElementById(id).innerHTML='<option value="">Select brand…</option>'+opts;});}
-function openCompare(){document.getElementById('compareModal').classList.add('open');document.getElementById('overlay').classList.add('open');}
-function closeCompare(){document.getElementById('compareModal').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
-function runCompare(){
+function openCompareFromBar(){
+  showSection('compare');
+  if(compareList.length===2){
+    setTimeout(()=>{
+      document.getElementById('cmpA').value=compareList[0].name;
+      document.getElementById('cmpB').value=compareList[1].name;
+      runAdvancedCompare();
+    },100);
+  }
+}
+function runAdvancedCompare(){
   const a=document.getElementById('cmpA').value,b=document.getElementById('cmpB').value;
-  if(!a||!b||a===b){document.getElementById('compareResult').innerHTML='<div style="padding:2rem;text-align:center;color:var(--muted);">Please select two different brands.</div>';return;}
-  const da=COMPARE_DATA[a],db=COMPARE_DATA[b],ba=BRANDS.find(x=>x.name===a),bb=BRANDS.find(x=>x.name===b);
-  const rows=[['Founded','founded'],['Country','country'],['Annual Revenue','revenue'],['Employees','employees'],['Valuation','valuation'],['Business Model','model'],['Core Strategy','strategy'],['Biggest Strength','strength'],['Key Challenge','weakness']];
-  const col=(d,br,data)=>`<div class="compare-col"><div class="compare-col-head"><div class="cc-cat">${br.cat}</div><div class="cc-name">${br.name}</div><div class="cc-year">Founded ${data.founded}</div></div>${rows.map(([l,k])=>`<div class="compare-data-row"><div class="cdr-label">${l}</div><div class="cdr-val">${data[k]}</div></div>`).join('')}<a class="cm-link" href="${br.url}">Read full story →</a></div>`;
-  document.getElementById('compareResult').innerHTML=`<div class="compare-grid">${col(da,ba,da)}${col(db,bb,db)}</div>`;
+  if(!a||!b||a===b){document.getElementById('compareOutput').innerHTML='<div class="compare-placeholder"><div style="font-size:2rem;margin-bottom:0.8rem;">⚠️</div><div style="font-size:0.9rem;">Please select two different brands.</div></div>';return;}
+  const da=COMPARE_FULL[a],db=COMPARE_FULL[b];
+  // Verdict
+  const vb=document.getElementById('verdictBanner');
+  const winner=da.brandScore>db.brandScore?a:b,other=winner===a?b:a;
+  document.getElementById('verdictText').textContent=`${winner} played the smarter long game — with higher brand equity and more durable competitive advantages. But ${other} executed faster and with higher innovation velocity. Neither is strictly "better" — they played fundamentally different games.`;
+  vb.classList.add('show');
+  // Scorecard
+  const ss=document.getElementById('scoreSection');ss.style.display='block';
+  const metrics=[['Brand equity','brandScore'],['Innovation','innovationScore'],['Profitability','profitabilityScore'],['Growth speed','growthScore'],['Risk level','riskScore']];
+  document.getElementById('scoreGrid').innerHTML=`
+    <div><div class="score-col-name">${a}</div>${metrics.map(([l,k])=>`<div class="score-metric"><div class="sm-row"><span class="sm-name">${l}</span><span class="sm-val">${da[k]}/100</span></div><div class="sm-track"><div class="sm-fill" style="width:${da[k]}%"></div></div></div>`).join('')}</div>
+    <div><div class="score-col-name">${b}</div>${metrics.map(([l,k])=>`<div class="score-metric"><div class="sm-row"><span class="sm-name">${l}</span><span class="sm-val">${db[k]}/100</span></div><div class="sm-track"><div class="sm-fill b" style="width:${db[k]}%"></div></div></div>`).join('')}</div>`;
+  // Main grid
+  const rows=[['Revenue','revenue'],['Employees','employees'],['Valuation','valuation'],['Business Model','model'],['Core Strategy','strategy'],['Founder Style','founderStyle'],['Risk Profile','risk'],['Growth Pattern','growth']];
+  const col=(d,name,data)=>`
+    <div class="acc-col">
+      <div class="acc-head"><div class="acc-cat">${d.cat}</div><div class="acc-name">${name}</div><div class="acc-year">Founded ${d.year} · ${d.country}</div></div>
+      ${rows.map(([l,k])=>`<div class="acc-row"><div class="acc-row-label">${l}</div><div class="acc-row-val">${data[k]}</div></div>`).join('')}
+      <div class="acc-list-section"><div class="acc-list-label">Signature strategies</div>${d.strategies.map(s=>`<div class="acc-list-item">${s}</div>`).join('')}</div>
+      <div class="acc-list-section"><div class="acc-list-label">Strengths</div>${d.strengths.map(s=>`<div class="acc-strength-item">✓ ${s}</div>`).join('')}</div>
+      <div class="acc-list-section"><div class="acc-list-label">Key challenges</div>${d.weaknesses.map(s=>`<div class="acc-strength-item">△ ${s}</div>`).join('')}</div>
+      <div class="acc-link-wrap"><a class="acc-link" href="${d.url}">Read full story →</a></div>
+    </div>`;
+  document.getElementById('compareOutput').innerHTML=`<div class="adv-compare-grid">${col(da,a,da)}${col(db,b,db)}</div>`;
 }
 
-/* ── QUIZ ── */
+/* ══════════════════════════════════
+   QUIZ
+══════════════════════════════════ */
 function openQuiz(){document.getElementById('quizModal').classList.add('open');document.getElementById('overlay').classList.add('open');}
 function closeQuiz(){document.getElementById('quizModal').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
 function openQuizForBrand(e,brand){e.preventDefault();e.stopPropagation();document.getElementById('quizBrandSelect').value=brand;loadQuiz(brand);openQuiz();}
 function loadQuiz(brand){
-  if(!brand)return;
-  const qs=QUIZ_DATA[brand];if(!qs)return;
-  quizState={brand,questions:qs,current:0,score:0,answered:false};
-  renderQuestion();
+  if(!brand)return;const qs=QUIZ_DATA[brand];if(!qs)return;
+  quizState={brand,questions:qs,current:0,score:0,answered:false};renderQuizQuestion();
 }
-function renderQuestion(){
+function renderQuizQuestion(){
   const{questions,current,score}=quizState;const total=questions.length;
-  if(current>=total){showResult();return;}
+  if(current>=total){showQuizResult();return;}
   const q=questions[current];quizState.answered=false;
   document.getElementById('quizBody').innerHTML=`
-    <div class="quiz-progress">${questions.map((_,i)=>`<div class="qp-dot ${i<current?'done':i===current?'current':''}"></div>`).join('')}</div>
-    <div class="quiz-q-num">Question ${current+1} of ${total} · Score: ${score}/${current}</div>
+    <div class="quiz-progress">${questions.map((_,i)=>`<div class="qp-dot ${i<current?'done':i===current?'cur':''}"></div>`).join('')}</div>
+    <div class="quiz-q-num">Q${current+1} of ${total} · Score: ${score}/${current}</div>
     <div class="quiz-question">${q.q}</div>
     <div class="quiz-options">${q.opts.map((o,i)=>`<button class="quiz-option" onclick="answerQuiz(${i})">${o}</button>`).join('')}</div>
     <div class="quiz-feedback" id="quizFeedback"></div>
-    <button class="quiz-next" id="quizNext" onclick="nextQuestion()">${current+1===total?'See Results →':'Next Question →'}</button>`;
+    <button class="quiz-next-btn" id="quizNextBtn" onclick="nextQuizQ()">${current+1===total?'See Results →':'Next →'}</button>`;
 }
 function answerQuiz(idx){
   if(quizState.answered)return;quizState.answered=true;
-  const q=quizState.questions[quizState.current];
-  const opts=document.querySelectorAll('.quiz-option');const fb=document.getElementById('quizFeedback');
-  const correct=idx===q.ans;if(correct)quizState.score++;
-  opts.forEach((btn,i)=>{if(i===q.ans)btn.classList.add('correct');else if(i===idx&&!correct)btn.classList.add('wrong');else btn.classList.add('reveal');btn.disabled=true;});
-  fb.className='quiz-feedback show '+(correct?'correct-fb':'wrong-fb');
+  const q=quizState.questions[quizState.current];const correct=idx===q.ans;if(correct)quizState.score++;
+  document.querySelectorAll('.quiz-option').forEach((b,i)=>{if(i===q.ans)b.classList.add('correct');else if(i===idx&&!correct)b.classList.add('wrong');else b.classList.add('reveal');b.disabled=true;});
+  const fb=document.getElementById('quizFeedback');fb.className='quiz-feedback show '+(correct?'correct-fb':'wrong-fb');
   fb.innerHTML=(correct?'✅ Correct! ':'❌ Not quite. ')+q.fact;
-  document.getElementById('quizNext').classList.add('show');
+  document.getElementById('quizNextBtn').classList.add('show');
 }
-function nextQuestion(){quizState.current++;renderQuestion();}
-function showResult(){
-  const{score,questions,brand}=quizState;const total=questions.length;const pct=Math.round(score/total*100);
-  const msg=pct===100?'🏆 Perfect! You know this brand inside out.':pct>=80?'🎯 Great job! You read that story well.':pct>=60?'📖 Good effort! A re-read will sharpen things.':'📚 Time to revisit the story!';
-  document.getElementById('quizBody').innerHTML=`<div class="quiz-result show"><div class="qr-score">${score}/${total}</div><div class="qr-label">${pct}% correct · ${brand}</div><div class="qr-msg">${msg}</div><button class="qr-retry" onclick="loadQuiz('${brand}')">Try Again</button></div>`;
+function nextQuizQ(){quizState.current++;renderQuizQuestion();}
+function showQuizResult(){
+  const{score,questions,brand}=quizState;const t=questions.length;const pct=Math.round(score/t*100);
+  const msg=pct===100?'🏆 Perfect! You know this brand inside out.':pct>=80?'🎯 Great job!':pct>=60?'📖 Good effort — a re-read will help.':'📚 Time to revisit the story!';
+  document.getElementById('quizBody').innerHTML=`<div class="quiz-result show"><div class="qr-score">${score}/${t}</div><div class="qr-label">${pct}% correct · ${brand}</div><div class="qr-msg">${msg}</div><button class="qr-retry" onclick="loadQuiz('${brand}')">Try Again</button></div>`;
 }
 
-/* ── UTILS ── */
-function closeAll(){closeBookmarks();closeCompare();closeQuiz();}
+/* ══════════════════════════════════
+   STRATEGY LIBRARY
+══════════════════════════════════ */
+function catColor(cat){return{Growth:'#c0392b',Brand:'#2c7bb6',Distribution:'#27ae60',Product:'#8e44ad',Culture:'#e67e22'}[cat]||'var(--accent)';}
+function renderStrategyLibrary(filter){
+  const data=filter==='all'?STRATEGY_DATA:STRATEGY_DATA.filter(s=>s.cat===filter);
+  document.getElementById('strategyLibrary').innerHTML=data.map((s,i)=>`
+    <div class="slc" id="slc${i}">
+      <div class="slc-cat" style="color:${catColor(s.cat)}">${s.cat}</div>
+      <div class="slc-name">${s.name}</div>
+      <div class="slc-tagline">${s.tagline}</div>
+      <div class="slc-brands">${s.brands.map(b=>`<span class="slc-tag">${b}</span>`).join('')}</div>
+      <div class="slc-impact">${s.impact}</div>
+      <button class="slc-toggle-btn" onclick="toggleSlc(${i})">Expand ↓</button>
+      <div class="slc-body" id="slcb${i}">
+        <div class="slc-detail-label">What it is</div>
+        <div class="slc-detail-text">${s.what}</div>
+        <div class="slc-detail-label">How to apply it</div>
+        <ol class="slc-steps">${s.how.map((h,j)=>`<li><span class="slc-step-n">${j+1}</span>${h}</li>`).join('')}</ol>
+        <div class="slc-detail-label">Metrics</div>
+        <div class="meter-row"><span class="meter-label">Risk</span><div class="meter-track"><div class="meter-fill" style="width:${s.risk}%"></div></div><span class="meter-val">${s.risk}%</span></div>
+        <div class="meter-row"><span class="meter-label">Speed</span><div class="meter-track"><div class="meter-fill" style="width:${s.speed}%"></div></div><span class="meter-val">${s.speed}%</span></div>
+        <div class="meter-row"><span class="meter-label">Difficulty</span><div class="meter-track"><div class="meter-fill" style="width:${s.difficulty}%"></div></div><span class="meter-val">${s.difficulty}%</span></div>
+        <div class="slc-detail-label">Best for</div>
+        <div class="slc-detail-text">${s.when}</div>
+      </div>
+    </div>`).join('');
+}
+function toggleSlc(i){
+  const b=document.getElementById('slcb'+i),c=document.getElementById('slc'+i),btn=c.querySelector('.slc-toggle-btn');
+  const open=b.classList.toggle('open');c.classList.toggle('open',open);btn.textContent=open?'Collapse ↑':'Expand ↓';
+}
+function filterLib(btn,filter){document.querySelectorAll('.sf-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderStrategyLibrary(filter);}
+
+/* ══════════════════════════════════
+   DECISION SIMULATOR
+══════════════════════════════════ */
+function openSimForBrand(e,brand){e.preventDefault();e.stopPropagation();showSection('simulator');setTimeout(()=>loadSim(brand),150);}
+function loadSim(brand){
+  document.querySelectorAll('.sim-brand-btn').forEach(b=>b.classList.toggle('active',b.textContent===brand));
+  document.getElementById('simEmpty').style.display='none';
+  simState={brand,questions:SIM_DATA[brand],current:0,score:0,answered:false};
+  renderSimQ();
+}
+function renderSimQ(){
+  const{questions,current,score,brand}=simState;
+  if(current>=questions.length){showSimEnd();return;}
+  const q=questions[current];simState.answered=false;
+  document.getElementById('simContent').innerHTML=`
+    <div class="sim-content-wrap">
+      <div class="sim-progress">${questions.map((_,i)=>`<div class="sim-prog-dot ${i<current?'done':i===current?'cur':''}"></div>`).join('')}</div>
+      <div class="sim-score-line">Decision ${current+1} of ${questions.length} · Correct so far: <span>${score}</span></div>
+      <div class="sim-year-pill">${brand} · ${q.year}</div>
+      <div class="sim-scenario-title">${q.title}</div>
+      <div class="sim-context">${q.context}</div>
+      <div class="sim-question">${q.scenario}</div>
+      <div class="sim-choices">${q.choices.map((c,i)=>`<button class="sim-choice" onclick="answerSim(${i})"><span class="sim-letter">${String.fromCharCode(65+i)}</span><span>${c}</span></button>`).join('')}</div>
+      <div class="sim-outcome" id="simOutcome">
+        <div class="sim-outcome-label">What actually happened</div>
+        <div class="sim-outcome-heading" id="simOutcomeH"></div>
+        <div class="sim-outcome-text" id="simOutcomeT"></div>
+        <div class="sim-outcome-impact" id="simOutcomeI"></div>
+      </div>
+      <button class="sim-next-btn" id="simNextBtn" onclick="nextSimQ()">${current+1===questions.length?'See your verdict →':'Next decision →'}</button>
+    </div>`;
+}
+function answerSim(idx){
+  if(simState.answered)return;simState.answered=true;
+  const q=simState.questions[simState.current];const correct=idx===q.correct;if(correct)simState.score++;
+  document.querySelectorAll('.sim-choice').forEach((b,i)=>{if(i===q.correct)b.classList.add('correct');else if(i===idx&&!correct)b.classList.add('wrong');else b.classList.add('reveal');b.disabled=true;});
+  document.getElementById('simOutcomeH').textContent=correct?'✅ You made the right call.':'❌ That\'s not what happened.';
+  document.getElementById('simOutcomeT').textContent=q.outcome;
+  document.getElementById('simOutcomeI').textContent=q.impact;
+  document.getElementById('simOutcome').classList.add('show');
+  document.getElementById('simNextBtn').classList.add('show');
+}
+function nextSimQ(){simState.current++;renderSimQ();}
+function showSimEnd(){
+  const{score,questions,brand}=simState;const t=questions.length;const pct=Math.round(score/t*100);
+  const msg=pct===100?`Remarkable. You think exactly like the real ${brand} founders did.`:pct>=75?'Strong instincts. You understood most of the key turning points.':pct>=50?'Decent — but a few crucial decisions went differently than expected. Re-read the story.':'The real decisions were harder than they look. Read the full story and try again.';
+  document.getElementById('simContent').innerHTML=`<div class="sim-content-wrap"><div class="sim-end show"><div class="sim-end-score">${score}/${t}</div><div class="sim-end-label">${pct}% correct · ${brand} Decision Simulator</div><div class="sim-end-msg">${msg}</div><button class="sim-restart-btn" onclick="loadSim('${brand}')">Try again</button> <button class="sim-restart-btn dark" onclick="resetSim()">Switch brand</button></div></div>`;
+}
+function resetSim(){document.getElementById('simContent').innerHTML='';document.getElementById('simEmpty').style.display='block';document.querySelectorAll('.sim-brand-btn').forEach(b=>b.classList.remove('active'));}
+
+/* ══════════════════════════════════
+   GROWTH CHARTS
+══════════════════════════════════ */
+function destroyCharts(){Object.values(charts).forEach(c=>{try{c.destroy();}catch(e){}});charts={};}
+function legend(id,items){document.getElementById(id).innerHTML=items.map(i=>`<span class="cl-item"><span class="cl-dot" style="background:${i.c}"></span>${i.l}</span>`).join('');}
+function renderChartOverview(){
+  destroyCharts();
+  document.getElementById('chartsContent').innerHTML=`
+    <div class="insight-strip">
+      <div class="ic"><div class="ic-num">$600B</div><div class="ic-label">Amazon revenue 2024</div><div class="ic-trend">↑ 12% YoY</div></div>
+      <div class="ic"><div class="ic-num">$3.5T</div><div class="ic-label">Apple valuation</div><div class="ic-trend">Most valuable company</div></div>
+      <div class="ic"><div class="ic-num">138yr</div><div class="ic-label">Coca-Cola age</div><div class="ic-trend">Still growing in India</div></div>
+      <div class="ic"><div class="ic-num">$4B</div><div class="ic-label">Air Jordan revenue</div><div class="ic-trend">One product line</div></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-panel"><div class="chart-panel-title">Revenue 2000–2024</div><div class="chart-panel-sub">Amazon · Apple · Nike · Coca-Cola ($B)</div><div class="chart-legend" id="leg-rev"></div><div class="chart-wrap"><canvas id="ch-rev" role="img" aria-label="Revenue comparison 2000–2024">Revenue chart.</canvas></div></div>
+      <div class="chart-panel"><div class="chart-panel-title">Valuation milestones</div><div class="chart-panel-sub">Market cap over time ($B)</div><div class="chart-legend" id="leg-val"></div><div class="chart-wrap"><canvas id="ch-val" role="img" aria-label="Valuation comparison">Valuation chart.</canvas></div></div>
+      <div class="chart-panel"><div class="chart-panel-title">Amazon revenue breakdown 2024</div><div class="chart-panel-sub">By business segment ($B)</div><div class="chart-legend" id="leg-seg"></div><div class="chart-wrap"><canvas id="ch-seg" role="img" aria-label="Amazon segments">Amazon segments chart.</canvas></div></div>
+      <div class="chart-panel"><div class="chart-panel-title">Market dominance</div><div class="chart-panel-sub">Category leader vs next competitor (%)</div><div class="chart-legend" id="leg-mkt"></div><div class="chart-wrap" style="height:220px;"><canvas id="ch-mkt" role="img" aria-label="Market share">Market share chart.</canvas></div></div>
+    </div>`;
+  setTimeout(()=>{
+    // Revenue
+    const rd=CHART_DATA.revenue;const rc=['#e47911','#666','#111','#c0392b'];const rdash=[[],[5,3],[3,3],[7,3]];
+    legend('leg-rev',rd.datasets.map((d,i)=>({l:d.label,c:rc[i]})));
+    charts.rev=new Chart(document.getElementById('ch-rev').getContext('2d'),{type:'line',data:{labels:rd.labels,datasets:rd.datasets.map((d,i)=>({label:d.label,data:d.data,borderColor:rc[i],backgroundColor:'transparent',borderWidth:2,borderDash:rdash[i],pointRadius:2,tension:0.3}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#7a7068',font:{size:10},maxRotation:45},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{color:'#7a7068',font:{size:10},callback:v=>'$'+v+'B'},grid:{color:'rgba(0,0,0,0.04)'}}}}});
+    // Valuation
+    const vd=CHART_DATA.valuation;const vc=['#e47911','#666','#e63946','#c0392b'];const vdash=[[],[5,3],[3,3],[7,3]];
+    legend('leg-val',vd.datasets.map((d,i)=>({l:d.label,c:vc[i]})));
+    charts.val=new Chart(document.getElementById('ch-val').getContext('2d'),{type:'line',data:{labels:vd.labels,datasets:vd.datasets.map((d,i)=>({label:d.label,data:d.data,borderColor:vc[i],backgroundColor:'transparent',borderWidth:2,borderDash:vdash[i],pointRadius:2,tension:0.3}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#7a7068',font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{color:'#7a7068',font:{size:10},callback:v=>'$'+v+'B'},grid:{color:'rgba(0,0,0,0.04)'}}}}});
+    // Amazon segments
+    const segs=['Online stores','3P sellers','AWS','Advertising','Prime','Physical'];
+    const segv=[247,143,100,47,40,21];const segc=['#c0392b','#e47911','#2c7bb6','#8e44ad','#27ae60','#888'];
+    legend('leg-seg',segs.map((l,i)=>({l:`${l} $${segv[i]}B`,c:segc[i]})));
+    charts.seg=new Chart(document.getElementById('ch-seg').getContext('2d'),{type:'bar',data:{labels:segs,datasets:[{label:'$B',data:segv,backgroundColor:segc,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#7a7068',font:{size:10},maxRotation:30},grid:{display:false}},y:{ticks:{color:'#7a7068',font:{size:10},callback:v=>'$'+v+'B'},grid:{color:'rgba(0,0,0,0.04)'}}}}});
+    // Market share
+    const mktL=['E-commerce India','EV Global','Smartphone profit','Soft Drinks','Athleisure'];
+    const mktC=['#c0392b','#888','#ede8e0'];const mktN=['Leader','Competitor','Rest'];
+    const mktD=[[64,18,85,43,28],[30,10,8,20,18],[6,72,7,37,54]];
+    legend('leg-mkt',mktN.map((l,i)=>({l,c:mktC[i]})));
+    charts.mkt=new Chart(document.getElementById('ch-mkt').getContext('2d'),{type:'bar',data:{labels:mktL,datasets:mktD.map((d,i)=>({label:mktN[i],data:d,backgroundColor:mktC[i],borderWidth:0}))},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{color:'#7a7068',font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.04)'}},y:{stacked:true,ticks:{color:'#7a7068',font:{size:10}},grid:{display:false}}}}});
+  },80);
+}
+function switchChartView(btn,view){
+  document.querySelectorAll('.cv-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  destroyCharts();
+  if(view==='overview'){renderChartOverview();return;}
+  const titles={revenue:'Revenue Growth 2000–2024 ($B)',valuation:'Valuation Milestones ($B)',market:'Market Share: Category Leaders vs Competitors (%)'};
+  const subs={revenue:'Amazon · Apple · Nike · Coca-Cola',valuation:'Amazon · Apple · Tesla · Coca-Cola',market:'Leader vs Next Competitor vs Rest of Market'};
+  document.getElementById('chartsContent').innerHTML=`<div class="chart-full-panel"><div class="chart-full-title">${titles[view]}</div><div class="chart-full-sub">${subs[view]}</div><div class="chart-legend" id="leg-full"></div><div class="chart-full-wrap"><canvas id="ch-full" role="img" aria-label="${titles[view]}">${titles[view]}</canvas></div></div>`;
+  setTimeout(()=>{
+    if(view==='revenue'||view==='valuation'){
+      const d=CHART_DATA[view];const c=view==='revenue'?['#e47911','#666','#111','#c0392b']:['#e47911','#666','#e63946','#c0392b'];const dash=[[],[5,3],[3,3],[7,3]];
+      legend('leg-full',d.datasets.map((ds,i)=>({l:ds.label,c:c[i]})));
+      charts.full=new Chart(document.getElementById('ch-full').getContext('2d'),{type:'line',data:{labels:d.labels,datasets:d.datasets.map((ds,i)=>({label:ds.label,data:ds.data,borderColor:c[i],backgroundColor:'transparent',borderWidth:2.5,borderDash:dash[i],pointRadius:3,tension:0.3}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#7a7068'},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{color:'#7a7068',callback:v=>'$'+v+'B'},grid:{color:'rgba(0,0,0,0.04)'}}}}});
+    } else if(view==='market'){
+      const mktL=['E-commerce India','EV Global','Smartphone profit','Soft Drinks','Athleisure'];
+      const mktC=['#c0392b','#888','#ede8e0'];const mktN=['Leader','Competitor','Rest'];const mktD=[[64,18,85,43,28],[30,10,8,20,18],[6,72,7,37,54]];
+      legend('leg-full',mktN.map((l,i)=>({l,c:mktC[i]})));
+      charts.full=new Chart(document.getElementById('ch-full').getContext('2d'),{type:'bar',data:{labels:mktL,datasets:mktD.map((d,i)=>({label:mktN[i],data:d,backgroundColor:mktC[i],borderWidth:0}))},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{color:'#7a7068',callback:v=>v+'%'}},y:{stacked:true,ticks:{color:'#7a7068'},grid:{display:false}}}}});
+    }
+  },80);
+}
+
+/* ══════════════════════════════════
+   UTILS
+══════════════════════════════════ */
+function closeOverlay(){closeBookmarks();closeQuiz();}
 function quickSubscribe(){
   var email=document.getElementById('quick-email').value.trim();
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert('Please enter a valid email address.');return;}
   window.location.href='newsletter.html?email='+encodeURIComponent(email);
 }
 document.getElementById('quick-email').addEventListener('keydown',function(e){if(e.key==='Enter')quickSubscribe();});
+
+/* ══════════════════════════════════
+   BOOT
+══════════════════════════════════ */
+document.addEventListener('DOMContentLoaded',()=>{
+  applyReadBadges();updateProgress();updateBookmarkCount();
+  renderBookmarksList();initCompareSelects();
+  const params=new URLSearchParams(location.search);
+  if(params.get('read'))markRead(params.get('read'));
+  if(params.get('section'))showSection(params.get('section'));
+});
 </script>
 </body>
 </html>
